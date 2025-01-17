@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34902.65
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstaStay", "InstaStay\InstaStay.csproj", "{C2F0C5F3-BEEB-49C7-BA70-8E5FC6AB653F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{33EEF109-116B-4C29-968F-58A241951493}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{B22BCE86-9317-447B-AA0F-0260CC60025F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C2F0C5F3-BEEB-49C7-BA70-8E5FC6AB653F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2F0C5F3-BEEB-49C7-BA70-8E5FC6AB653F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2F0C5F3-BEEB-49C7-BA70-8E5FC6AB653F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2F0C5F3-BEEB-49C7-BA70-8E5FC6AB653F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33EEF109-116B-4C29-968F-58A241951493}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33EEF109-116B-4C29-968F-58A241951493}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33EEF109-116B-4C29-968F-58A241951493}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33EEF109-116B-4C29-968F-58A241951493}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B22BCE86-9317-447B-AA0F-0260CC60025F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B22BCE86-9317-447B-AA0F-0260CC60025F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B22BCE86-9317-447B-AA0F-0260CC60025F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B22BCE86-9317-447B-AA0F-0260CC60025F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E286644B-E04D-4644-A4F9-E447FBE958D7}
+	EndGlobalSection
+EndGlobal
