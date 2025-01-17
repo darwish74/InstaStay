@@ -10,6 +10,7 @@ using System.Security.Claims;
 
 namespace InstaStay.Areas.Identity.Controllers
 {
+    [Area("Identity")]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;

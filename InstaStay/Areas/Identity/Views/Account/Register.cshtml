@@ -4,75 +4,139 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>Register</h1>
+<h1 class="text-center mb-4">Register</h1>
 
-<h4>ApplicationUserVM</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Register">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-body p-4">
+                <h4 class="card-title text-center mb-3">Create Your Account</h4>
+
+                <!-- Social Media Register Options -->
+                <div class="d-flex justify-content-center mb-4">
+                    <button type="button" class="btn btn-danger me-2 shadow-sm">
+                        <i class="fab fa-google"></i> Register with Google
+                    </button>
+                    <button type="button" class="btn btn-primary shadow-sm">
+                        <i class="fab fa-facebook"></i> Register with Facebook
+                    </button>
+                </div>
+
+                <div class="text-center mb-3">
+                    <span>or</span>
+                </div>
+
+                <!-- Registration Form -->
+                <form asp-action="Register">
+                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                    <!-- User Info Fields -->
+                    <div class="form-group mb-3">
+                        <label asp-for="UserName" class="form-label">
+                            <i class="fas fa-user-circle"></i> User Name
+                        </label>
+                        <input asp-for="UserName" class="form-control" placeholder="Enter your username" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="FirstName" class="form-label">
+                            <i class="fas fa-user"></i> First Name
+                        </label>
+                        <input asp-for="FirstName" class="form-control" placeholder="Enter your first name" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="LastName" class="form-label">
+                            <i class="fas fa-user"></i> Last Name
+                        </label>
+                        <input asp-for="LastName" class="form-control" placeholder="Enter your last name" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Email" class="form-label">
+                            <i class="fas fa-envelope"></i> Email
+                        </label>
+                        <input asp-for="Email" class="form-control" placeholder="Enter your email address" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Password" class="form-label">
+                            <i class="fas fa-lock"></i> Password
+                        </label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="ConfirmPassword" class="form-label">
+                            <i class="fas fa-lock"></i> Confirm Password
+                        </label>
+                        <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Re-enter your password" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <!-- Address Fields -->
+                    <div class="form-group mb-3">
+                        <label asp-for="Country" class="form-label">
+                            <i class="fas fa-globe"></i> Country
+                        </label>
+                        <select asp-for="Country" class="form-select">
+                            <option value="">Select your country</option>
+                            <option value="USA">United States</option>
+                            <option value="Canada">Canada</option>
+                            <option value="UK">United Kingdom</option>
+                        </select>
+                        <span asp-validation-for="Country" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="City" class="form-label">
+                            <i class="fas fa-city"></i> City
+                        </label>
+                        <select asp-for="City" class="form-select">
+                            <option value="">Select your city</option>
+                            <option value="New York">New York</option>
+                            <option value="Toronto">Toronto</option>
+                            <option value="London">London</option>
+                        </select>
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="State" class="form-label">
+                            <i class="fas fa-map-marker-alt"></i> State
+                        </label>
+                        <input asp-for="State" class="form-control" placeholder="Enter your state" />
+                        <span asp-validation-for="State" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="PostalCode" class="form-label">
+                            <i class="fas fa-mail-bulk"></i> Postal Code
+                        </label>
+                        <input asp-for="PostalCode" class="form-control" placeholder="Enter your postal code" />
+                        <span asp-validation-for="PostalCode" class="text-danger"></span>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-group d-grid">
+                        <button type="submit" class="btn btn-success btn-lg shadow-sm">
+                            <i class="fas fa-user-plus"></i> Create Account
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ConfirmPassword" class="control-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Country" class="control-label"></label>
-                <input asp-for="Country" class="form-control" />
-                <span asp-validation-for="Country" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="City" class="control-label"></label>
-                <input asp-for="City" class="form-control" />
-                <span asp-validation-for="City" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="State" class="control-label"></label>
-                <input asp-for="State" class="form-control" />
-                <span asp-validation-for="State" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PostalCode" class="control-label"></label>
-                <input asp-for="PostalCode" class="form-control" />
-                <span asp-validation-for="PostalCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            // Enhance dropdowns
+            $('select').select2();
+        });
+    </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

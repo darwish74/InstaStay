@@ -4,40 +4,80 @@
     ViewData["Title"] = "Login";
 }
 
-<h1>Login</h1>
+<h1 class="text-center mb-4">Login</h1>
 
-<h4>LoginVM</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Login">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-body p-4">
+                <h4 class="card-title text-center mb-3">
+                    <i class="fas fa-sign-in-alt"></i> Welcome Back
+                </h4>
+                <form asp-action="Login">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert" style="display: none;">
+                        <!-- Validation summary will appear here -->
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Name" class="form-label">
+                            <i class="fas fa-user"></i> Username
+                        </label>
+                        <input asp-for="Name" class="form-control" placeholder="Enter your username" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Password" class="form-label">
+                            <i class="fas fa-lock"></i> Password
+                        </label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group form-check mb-3">
+                        <input asp-for="RememberMe" class="form-check-input" id="RememberMe" />
+                        <label class="form-check-label" for="RememberMe">
+                            <i class="fas fa-check-square"></i> @Html.DisplayNameFor(model => model.RememberMe)
+                        </label>
+                    </div>
+
+                    <div class="form-group d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </button>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <p>Or login with:</p>
+                        <a href="#" class="btn btn-outline-primary btn-sm me-2">
+                            <i class="fab fa-google"></i> Google
+                        </a>
+                        <a href="#" class="btn btn-outline-primary btn-sm">
+                            <i class="fab fa-facebook-f"></i> Facebook
+                        </a>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="text-center mt-4">
+    <a asp-action="Index" class="btn btn-link text-secondary">
+        <i class="fas fa-arrow-left"></i> Back to List
+    </a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            // Show validation summary if there are errors
+            if ($(".text-danger").text().trim() !== "") {
+                $(".alert-danger").show();
+            }
+        });
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
