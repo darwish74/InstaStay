@@ -14,12 +14,21 @@
 
                 <!-- Social Media Register Options -->
                 <div class="d-flex justify-content-center mb-4">
-                    <button type="button" class="btn btn-danger me-2 shadow-sm">
-                        <i class="fab fa-google"></i> Register with Google
-                    </button>
-                    <button type="button" class="btn btn-primary shadow-sm">
-                        <i class="fab fa-facebook"></i> Register with Facebook
-                    </button>
+                    <form id="external-account" asp-action="ExternalLogin" method="post" class="form-horizontal">
+
+                       <div>
+                            <p>
+                                @foreach (var provider in ViewBag.ExternalLogins!)
+                                {
+                                    
+
+                                    <button type="submit" class="btn btn-danger me-2 shadow-sm" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"><i class="fab fa-google"></i> Register with @provider.DisplayName</button>
+                            }
+                        </p>
+                       </div>
+                  </form>
+                
+                    
                 </div>
 
                 <div class="text-center mb-3">
