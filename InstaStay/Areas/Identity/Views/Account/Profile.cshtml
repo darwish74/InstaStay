@@ -4,75 +4,103 @@
     ViewData["Title"] = "Profile";
 }
 
-<h1>Profile</h1>
+<h1 class="text-center my-4">Profile</h1>
 
-<h4>ApplicationUserVM</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Profile">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white text-center">
+                <h4 class="mb-0">Edit Profile</h4>
             </div>
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
+            <div class="card-body">
+                <form asp-action="Profile">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <div class="form-group position-relative">
+                        <label asp-for="UserName" class="control-label">
+                            <i class="fa fa-user-circle me-2 text-primary"></i>Username
+                        </label>
+                        <input asp-for="UserName" class="form-control" placeholder="Enter username" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group position-relative">
+                        <label asp-for="FirstName" class="control-label">
+                            <i class="fa fa-id-badge me-2 text-primary"></i>First Name
+                        </label>
+                        <input asp-for="FirstName" class="form-control" placeholder="Enter first name" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group position-relative">
+                        <label asp-for="LastName" class="control-label">
+                            <i class="fa fa-id-badge me-2 text-primary"></i>Last Name
+                        </label>
+                        <input asp-for="LastName" class="form-control" placeholder="Enter last name" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group position-relative">
+                        <label asp-for="Email" class="control-label">
+                            <i class="fa fa-envelope me-2 text-primary"></i>Email
+                        </label>
+                        <input asp-for="Email" type="email" class="form-control" placeholder="Enter email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group position-relative">
+                        <label asp-for="Password" class="control-label">
+                            <i class="fa fa-lock me-2 text-primary"></i>Password
+                        </label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Enter password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group position-relative">
+                        <label asp-for="ConfirmPassword" class="control-label">
+                            <i class="fa fa-lock me-2 text-primary"></i>Confirm Password
+                        </label>
+                        <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm password" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <div class="form-group position-relative">
+                        <label asp-for="Country" class="control-label">
+                            <i class="fa fa-globe me-2 text-primary"></i>Country
+                        </label>
+                        <input asp-for="Country" class="form-control" placeholder="Enter country" />
+                        <span asp-validation-for="Country" class="text-danger"></span>
+                    </div>
+                    <div class="form-group position-relative">
+                        <label asp-for="City" class="control-label">
+                            <i class="fa fa-building me-2 text-primary"></i>City
+                        </label>
+                        <input asp-for="City" class="form-control" placeholder="Enter city" />
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                    <div class="form-group position-relative">
+                        <label asp-for="State" class="control-label">
+                            <i class="fa fa-map me-2 text-primary"></i>State
+                        </label>
+                        <input asp-for="State" class="form-control" placeholder="Enter state" />
+                        <span asp-validation-for="State" class="text-danger"></span>
+                    </div>
+                    <div class="form-group position-relative">
+                        <label asp-for="PostalCode" class="control-label">
+                            <i class="fa fa-envelope-open me-2 text-primary"></i>Postal Code
+                        </label>
+                        <input asp-for="PostalCode" class="form-control" placeholder="Enter postal code" />
+                        <span asp-validation-for="PostalCode" class="text-danger"></span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fa fa-arrow-left me-1"></i>Back to List
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-save me-1"></i>Save
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ConfirmPassword" class="control-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Country" class="control-label"></label>
-                <input asp-for="Country" class="form-control" />
-                <span asp-validation-for="Country" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="City" class="control-label"></label>
-                <input asp-for="City" class="form-control" />
-                <span asp-validation-for="City" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="State" class="control-label"></label>
-                <input asp-for="State" class="form-control" />
-                <span asp-validation-for="State" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PostalCode" class="control-label"></label>
-                <input asp-for="PostalCode" class="form-control" />
-                <span asp-validation-for="PostalCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

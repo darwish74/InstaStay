@@ -20,3 +20,95 @@ html {
 body {
   margin-bottom: 60px;
 }
+.theme-icon {
+    padding: 0.25rem 0.5rem;
+    font-size: 1rem;
+    line-height: 1; /* Make the button smaller */
+}
+
+    .theme-icon .fas {
+        font-size: 1.25rem; /* Slightly larger icon */
+    }
+
+.dropdown-menu {
+    font-size: 0.9rem; /* Reduce dropdown menu font size */
+}
+/* Global Theme Variables */
+body.light-theme {
+    --bg-color: #f8f9fa; /* Light */
+    --text-color: #495057; /* Dark gray */
+    --hover-color: #e9ecef;
+    --nav-bg: #fff;
+    --footer-bg: #e9ecef;
+}
+
+body.dark-theme {
+    --bg-color: #343a40; /* Dark */
+    --text-color: #f8f9fa; /* Light gray */
+    --hover-color: #495057;
+    --nav-bg: #212529;
+    --footer-bg: #495057;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background 0.3s ease, color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
+
+.navbar {
+    background-color: var(--nav-bg);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+    .navbar .nav-link {
+        color: var(--text-color);
+        transition: all 0.3s ease;
+    }
+
+        .navbar .nav-link:hover {
+            background-color: var(--hover-color);
+            border-radius: 5px;
+        }
+
+.navbar-brand {
+    font-family: 'Pacifico', cursive;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.navbar-brand .insta {
+        color: #007bff; /* Blue */
+}
+
+.navbar-brand .stay {
+        color: #28a745; /* Green */
+}
+
+footer {
+    background-color: var(--footer-bg);
+    color: var(--text-color);
+    text-align: center;
+    padding: 1rem 0;
+    box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.1);
+}
+footer a {
+    color: var(--text-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+footer a:hover {
+     color: var(--hover-color);
+ }

@@ -8,132 +8,31 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-    <style>
-        /* Global Theme Variables */
-        body.light-theme {
-            --bg-color: #f8f9fa; /* Light */
-            --text-color: #495057; /* Dark gray */
-            --hover-color: #e9ecef;
-            --nav-bg: #fff;
-            --footer-bg: #e9ecef;
-        }
 
-        body.dark-theme {
-            --bg-color: #343a40; /* Dark */
-            --text-color: #f8f9fa; /* Light gray */
-            --hover-color: #495057;
-            --nav-bg: #212529;
-            --footer-bg: #495057;
-        }
-
-        /* General Styles */
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            transition: background 0.3s ease, color 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .navbar {
-            background-color: var(--nav-bg);
-            color: var(--text-color);
-            transition: background-color 0.3s ease, color 0.3s ease;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-            .navbar .nav-link {
-                color: var(--text-color);
-                transition: all 0.3s ease;
-            }
-
-                .navbar .nav-link:hover {
-                    background-color: var(--hover-color);
-                    border-radius: 5px;
-                }
-
-        .navbar-brand {
-            font-family: 'Pacifico', cursive;
-            font-size: 1.8rem;
-            color: var(--text-color);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-            .navbar-brand span {
-                font-weight: 600;
-            }
-
-            .navbar-brand .insta {
-                color: #007bff; /* Blue */
-            }
-
-            .navbar-brand .stay {
-                color: #28a745; /* Green */
-            }
-
-        /* Theme Dropdown Button */
-        .dropdown-toggle {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .dropdown-menu {
-            background-color: var(--nav-bg);
-            color: var(--text-color);
-            border: none;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        .dropdown-item {
-            color: var(--text-color);
-        }
-
-            .dropdown-item:hover {
-                background-color: var(--hover-color);
-            }
-
-        /* Footer */
-        footer {
-            margin-top: auto;
-            background-color: var(--footer-bg);
-            color: var(--text-color);
-            text-align: center;
-            padding: 1.5rem 0;
-            box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-            footer a {
-                color: var(--text-color);
-                text-decoration: none;
-                transition: all 0.3s ease;
-            }
-
-                footer a:hover {
-                    color: var(--hover-color);
-                }
-    </style>
 </head>
 <body class="light-theme">
+    <!-- Navbar -->
     <header>
-        <nav class="navbar navbar-expand-lg">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm position-relative">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">
-                    <i class="fas fa-bed"></i>
-                    <span class="insta">Insta</span><span class="stay">Stay</span>
+                <!-- Navbar Brand -->
+                <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+                    <i class="fas fa-plane-departure"></i>
+                    <span>
+                        <span class="insta">Insta</span><span class="stay">Stay</span>
+                    </span>
                 </a>
+
+                <!-- Navbar Toggler -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
+                <!-- Navbar Links -->
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#">Home</a>
+                            <a class="nav-link active" href="/Customer/Home/Index">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">About</a>
@@ -142,48 +41,55 @@
                             <a class="nav-link" href="#">Contact</a>
                         </li>
                     </ul>
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav align-items-center">
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="Identity" asp-controller="Account" asp-action="Profile">Welcome, @User.Identity.Name</a>
+                                <a class="nav-link" asp-area="Identity" asp-controller="Account" asp-action="Profile">
+                                    <i class="fas fa-user-circle"></i> Welcome, @User.Identity.Name
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="Identity" asp-controller="Account" asp-action="SignOut"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                                <a class="nav-link" asp-area="Identity" asp-controller="Account" asp-action="SignOut">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Account" asp-action="Login"><i class="fas fa-sign-in-alt"></i> Login</a>
+                                <a class="nav-link" asp-area="Identity" asp-controller="Account" asp-action="Login">
+                                    <i class="fas fa-sign-in-alt"></i> Login
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="Identity" asp-controller="Account" asp-action="Register"><i class="fas fa-user-plus"></i> Register</a>
+                                <a class="nav-link" asp-area="Identity" asp-controller="Account" asp-action="Register">
+                                    <i class="fas fa-user-plus"></i> Register
+                                </a>
                             </li>
                         }
                     </ul>
                     <div class="dropdown">
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="themeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-lightbulb"></i> Theme
+                        <button class="btn btn-outline-secondary dropdown-toggle theme-icon" type="button" id="themeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-lightbulb"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="themeDropdown">
                             <li><a class="dropdown-item" href="#" id="light-theme">Light Theme</a></li>
                             <li><a class="dropdown-item" href="#" id="dark-theme">Dark Theme</a></li>
                         </ul>
                     </div>
+
                 </div>
             </div>
         </nav>
     </header>
-
-    <div class="container">
-        <main role="main" class="pb-3">
+    <main class="container">
+        <div role="main" class="pb-3">
             @RenderBody()
-        </main>
-    </div>
-
-    <footer>
-        <div class="container">
+        </div>
+    </main>
+    <footer class="mb-0>
+        <div class="container mb-0">
             &copy; 2025 - InstaStay
             <br />
             <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
@@ -194,9 +100,6 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/jquery.validate.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/additional-methods.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
     <script>
         const lightTheme = document.getElementById('light-theme');
         const darkTheme = document.getElementById('dark-theme');
