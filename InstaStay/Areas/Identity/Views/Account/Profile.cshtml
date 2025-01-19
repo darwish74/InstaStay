@@ -1,5 +1,6 @@
 ﻿@model Models.ViewModels.ApplicationUserVM
-
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> _userManager
 @{
     ViewData["Title"] = "Profile";
 }
@@ -13,8 +14,26 @@
                 <h4 class="mb-0">Edit Profile</h4>
             </div>
             <div class="card-body">
-                <form asp-action="Profile">
+                <form asp-action="Profile" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="text-center mb-4">
+                        <img id="profilePreview" src="@(_userManager.GetUserAsync(User).Result?.Photo ?? "~/images/ProfileImage/profile.webp")"
+                             class="rounded-circle shadow"
+                             style="width: 120px; height: 120px; object-fit: cover;"
+                             alt="Profile Photo" />
+                        <div class="mt-2">
+                            <label class="form-label btn btn-outline-secondary">
+                                <i class="fa fa-upload me-1"></i>Change Profile Photo
+                                <input asp-for="ProfilePhoto" id="profilePhotoInput"
+                                       type="file" class="form-control d-none"
+                                       accept="image/*" />
+                            </label>
+                            <span asp-validation-for="ProfilePhoto" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
                     <div class="form-group position-relative">
                         <label asp-for="UserName" class="control-label">
                             <i class="fa fa-user-circle me-2 text-primary"></i>Username
@@ -42,20 +61,6 @@
                         </label>
                         <input asp-for="Email" type="email" class="form-control" placeholder="Enter email" />
                         <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
-                    <div class="form-group position-relative">
-                        <label asp-for="Password" class="control-label">
-                            <i class="fa fa-lock me-2 text-primary"></i>Password
-                        </label>
-                        <input asp-for="Password" type="password" class="form-control" placeholder="Enter password" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-                    <div class="form-group position-relative">
-                        <label asp-for="ConfirmPassword" class="control-label">
-                            <i class="fa fa-lock me-2 text-primary"></i>Confirm Password
-                        </label>
-                        <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm password" />
-                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                     </div>
                     <div class="form-group position-relative">
                         <label asp-for="Country" class="control-label">
@@ -90,10 +95,7 @@
                             <i class="fa fa-lock me-1"></i>Go to Change Password
                         </a>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center mt-4">
-                        <a asp-action="Index" class="btn btn-secondary">
-                            <i class="fa fa-arrow-left me-1"></i>Back to List
-                        </a>
+                    <div class="d-flex justify-content-between align-items-center mt-8">
                         <button type="submit" class="btn btn-primary">
                             <i class="fa fa-save me-1"></i>Save
                         </button>
@@ -105,7 +107,17 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <script>
+        document.getElementById("profilePhotoInput").addEventListener("change", function (event) {
+            const [file] = event.target.files;
+            if (file) {
+                // Show selected image immediately in the preview
+                const previewElement = document.getElementById("profilePreview");
+                previewElement.src = URL.createObjectURL(file);
+                previewElement.onload = function () {
+                    URL.revokeObjectURL(previewElement.src); // Release memory
+                };
+            }
+        });
+    </script>
 }

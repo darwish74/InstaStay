@@ -174,7 +174,7 @@ namespace InstaStay.Areas.Identity.Controllers
             });
         }
         [HttpPost]
-        public async Task<IActionResult> Profile(ApplicationUserVM model)
+        public async Task<IActionResult> Profile(ApplicationUserVM model, IFormFile ProfilePhoto)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -182,6 +182,7 @@ namespace InstaStay.Areas.Identity.Controllers
                 ModelState.AddModelError("", "User not found.");
                 return View(model);
             }
+
             user.UserName = model.UserName;
             user.Email = model.Email;
             user.FirstName = model.FirstName;
@@ -190,13 +191,25 @@ namespace InstaStay.Areas.Identity.Controllers
             user.State = model.State;
             user.Country = model.Country;
             user.PostalCode = model.PostalCode;
+
+            if (ProfilePhoto != null && ProfilePhoto.Length > 0)
+            {
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(ProfilePhoto.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\ProfileImage", fileName);
+
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await ProfilePhoto.CopyToAsync(stream);
+                }
+                user.Photo = $"/images/ProfileImage/{fileName}";
+            }
+
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
             {
-                await _userManager.AddClaimAsync(user, new Claim("UserName", user.UserName));
                 await _signInManager.RefreshSignInAsync(user);
                 TempData["success"] = "Profile updated successfully.";
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Profile", "Account");
             }
             else
             {
@@ -208,6 +221,7 @@ namespace InstaStay.Areas.Identity.Controllers
 
             return View(model);
         }
+
         [HttpGet]
         public async Task<IActionResult> ChangePassword()
         {

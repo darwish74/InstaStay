@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -21,9 +22,11 @@ namespace Models.ViewModels
         [DataType(DataType.Password)]
         [Compare("Password")]
         public string ConfirmPassword { get; set; }
+        public string Photo { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
         public string State { get; set; }
         public int PostalCode { get; set; }
+        public IFormFile ProfilePhoto { get; set; }
     }
 }

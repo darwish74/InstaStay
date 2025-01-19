@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> _userManager
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -8,7 +10,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-
 </head>
 <body class="light-theme">
     <!-- Navbar -->
@@ -16,7 +17,7 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm position-relative">
             <div class="container-fluid">
                 <!-- Navbar Brand -->
-                <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+                <a class="navbar-brand d-flex align-items-center gap-2" href="/">
                     <i class="fas fa-plane-departure"></i>
                     <span>
                         <span class="insta">Insta</span><span class="stay">Stay</span>
@@ -35,18 +36,20 @@
                             <a class="nav-link active" href="/Customer/Home/Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">About</a>
+                            <a class="nav-link" href="/Customer/Home/About">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Contact</a>
+                            <a class="nav-link" href="/Customer/Home/Contact">Contact</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav align-items-center">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="Identity" asp-controller="Account" asp-action="Profile">
-                                    <i class="fas fa-user-circle"></i> Welcome, @User.Identity.Name
+                            <li class="nav-item d-flex align-items-center">
+                                <img src="@(_userManager.GetUserAsync(User).Result?.Photo ?? "~/images/ProfileImage/profile.webp")"
+                                     alt="Profile Photo" class="rounded-circle" style="width: 35px; height: 35px; object-fit: cover;" />
+                                <a class="nav-link ms-2" asp-area="Identity" asp-controller="Account" asp-action="Profile">
+                                    Welcome, @User.Identity.Name
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -78,7 +81,6 @@
                             <li><a class="dropdown-item" href="#" id="dark-theme">Dark Theme</a></li>
                         </ul>
                     </div>
-
                 </div>
             </div>
         </nav>
@@ -88,8 +90,8 @@
             @RenderBody()
         </div>
     </main>
-    <footer class="mb-0>
-        <div class="container mb-0">
+    <footer class="mb-0">
+        <div class="container">
             &copy; 2025 - InstaStay
             <br />
             <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
@@ -105,14 +107,22 @@
         const darkTheme = document.getElementById('dark-theme');
         const body = document.body;
 
+        // Load theme from localStorage
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            body.className = savedTheme;
+        }
+
         lightTheme.addEventListener('click', () => {
             body.classList.remove('dark-theme');
             body.classList.add('light-theme');
+            localStorage.setItem('theme', 'light-theme');
         });
 
         darkTheme.addEventListener('click', () => {
             body.classList.remove('light-theme');
             body.classList.add('dark-theme');
+            localStorage.setItem('theme', 'dark-theme');
         });
     </script>
     @await RenderSectionAsync("Scripts", required: false)
