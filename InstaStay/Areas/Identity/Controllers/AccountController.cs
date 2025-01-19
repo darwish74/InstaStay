@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
 using Models.Models;
 using Models.ViewModels;
 using Mono.TextTemplating;
+using Newtonsoft.Json.Linq;
 using System.Diagnostics.Metrics;
 using System.Security.Claims;
 
@@ -115,7 +116,7 @@ namespace InstaStay.Areas.Identity.Controllers
                     await _userManager.AddToRoleAsync(User, "Admin");
 
                     await _signInManager.SignInAsync(User, false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("index", "home", new { area = "customer" });
                 }
                 else
                 {
@@ -146,7 +147,7 @@ namespace InstaStay.Areas.Identity.Controllers
                     if (found)
                     {
                         await _signInManager.SignInAsync(user, LoginVM.RememberMe);
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("index", "home", new { area = "customer"});
                     }
                 }
                 ModelState.AddModelError("", "UserName Or Password wrong");
