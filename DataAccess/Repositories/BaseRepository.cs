@@ -15,11 +15,15 @@ namespace DataAccess.Repositories
     {
         private readonly ApplicationDbContext Context;
         private DbSet<T> DbSet;
+        
+
         public BaseRepository(ApplicationDbContext _context)
         {
             Context = _context;
             DbSet = Context.Set<T>();
         }
+
+
         public void Alter(T entity)
         {
             Context.Update(entity);
