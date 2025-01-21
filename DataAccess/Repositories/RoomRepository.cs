@@ -1,5 +1,5 @@
 ﻿using DataAccess.Data;
-using Models;
+using Models.IRepositories;
 using Models.Models;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    internal class RoomRepository : BaseRepository<Room>, IRoomRepository
+    public class RoomRepository : BaseRepository<Room>, IRoomRepository
     {
         private readonly ApplicationDbContext dbContext;
 

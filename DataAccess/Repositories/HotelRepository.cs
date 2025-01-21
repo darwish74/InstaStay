@@ -1,6 +1,7 @@
 ﻿using DataAccess.Data;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Models;
+using Models.IRepositories;
 using Models.Models;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    internal class HotelRepository:BaseRepository<Hotel>,IHotelRepository
+    public class HotelRepository:BaseRepository<Hotel>,IHotelRepository
     {
         private readonly ApplicationDbContext dbContext;
 

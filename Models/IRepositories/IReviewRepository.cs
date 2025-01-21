@@ -8,14 +8,9 @@ using System.Threading.Tasks;
 
 namespace Models.IRepositories
 {
-    internal interface IReviewRepository:IBaseRepositories<Review>
+    public interface IReviewRepository:IBaseRepositories<Review>
     {
+
     }
 }
 
-namespace Models
-{
-    public interface IReviewRepository
-    {
-    }
-}

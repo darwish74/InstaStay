@@ -8,14 +8,9 @@ using System.Threading.Tasks;
 
 namespace Models.IRepositories
 {
-    internal interface INotificationRepository:IBaseRepositories<Notification>
+    public interface INotificationRepository:IBaseRepositories<Notification>
     {
+
     }
 }
 
-namespace Models
-{
-    public interface INotificationRepository
-    {
-    }
-}

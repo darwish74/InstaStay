@@ -8,14 +8,8 @@ using System.Threading.Tasks;
 
 namespace Models.IRepositories
 {
-    internal interface IPaymentRepository:IBaseRepositories<Payment>
+    public interface IPaymentRepository:IBaseRepositories<Payment>
     {
     }
 }
 
-namespace Models
-{
-    public interface IPaymentRepository
-    {
-    }
-}

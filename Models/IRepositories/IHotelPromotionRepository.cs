@@ -8,14 +8,8 @@ using System.Threading.Tasks;
 
 namespace Models.IRepositories
 {
-    internal interface IHotelPromotionRepository:IBaseRepositories<HotelPromotion>
+    public interface IHotelPromotionRepository:IBaseRepositories<HotelPromotion>
     {
-    }
-}
 
-namespace Models
-{
-    public interface IHotelPromotionRepository
-    {
     }
 }

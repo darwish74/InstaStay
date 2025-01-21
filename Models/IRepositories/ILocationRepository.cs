@@ -8,14 +8,7 @@ using System.Threading.Tasks;
 
 namespace Models.IRepositories
 {
-    internal interface ILocationRepository:IBaseRepositories<Location>
-    {
-    }
-}
-
-namespace Models
-{
-    public interface ILocationRepository
+    public interface ILocationRepository:IBaseRepositories<Location>
     {
     }
 }

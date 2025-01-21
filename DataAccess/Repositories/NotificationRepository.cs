@@ -1,5 +1,6 @@
 ﻿using DataAccess.Data;
 using Models;
+using Models.IRepositories;
 using Models.Models;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    internal class NotificationRepository:BaseRepository<Notification>, INotificationRepository
+    public class NotificationRepository:BaseRepository<Notification>, INotificationRepository
     {
         private readonly ApplicationDbContext dbContext;
 

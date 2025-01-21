@@ -8,14 +8,8 @@ using System.Threading.Tasks;
 
 namespace Models.IRepositories
 {
-    internal interface IRoomRepository:IBaseRepositories<Room>
+    public interface IRoomRepository:IBaseRepositories<Room>
     {
-    }
-}
 
-namespace Models
-{
-    public interface IRoomRepository
-    {
     }
 }

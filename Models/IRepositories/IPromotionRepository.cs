@@ -8,14 +8,9 @@ using System.Threading.Tasks;
 
 namespace Models.IRepositories
 {
-    internal interface IPromotionRepository:IBaseRepositories<Promotion>
+    public interface IPromotionRepository:IBaseRepositories<Promotion>
     {
-    }
-}
 
-namespace Models
-{
-    public interface IPromotionRepository
-    {
+
     }
 }
