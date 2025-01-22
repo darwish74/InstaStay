@@ -2,6 +2,7 @@ using DataAccess;
 using DataAccess.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Models.IRepositories;
 using Models.Models;
 
 namespace InstaStay
@@ -26,8 +27,6 @@ namespace InstaStay
                 googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
                 googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
             });
-
-            
 
             var app = builder.Build();
             // Configure the HTTP request pipeline.
