@@ -104,10 +104,7 @@ namespace InstaStay.Areas.Identity.Controllers
                     Email = userVM.Email,
                     FirstName = userVM.FirstName,
                     LastName = userVM.LastName,
-                    City = userVM.City,
-                    State = userVM.State,
-                    Country = userVM.Country,
-                    PostalCode = userVM.PostalCode,
+                  
                 };
                 var result = await _userManager.CreateAsync(User, userVM.Password);
 
@@ -168,10 +165,7 @@ namespace InstaStay.Areas.Identity.Controllers
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                City = user.City,
-                State = user.State,
-                Country = user.Country,
-                PostalCode = user.PostalCode,
+               
             });
         }
         [HttpPost]
@@ -188,11 +182,8 @@ namespace InstaStay.Areas.Identity.Controllers
             user.Email = model.Email;
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
-            user.City = model.City;
-            user.State = model.State;
-            user.Country = model.Country;
-            user.PostalCode = model.PostalCode;
-
+            
+            
             if (ProfilePhoto != null && ProfilePhoto.Length > 0)
             {
                 var fileName = Guid.NewGuid().ToString() + Path.GetExtension(ProfilePhoto.FileName);
