@@ -191,3 +191,30 @@ footer a {
 footer a:hover {
   color: var(--hover-color);
 }
+.sidebar {
+    height: calc(100vh - 56px); /* Adjust for the navbar height */
+    width: 250px;
+    position: relative;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+    transition: width 0.3s;
+}
+
+    .sidebar.collapsed {
+        width: 80px;
+    }
+
+/* Content adjusts dynamically */
+#content {
+    margin-left: 250px;
+    transition: margin-left 0.3s;
+}
+
+.sidebar.collapsed ~ #content {
+    margin-left: 80px;
+}
+
+.transition {
+    transition: all 0.3s ease-in-out;
+}

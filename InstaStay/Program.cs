@@ -20,7 +20,7 @@ namespace InstaStay
                 )
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<DataAccess.IUnitOfWork, UnitOfWork>();
 
             builder.Services.AddAuthentication().AddGoogle(googleOptions =>
             {

@@ -1,0 +1,108 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> _userManager
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+@section Scripts {
+    <script>
+        const toggleSidebarButton = document.getElementById("toggle-sidebar");
+        const sidebar = document.querySelector(".sidebar");
+
+        toggleSidebarButton.addEventListener("click", () => {
+            sidebar.classList.toggle("collapsed");
+        });
+    </script>
+}
+
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div class="sidebar bg-dark text-white">
+        <div class="sidebar-header d-flex align-items-center justify-content-between px-3 py-3">
+            <span class="d-flex align-items-center">
+                <img src="@(_userManager.GetUserAsync(User).Result?.Photo ?? "~/images/ProfileImage/profile.webp")"
+                     alt="Admin Photo" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;" />
+                <span>Admin</span>
+            </span>
+            <button id="toggle-sidebar" class="btn btn-outline-light btn-sm">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <nav class="nav flex-column">
+            <a class="nav-link text-white" href="/Admin/DashBoard/Index"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
+            <a class="nav-link text-white" href="/Users/Index"><i class="fas fa-users me-2"></i>Manage Users</a>
+            <a class="nav-link text-white" href="/Hotels/Index"><i class="fas fa-hotel me-2"></i>Manage Hotels</a>
+            <a class="nav-link text-white" href="/Payments/Index"><i class="fas fa-credit-card me-2"></i>Payments</a>
+            <a class="nav-link text-white" href="/Reports/Index"><i class="fas fa-chart-line me-2"></i>Reports</a>
+            <a class="nav-link text-white" href="/Settings/Index"><i class="fas fa-cog me-2"></i>Settings</a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content flex-grow-1 p-4">
+        <h1 class="mb-4">Welcome,@User.Identity.Name</h1>
+
+        <!-- Statistics Section -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Users</h5>
+                        <p class="card-text fs-4">12,345</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Bookings</h5>
+                        <p class="card-text fs-4">6,789</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-warning mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Pending Payments</h5>
+                        <p class="card-text fs-4">123</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activities -->
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                Recent Activities
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Activity</th>
+                            <th>User</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Added a new booking</td>
+                            <td>John Doe</td>
+                            <td>2025-01-21</td>
+                        </tr>
+                        <tr>
+                            <td>Updated hotel information</td>
+                            <td>Admin</td>
+                            <td>2025-01-20</td>
+                        </tr>
+                        <tr>
+                            <td>Processed a payment</td>
+                            <td>Jane Smith</td>
+                            <td>2025-01-19</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

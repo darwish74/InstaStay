@@ -1,66 +1,11 @@
-﻿<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-    <!-- Indicators -->
-    <div class="carousel-indicators">
-        <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="1" aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="2" aria-label="Slide 3"></button>
-    </div>
+﻿
 
-    <!-- Carousel Items -->
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-            <img src="~/images/Ads/0efa99b822173f5e289889f5fbab9fa5.jpg" class="d-block w-100" alt="First advertisement" loading="lazy">
-            <div class="carousel-caption d-none d-md-block">
-                <h5>Advertisement 1</h5>
-                <p>Description for the first advertisement.</p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img src="~/images/Ads/ade8c9e74c365637c77946e774f9279b.jpg" class="d-block w-100" alt="Second advertisement" loading="lazy">
-            <div class="carousel-caption d-none d-md-block">
-                <h5>Advertisement 2</h5>
-                <p>Description for the second advertisement.</p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img src="~/images/Ads/e4dfbd6b2d116fd8dfdfbd9c7ff08191.jpg" class="d-block w-100" alt="Third advertisement" loading="lazy">
-            <div class="carousel-caption d-none d-md-block">
-                <h5>Advertisement 3</h5>
-                <p>Description for the third advertisement.</p>
-            </div>
-        </div>
-    </div>
 
-    <!-- Controls -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
-
-    <!-- Play/Pause Button -->
-    <div class="carousel-play-controls">
-        <button id="playPauseButton" class="btn btn-light">Pause</button>
-    </div>
-</div>
-
-<!-- Script for Play/Pause -->
-<script>
-    const carousel = document.querySelector('#carouselExampleControls');
-    const playPauseButton = document.querySelector('#playPauseButton');
-    let isPaused = false;
-
-    playPauseButton.addEventListener('click', () => {
-        if (isPaused) {
-            carousel.carousel('cycle');
-            playPauseButton.textContent = 'Pause';
-        } else {
-            carousel.carousel('pause');
-            playPauseButton.textContent = 'Play';
-        }
-        isPaused = !isPaused;
-    });
-</script>
+@section Scripts {
+    @if (@TempData["success"] != null)
+    {
+        <script>
+            toastr.success('@TempData["success"]')
+        </script>
+    }
+}

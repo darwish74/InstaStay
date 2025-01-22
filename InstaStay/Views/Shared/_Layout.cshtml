@@ -14,8 +14,8 @@
 <body class="light-theme">
     <!-- Navbar -->
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm position-relative">
-            <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg navbar-collapse navbar-text-light bg-gradient bg-primary shadow-sm position-relative">
+            <div class="container-fluid fs-6">
                 <!-- Navbar Brand -->
                 <a class="navbar-brand d-flex align-items-center gap-2" href="/">
                     <i class="fas fa-plane-departure"></i>
@@ -41,6 +41,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/Customer/Home/Index">Contact</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Admin/Dashboard/Index">Dashboard</a>
+                        </li>
                     </ul>
                     <ul class="navbar-nav align-items-center">
                         @if (User.Identity.IsAuthenticated)
@@ -57,6 +60,8 @@
                                     <i class="fas fa-sign-out-alt"></i> Logout
                                 </a>
                             </li>
+
+
                         }
                         else
                         {
@@ -73,7 +78,7 @@
                         }
                     </ul>
                     <div class="dropdown">
-                        <button class="btn btn-outline-secondary dropdown-toggle theme-icon" type="button" id="themeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn btn-outline-info bg-gradient theme-icon light-theme" type="button" id="themeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-lightbulb"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="themeDropdown">
@@ -85,7 +90,7 @@
             </div>
         </nav>
     </header>
-    <main class="container">
+    <main class="container p-0 m-0 ">
         <div role="main" class="pb-3">
             @RenderBody()
         </div>
