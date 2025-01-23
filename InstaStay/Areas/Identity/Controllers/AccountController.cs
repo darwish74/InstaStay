@@ -79,6 +79,7 @@ namespace InstaStay.Areas.Identity.Controllers
                 if (result.Succeeded)
                 {
                     result = await _userManager.AddLoginAsync(user, info);
+                    await _userManager.AddToRoleAsync(user, "User");
                     if (result.Succeeded)
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);

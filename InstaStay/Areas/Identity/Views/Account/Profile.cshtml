@@ -18,10 +18,8 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
                     <div class="text-center mb-4">
-                        <img id="profilePreview" src="@(_userManager.GetUserAsync(User).Result?.Photo ?? "~/images/ProfileImage/profile.webp")"
-                             class="rounded-circle shadow"
-                             style="width: 120px; height: 120px; object-fit: cover;"
-                             alt="Profile Photo" />
+                        <img src="@(_userManager.GetUserAsync(User).Result?.Photo ?? Url.Content("~/images/ProfileImage/profile.webp"))"
+                             alt="Admin Photo" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;" />
                         <div class="mt-2">
                             <label class="form-label btn btn-outline-secondary">
                                 <i class="fa fa-upload me-1"></i>Change Profile Photo
