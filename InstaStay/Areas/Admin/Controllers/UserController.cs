@@ -70,7 +70,7 @@ namespace InstaStay.Areas.Admin.Controllers
                 {
                     user.ISBlocked = false;
                     await userManager.UpdateAsync(user);
-                    TempData["success"] = "The user is not blocked from thd site";
+                    TempData["success"] = "The user is not blocked from thid site";
                     var allUser = userManager.Users.ToList();
                     return View("Index", allUser);
                 }
