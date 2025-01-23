@@ -74,12 +74,12 @@ namespace InstaStay.Areas.Admin.Controllers
                     var allUser = userManager.Users.ToList();
                     return View("Index", allUser);
                 }
-                TempData["error"] = "something error has happened";
+                TempData["error"] = "something  has happened error";
 
                 var allUser2 = userManager.Users.ToList();
                 return View("Index", allUser2);
             }
-            return RedirectToAction("NotFoundPage", "home");
+            return RedirectToAction("index", "home");
         }
 
     }
