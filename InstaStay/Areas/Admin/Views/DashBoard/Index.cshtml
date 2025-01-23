@@ -20,7 +20,7 @@
     <div class="sidebar bg-dark text-white">
         <div class="sidebar-header d-flex align-items-center justify-content-between px-3 py-3">
             <span class="d-flex align-items-center">
-                <img src="@(_userManager.GetUserAsync(User).Result?.Photo ?? "~/images/ProfileImage/profile.webp")"
+                <img src="@(_userManager.GetUserAsync(User).Result?.Photo ?? Url.Content("~/images/ProfileImage/profile.webp"))"
                      alt="Admin Photo" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;" />
                 <span>Admin</span>
             </span>

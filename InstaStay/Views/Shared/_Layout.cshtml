@@ -49,8 +49,8 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item d-flex align-items-center">
-                                <img src="@(_userManager.GetUserAsync(User).Result?.Photo ?? "~/images/ProfileImage/profile.webp")"
-                                     alt="Profile Photo" class="rounded-circle" style="width: 35px; height: 35px; object-fit: cover;" />
+                                <img src="@(_userManager.GetUserAsync(User).Result?.Photo ?? Url.Content("~/images/ProfileImage/profile.webp"))"
+                                     alt="Admin Photo" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;" />
                                 <a class="nav-link ms-2" asp-area="Identity" asp-controller="Account" asp-action="Profile">
                                     Welcome, @User.Identity.Name
                                 </a>
