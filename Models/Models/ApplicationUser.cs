@@ -19,5 +19,6 @@ namespace Models.Models
         public virtual ICollection<Booking> Bookings { get; set; }
         public virtual ICollection<Room> Wishlist { get; set; }
         public virtual ICollection<Notification> Notifications { get; set; }
+        public bool? ISBlocked { get; set; } = false;
     }
 }

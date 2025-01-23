@@ -140,6 +140,11 @@ namespace InstaStay.Areas.Identity.Controllers
                 ApplicationUser user = await _userManager.FindByNameAsync(LoginVM.Name);
                 if (user != null)
                 {
+                    if (await _userManager.IsLockedOutAsync(user ))
+                    {
+                        ModelState.AddModelError(string.Empty, "This account has been blocked.");
+                        return View(LoginVM);
+                    }
                     bool found = await _userManager.CheckPasswordAsync(user, LoginVM.Password);
                     if (found)
                     {

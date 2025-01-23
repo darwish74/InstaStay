@@ -1,0 +1,75 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<ApplicationUser> userManager
+
+@model IEnumerable<ApplicationUser>
+
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h3> All Users</h3>
+
+
+<table class="table">
+    <thead>
+        <tr>
+
+
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+
+
+            <th>  block | unblock </th>
+            <th> Role</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var role = await userManager.GetRolesAsync(item);
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                
+                <td>
+                    @if ((bool)item.ISBlocked.HasValue && item.ISBlocked.Value)
+                    {
+                        <a class="btn btn-outline-info" asp-action="unBlockUser" asp-route-userId="@item.Id">UnBlock</a>
+                    }
+                    else
+                    {
+
+                        <a class="btn btn-outline-danger" asp-action="blockUser" asp-route-userId="@item.Id">Block</a>
+                    }
+
+                </td>
+                <td>
+                    @string.Join(" ", role)
+
+                </td>
+                <td>
+                    <a href="/Admin/Role/Role?userId=@item.Id" class="btn btn-outline-success"> ADD to Role</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
