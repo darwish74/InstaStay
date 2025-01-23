@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,10 +24,6 @@ namespace Models.ViewModels
         [Compare("Password")]
         public string ConfirmPassword { get; set; }
         public string Photo { get; set; }
-        public string Country { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
-        public int PostalCode { get; set; }
         public IFormFile ProfilePhoto { get; set; }
     }
 }

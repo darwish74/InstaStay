@@ -13,8 +13,13 @@
             sidebar.classList.toggle("collapsed");
         });
     </script>
+    @if (@TempData["success"] != null)
+    {
+        <script>
+            toastr.success('@TempData["success"]')
+        </script>
+    }
 }
-
 <div class="d-flex">
     <!-- Sidebar -->
     <div class="sidebar bg-dark text-white">
@@ -30,11 +35,9 @@
         </div>
         <nav class="nav flex-column">
             <a class="nav-link text-white" href="/Admin/DashBoard/Index"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
+            <a class="nav-link text-white" href="/Admin/Dashboard/AddAdmin"><i class="fa-solid fa-user-plus me-2"></i>Add Admin</a>
+            <a class="nav-link text-white" href="/Admin/Role/Role"><i class="fa-solid fa-circle-plus me-2"></i></i>Add Role</a>
             <a class="nav-link text-white" href="/Users/Index"><i class="fas fa-users me-2"></i>Manage Users</a>
-            <a class="nav-link text-white" href="/Hotels/Index"><i class="fas fa-hotel me-2"></i>Manage Hotels</a>
-            <a class="nav-link text-white" href="/Payments/Index"><i class="fas fa-credit-card me-2"></i>Payments</a>
-            <a class="nav-link text-white" href="/Reports/Index"><i class="fas fa-chart-line me-2"></i>Reports</a>
-            <a class="nav-link text-white" href="/Settings/Index"><i class="fas fa-cog me-2"></i>Settings</a>
         </nav>
     </div>
 

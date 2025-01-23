@@ -111,8 +111,7 @@ namespace InstaStay.Areas.Identity.Controllers
 
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(User, "Admin");
-
+                    await _userManager.AddToRoleAsync(User, "User");
                     await _signInManager.SignInAsync(User, false);
                     return RedirectToAction("index", "home", new { area = "customer" });
                 }
