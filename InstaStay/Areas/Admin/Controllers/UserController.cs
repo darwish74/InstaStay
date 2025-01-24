@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿// Updated UserController.cs
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Models.Models;
+using Models.ViewModels;
+using X.PagedList;
+using X.PagedList.Extensions;
 
 namespace InstaStay.Areas.Admin.Controllers
 {
@@ -15,24 +19,29 @@ namespace InstaStay.Areas.Admin.Controllers
             this.userManager = userManager;
             this.roleManager = roleManager;
         }
-        public IActionResult Index(string? Account)
+
+        public IActionResult Index(string? Account, int pageNumber = 1, int pageSize = 10)
         {
-            if (Account == null)
+            var usersQuery = userManager.Users.AsQueryable();
+            if (!string.IsNullOrEmpty(Account))
             {
-                return View(userManager.Users.ToList());
+                usersQuery = usersQuery.Where(u => u.Email.Contains(Account) || u.UserName.Contains(Account));
             }
-
-            var Users = userManager.Users.Where(e =>
-                 e.Email.Contains(Account) || e.UserName.Contains(Account)).ToList();
-            if (Users.Any())
+            int totalUsers = usersQuery.Count();
+            var users = usersQuery
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+            var viewModel = new UserPaginationViewModel
             {
+                Users = users,
+                CurrentPage = pageNumber,
+                PageSize = pageSize,
+                TotalUsers = totalUsers
+            };
 
-                return View(Users);
-            }
-
-            return View();
+            return View(viewModel);
         }
-
 
         public async Task<IActionResult> BlockUser(string userId)
         {
@@ -41,46 +50,63 @@ namespace InstaStay.Areas.Admin.Controllers
             {
                 await userManager.SetLockoutEnabledAsync(user, true);
                 var result = await userManager.SetLockoutEndDateAsync(user, DateTime.Now.AddYears(100));
-                //await userManager.SetLockoutEnabledAsync(user, false);
                 if (result.Succeeded)
                 {
                     user.ISBlocked = true;
                     await userManager.UpdateAsync(user);
-                    TempData["success"] = "The user has been blocked succefully";
-                    var allUser = userManager.Users.ToList();
-                    return View("Index", allUser);
+                    TempData["success"] = "The user has been blocked successfully.";
                 }
-                TempData["error"] = "The user has not been blocked";
-                var allUser2 = userManager.Users.ToList();
-                return View("Index", allUser2);
+                else
+                {
+                    TempData["error"] = "The user could not be blocked.";
+                }
             }
-            return RedirectToAction("NotFoundSearh");
-        }
 
-        public async Task<IActionResult> unBlockUser(string userId)
+            return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult> DeleteUser(string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
             if (user != null)
             {
-                //await userManager.SetLockoutEnabledAsync(user, true);
+                var result = await userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                {
+                    TempData["success"] = "The user has been deleted successfully.";
+                }
+                else
+                {
+                    TempData["error"] = "The user could not be deleted.";
+                }
+            }
+            else
+            {
+                TempData["error"] = "User not found.";
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> UnBlockUser(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
                 var result = await userManager.SetLockoutEndDateAsync(user, null);
                 await userManager.SetLockoutEnabledAsync(user, false);
-
                 if (result.Succeeded)
                 {
                     user.ISBlocked = false;
                     await userManager.UpdateAsync(user);
-                    TempData["success"] = "The user is not blocked from thid site";
-                    var allUser = userManager.Users.ToList();
-                    return View("Index", allUser);
+                    TempData["success"] = "The user has been unblocked successfully.";
                 }
-                TempData["error"] = "something  has happened error";
-
-                var allUser2 = userManager.Users.ToList();
-                return View("Index", allUser2);
+                else
+                {
+                    TempData["error"] = "The user could not be unblocked.";
+                }
             }
-            return RedirectToAction("index", "home");
-        }
 
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

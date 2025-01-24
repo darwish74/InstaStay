@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Models.Models;
 using Models.ViewModels;
-using Mono.TextTemplating;
-using Newtonsoft.Json.Linq;
-using System.Diagnostics.Metrics;
 using System.Security.Claims;
 
 namespace InstaStay.Areas.Identity.Controllers
@@ -17,17 +13,56 @@ namespace InstaStay.Areas.Identity.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager)
+
+        public AccountController(
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _roleManager = roleManager; 
+            _roleManager = roleManager;
         }
+
         [HttpGet]
         public async Task<IActionResult> Register()
         {
             ViewBag.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(ApplicationUserVM userVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = userVM.UserName,
+                    Email = userVM.Email,
+                    FirstName = userVM.FirstName,
+                    LastName = userVM.LastName
+                };
+
+                var result = await _userManager.CreateAsync(user, userVM.Password);
+
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(user, "User");
+                    await _signInManager.SignInAsync(user, false);
+                    return RedirectToAction("Index", "Home", new { area = "Customer" });
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                }
+            }
+
+            ViewBag.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            return View(userVM);
         }
 
         public IActionResult ExternalLogin(string provider, string returnUrl = null)
@@ -53,12 +88,17 @@ namespace InstaStay.Areas.Identity.Controllers
                 return RedirectToAction(nameof(Register));
             }
 
-            // Sign in the user with this external login provider if the user already has a login
-            var signInResult = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+            var signInResult = await _signInManager.ExternalLoginSignInAsync(
+                info.LoginProvider,
+                info.ProviderKey,
+                isPersistent: false,
+                bypassTwoFactor: true);
+
             if (signInResult.Succeeded)
             {
                 return LocalRedirect(returnUrl);
             }
+
             if (signInResult.RequiresTwoFactor)
             {
                 return RedirectToAction(nameof(LoginWith2fa), new { ReturnUrl = returnUrl });
@@ -69,17 +109,17 @@ namespace InstaStay.Areas.Identity.Controllers
                 return RedirectToAction(nameof(Lockout));
             }
 
-            // If the user does not have an account, then create one and sign in
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
             if (email != null)
             {
                 var user = new ApplicationUser { UserName = email, Email = email };
-
                 var result = await _userManager.CreateAsync(user);
+
                 if (result.Succeeded)
                 {
                     result = await _userManager.AddLoginAsync(user, info);
                     await _userManager.AddToRoleAsync(user, "User");
+
                     if (result.Succeeded)
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
@@ -92,91 +132,73 @@ namespace InstaStay.Areas.Identity.Controllers
             return RedirectToAction(nameof(Register));
         }
 
-
-
-        [HttpPost]
-        public async Task<IActionResult> Register(ApplicationUserVM userVM)
-        {
-            if (ModelState.IsValid)
-            {
-                ApplicationUser User = new()
-                {
-                    UserName = userVM.UserName,
-                    Email = userVM.Email,
-                    FirstName = userVM.FirstName,
-                    LastName = userVM.LastName,
-                  
-                };
-                var result = await _userManager.CreateAsync(User, userVM.Password);
-
-                if (result.Succeeded)
-                {
-                    await _userManager.AddToRoleAsync(User, "User");
-                    await _signInManager.SignInAsync(User, false);
-                    return RedirectToAction("index", "home", new { area = "customer" });
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error.Description);
-                    }
-                }
-            }
-
-            return View(userVM);
-        }
         [HttpGet]
         public async Task<IActionResult> Login()
         {
             ViewBag.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             return View();
         }
+
         [HttpPost]
-        public async Task<IActionResult> Login(LoginVM LoginVM)
+        public async Task<IActionResult> Login(LoginVM loginVM)
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = await _userManager.FindByNameAsync(LoginVM.Name);
+                var user = await _userManager.FindByNameAsync(loginVM.Name);
+
                 if (user != null)
                 {
-                    if (await _userManager.IsLockedOutAsync(user ))
+                    if (await _userManager.IsLockedOutAsync(user))
                     {
-                        ModelState.AddModelError(string.Empty, "This account has been blocked.");
-                        return View(LoginVM);
+                        ModelState.AddModelError("", "This account has been locked.");
+                        return View(loginVM);
                     }
-                    bool found = await _userManager.CheckPasswordAsync(user, LoginVM.Password);
-                    if (found)
+
+                    if (await _userManager.CheckPasswordAsync(user, loginVM.Password))
                     {
-                        await _signInManager.SignInAsync(user, LoginVM.RememberMe);
-                        return RedirectToAction("index", "home", new { area = "customer"});
+                        await _signInManager.SignInAsync(user, loginVM.RememberMe);
+                        return RedirectToAction("Index", "Home", new { area = "Customer" });
                     }
                 }
-                ModelState.AddModelError("", "UserName Or Password wrong");
+
+                ModelState.AddModelError("", "Invalid username or password.");
             }
-            return View();
+
+            return View(loginVM);
         }
+
         public async Task<IActionResult> SignOut()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login", "Account");
         }
+
+        [HttpGet]
         public async Task<IActionResult> Profile()
         {
             var user = await _userManager.GetUserAsync(User);
-            return View(new ApplicationUserVM()
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var model = new ApplicationUserVM
             {
                 UserName = user.UserName,
                 Email = user.Email,
                 FirstName = user.FirstName,
-                LastName = user.LastName,
-               
-            });
+                LastName = user.LastName
+            };
+
+            return View(model);
         }
+
         [HttpPost]
-        public async Task<IActionResult> Profile(ApplicationUserVM model, IFormFile ProfilePhoto)
+        public async Task<IActionResult> Profile(ApplicationUserVM model, IFormFile profilePhoto)
         {
             var user = await _userManager.GetUserAsync(User);
+
             if (user == null)
             {
                 ModelState.AddModelError("", "User not found.");
@@ -187,49 +209,50 @@ namespace InstaStay.Areas.Identity.Controllers
             user.Email = model.Email;
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
-            
-            
-            if (ProfilePhoto != null && ProfilePhoto.Length > 0)
+
+            if (profilePhoto != null && profilePhoto.Length > 0)
             {
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(ProfilePhoto.FileName);
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\ProfileImage", fileName);
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(profilePhoto.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/ProfileImage", fileName);
 
                 using (var stream = System.IO.File.Create(filePath))
                 {
-                    await ProfilePhoto.CopyToAsync(stream);
+                    await profilePhoto.CopyToAsync(stream);
                 }
+
                 user.Photo = $"/images/ProfileImage/{fileName}";
             }
 
             var result = await _userManager.UpdateAsync(user);
+
             if (result.Succeeded)
             {
                 await _signInManager.RefreshSignInAsync(user);
                 TempData["success"] = "Profile updated successfully.";
                 return RedirectToAction("Profile", "Account");
             }
-            else
+
+            foreach (var error in result.Errors)
             {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError("", error.Description);
-                }
+                ModelState.AddModelError("", error.Description);
             }
 
             return View(model);
         }
 
         [HttpGet]
-        public async Task<IActionResult> ChangePassword()
+        public IActionResult ChangePassword()
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordVM model)
         {
             if (ModelState.IsValid)
             {
                 var user = await _userManager.GetUserAsync(User);
+
                 if (user == null)
                 {
                     return RedirectToAction("Login", "Account");
@@ -243,13 +266,14 @@ namespace InstaStay.Areas.Identity.Controllers
                     TempData["success"] = "Your password has been changed successfully.";
                     return RedirectToAction("Profile", "Account");
                 }
+
                 foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    ModelState.AddModelError("", error.Description);
                 }
             }
+
             return View(model);
         }
-
     }
 }
