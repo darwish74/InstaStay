@@ -12,6 +12,16 @@
 
 <h3 class="m-3 text-center bg-dark text-info bg-transparent rounded-5">All Users</h3>
 
+
+<div class="mb-2">
+    <form asp-action="SearchForUser" asp-controller="User" asp-area="Admin" method="post">
+        <div class="col-md-3 d-flex">
+            <input type="Text" class="form-control" placeholder="User Name Or Email" name="account" />
+            <button class="btn btn-primary" type="submit"> Search </button>
+        </div>
+    </form>
+</div>
+
 @if (Model.Users == null || !Model.Users.Any())
 {
     <div class="alert alert-info">

@@ -42,6 +42,16 @@ namespace InstaStay.Areas.Admin.Controllers
 
             return View(viewModel);
         }
+        [HttpPost]
+        public async Task<IActionResult> SearchForUser(string account)
+        {
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction("Index", new { Account = account });
+
+            }
+            return RedirectToAction("Index");
+        }
 
         public async Task<IActionResult> BlockUser(string userId)
         {
