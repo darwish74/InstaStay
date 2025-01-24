@@ -8,7 +8,7 @@ using Models.ViewModels;
 namespace InstaStay.Areas.Admin.Controllers
 {
     [Area("Admin")]
-  //  [Authorize(Roles = "User")]
+    [Authorize(Roles = "Admin")]
     public class DashBoardController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -24,7 +24,8 @@ namespace InstaStay.Areas.Admin.Controllers
         {
             return View();
         }
-        [HttpGet]               
+        [HttpGet] 
+        
         public IActionResult AddAdmin() 
         {
             return View();
