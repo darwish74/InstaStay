@@ -1,0 +1,95 @@
+﻿@model IEnumerable<Models.Models.HotelManagerRequests>
+@{
+    ViewData["Title"] = "Requests";
+    @section Scripts {
+        @if (@TempData["success"] != null)
+        {
+            <script>
+                toastr.success('@TempData["success"]')
+            </script>
+        }
+    }
+}
+<h1 class="text-center my-4">Hotel Manager Requests</h1>
+
+<table class="table table-striped table-bordered mx-3">
+    <thead class="table-dark">
+        <tr>
+            <th><i class="fas fa-user"></i> User Name</th>
+            <th><i class="fas fa-envelope"></i> Email</th>
+            <th><i class="fas fa-comment-dots"></i> Request Message</th>
+            <th><i class="fas fa-calendar-alt"></i> Created At</th>
+            <th class="text-center">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.UserName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                    <td>@Html.DisplayFor(modelItem => item.RequestMesssage)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CreatedAt)</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-success me-2" data-bs-toggle="modal" data-bs-target="#confirmAcceptModal-@item.Id" title="Accept Request">
+                            <i class="fas fa-check"></i> Accept
+                        </button>
+                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeclineModal-@item.Id" title="Decline Request">
+                            <i class="fas fa-times"></i> Decline
+                        </button>
+                    </td>
+                </tr>
+
+                <!-- Accept Modal -->
+                <div class="modal fade" id="confirmAcceptModal-@item.Id" tabindex="-1" aria-labelledby="acceptModalLabel-@item.Id" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="acceptModalLabel-@item.Id">Confirm Accept</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to accept the request from <strong>@item.UserName</strong>?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <a asp-action="AcceptRequest" asp-route-userEmail="@item.Email" asp-route-id="@item.Id" class="btn btn-success">
+                                    <i class="fas fa-check"></i> Yes, Accept
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Decline Modal -->
+                <div class="modal fade" id="confirmDeclineModal-@item.Id" tabindex="-1" aria-labelledby="declineModalLabel-@item.Id" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="declineModalLabel-@item.Id">Confirm Decline</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to decline the request from <strong>@item.UserName</strong>?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <a asp-action="DeleteRequest" asp-route-id="@item.Id" class="btn btn-danger">
+                                    <i class="fas fa-trash"></i> Yes, Decline
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" class="text-center text-muted">No requests available.</td>
+            </tr>
+        }
+    </tbody>
+</table>

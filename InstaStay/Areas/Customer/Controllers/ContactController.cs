@@ -62,26 +62,51 @@ namespace InstaStay.Areas.Customer.Controllers
             catch (Exception ex)
             {
                 TempData["Error"] = "An error occurred while submitting your problem report.";
-                // Log exception here
                 return RedirectToAction("Index", "Home");
             }
 
             TempData["Success"] = "Your problem report has been submitted successfully.";
             return RedirectToAction("Index", "Home");
         }
-
-
         [HttpPost]
-        public async Task<IActionResult> RequestConversion(string managerReason)
+        public async Task<IActionResult> RequestConversion(string managerReason, string userId)
         {
             if (string.IsNullOrEmpty(managerReason))
             {
                 TempData["Error"] = "Please provide a reason for requesting a manager account.";
                 return RedirectToAction("Index");
             }
+            if (string.IsNullOrEmpty(userId))
+            {
+                TempData["Error"] = "Invalid user ID.";
+                return RedirectToAction("Index", "Home");
+            }
 
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                TempData["Error"] = "User not found.";
+                return RedirectToAction("Index", "Home");
+            }
+            var ManagerReason = new HotelManagerRequests
+            {
+                UserName = user.UserName,
+                Email = user.Email,
+                RequestMesssage= managerReason,
+                CreatedAt = DateTime.Now
+            };
+            try
+            {
+                _unitOfWork.HotelManagerRequestsRepository.Create(ManagerReason);
+                _unitOfWork.Commit();   
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "An error occurred while submitting your problem report.";
+                return RedirectToAction("Index", "Home");
+            }
             TempData["Success"] = "Your account conversion request has been submitted successfully.";
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

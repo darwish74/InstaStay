@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace Models.IRepositories
         IRoomRepository roomRepository { get; }
         IReviewRepository reviewRepository { get; }
         IProblemReports ProblemReportRepository { get; }
+        IHotelManagerRequestsRepository HotelManagerRequestsRepository { get; }
         void Commit();
     }
 

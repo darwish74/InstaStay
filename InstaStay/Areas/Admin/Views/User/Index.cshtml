@@ -8,6 +8,15 @@
 @{
     ViewData["Title"] = "All Users";
     var allRoles = await roleManager.Roles.ToListAsync();
+    @section Scripts {
+        @if (@TempData["success"] != null)
+        {
+            <script>
+                toastr.success('@TempData["success"]')
+            </script>
+        }
+    }
+
 }
 
 <h3 class="m-3 text-center bg-dark text-info bg-transparent rounded-5">All Users</h3>

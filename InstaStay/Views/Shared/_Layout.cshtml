@@ -54,6 +54,17 @@
                                     Welcome, @User.Identity.Name
                                 </a>
                             </li>
+                            <li class="nav-item position-relative">
+                                <a class="nav-link active" asp-controller="Messages" asp-action="Inbox">
+                                    <i class="fas fa-envelope"></i>
+                                    @if (ViewBag.UnreadMessages > 0)
+                                    {
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                            @ViewBag.UnreadMessages
+                                        </span>
+                                    }
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link active" asp-area="Identity" asp-controller="Account" asp-action="SignOut">
                                     <i class="fas fa-sign-out-alt"></i> Logout
@@ -74,6 +85,7 @@
                             </li>
                         }
                     </ul>
+
                     <div class="dropdown">
                         <button class="btn btn-outline-info bg-gradient theme-icon light-theme" type="button" id="themeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-lightbulb"></i>

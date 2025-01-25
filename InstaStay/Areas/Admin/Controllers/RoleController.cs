@@ -50,8 +50,7 @@ namespace InstaStay.Areas.Admin.Controllers
             {
                 TempData["Error"] = "Error occurred while assigning role.";
             }
-
-            return RedirectToAction("Index");
+            return RedirectToAction("Index","User");
         }
 
         [HttpPost]
