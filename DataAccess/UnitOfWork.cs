@@ -15,6 +15,7 @@ namespace DataAccess
         private IPaymentRepository _paymentRepository;
         private IRoomRepository _roomRepository;
         private IReviewRepository _reviewRepository;
+        private IProblemReports _problemReportRepository;
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -25,6 +26,7 @@ namespace DataAccess
         public IPaymentRepository paymentRepository => _paymentRepository ??= new PaymentRepository(_context);
         public IRoomRepository roomRepository => _roomRepository ??= new RoomRepository(_context);
         public IReviewRepository reviewRepository => _reviewRepository ??= new ReviewRepository(_context);
+        public IProblemReports ProblemReportRepository =>_problemReportRepository ??= new ProblemReportRepository(_context);
         public void Commit()
         {
             _context.SaveChanges();

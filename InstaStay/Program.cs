@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Models.IRepositories;
 using Models.Models;
-
 namespace InstaStay
 {
     public class Program
@@ -20,7 +19,7 @@ namespace InstaStay
                 )
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
-            builder.Services.AddScoped<DataAccess.IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             builder.Services.AddAuthentication().AddGoogle(googleOptions =>
             {

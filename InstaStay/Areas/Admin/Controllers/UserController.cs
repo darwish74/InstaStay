@@ -20,7 +20,7 @@ namespace InstaStay.Areas.Admin.Controllers
             this.roleManager = roleManager;
         }
 
-        public IActionResult Index(string? Account, int pageNumber = 1, int pageSize = 10)
+        public IActionResult Index(string? Account, int pageNumber = 1, int pageSize = 4)
         {
             var usersQuery = userManager.Users.AsQueryable();
             if (!string.IsNullOrEmpty(Account))

@@ -9,12 +9,14 @@ namespace Models.IRepositories
 {
     public interface IUnitOfWork : IDisposable
     {
-        IBookingRepository BookingRepository {  get; }  
-        IHotelRepository hotelRepository { get; }   
-        ILocationRepository locationRepository { get; } 
+        IBookingRepository BookingRepository { get; }
+        IHotelRepository hotelRepository { get; }
+        ILocationRepository locationRepository { get; }
         IPaymentRepository paymentRepository { get; }
         IRoomRepository roomRepository { get; }
-        IReviewRepository reviewRepository { get; } 
-        public void Commit();
+        IReviewRepository reviewRepository { get; }
+        IProblemReports ProblemReportRepository { get; }
+        void Commit();
     }
+
 }

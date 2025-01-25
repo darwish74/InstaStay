@@ -24,5 +24,6 @@ namespace DataAccess.Data
         public DbSet<HotelPromotion> hotelpromotions { get; set;}
         public DbSet<Payment> payments { get; set; }
         public DbSet<ApplicationUser>applicationUsers { get; set; }
+        public DbSet<ProblemReport> ProblemReports { get; set; }
     }
 }
