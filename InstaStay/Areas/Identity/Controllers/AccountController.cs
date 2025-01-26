@@ -27,6 +27,12 @@ namespace InstaStay.Areas.Identity.Controllers
         [HttpGet]
         public async Task<IActionResult> Register()
         {
+            if (!_roleManager.Roles.Any())
+            {
+                await _roleManager.CreateAsync(new("Admin"));
+                await _roleManager.CreateAsync(new("Hotel Manager"));
+                await _roleManager.CreateAsync(new("User"));
+            }
             ViewBag.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             return View();
         }
