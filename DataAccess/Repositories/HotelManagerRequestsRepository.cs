@@ -11,8 +11,11 @@ namespace DataAccess.Repositories
 {
     public class HotelManagerRequestsRepository : BaseRepository<HotelManagerRequests>, IHotelManagerRequestsRepository
     {
+        private readonly ApplicationDbContext context;
+
         public HotelManagerRequestsRepository(ApplicationDbContext _context) : base(_context)
         {
+            context = _context;
         }
     }
 }

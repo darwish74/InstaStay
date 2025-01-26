@@ -39,9 +39,8 @@ namespace InstaStay.Areas.Identity.Controllers
                 var user = new ApplicationUser
                 {
                     UserName = userVM.UserName,
-                    Email = userVM.Email,
-                    FirstName = userVM.FirstName,
-                    LastName = userVM.LastName
+                    Email = userVM.Email
+                    
                 };
 
                 var result = await _userManager.CreateAsync(user, userVM.Password);

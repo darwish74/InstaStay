@@ -12,8 +12,11 @@ namespace DataAccess.Repositories
 {
     public class LocationRepository:BaseRepository<Location>,ILocationRepository
     {
+        private readonly ApplicationDbContext dbContext;
+
         public LocationRepository(ApplicationDbContext dbContext):base(dbContext)
         {
+            this.dbContext = dbContext;
         }
     }
 }

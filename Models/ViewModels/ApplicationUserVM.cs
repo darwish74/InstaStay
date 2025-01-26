@@ -14,7 +14,9 @@ namespace Models.ViewModels
     {
         [Required]
         public string UserName { get; set; }
+        [ValidateNever]
         public string FirstName { get; set; }
+        [ValidateNever]
         public string LastName { get; set; }
         [DataType(DataType.EmailAddress)]
         [Required]
