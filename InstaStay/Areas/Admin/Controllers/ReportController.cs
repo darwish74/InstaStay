@@ -59,8 +59,9 @@ namespace InstaStay.Areas.Admin.Controllers
         }
         public IActionResult HotelRequestes()
         {
+            var NewHotelReport=unitOfWork.NewHotelRequestsRepository.Get().ToList();
             
-            return View();
+            return View(NewHotelReport);
         }
 
     }

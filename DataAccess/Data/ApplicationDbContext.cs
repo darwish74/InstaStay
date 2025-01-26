@@ -26,6 +26,7 @@ namespace DataAccess.Data
         public DbSet<ApplicationUser>applicationUsers { get; set; }
         public DbSet<ProblemReport> ProblemReports { get; set; }
         public DbSet<HotelManagerRequests> HotelManagerRequests { get; set; }
+        public DbSet<NewHotelRequests> NewHotelRequests { get; set; }
   
     }
 }
