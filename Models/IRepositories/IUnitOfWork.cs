@@ -18,6 +18,7 @@ namespace Models.IRepositories
         IReviewRepository reviewRepository { get; }
         IProblemReports ProblemReportRepository { get; }
         IHotelManagerRequestsRepository HotelManagerRequestsRepository { get; }
+        INewHotelRequestsRepository NewHotelRequestsRepository { get; }
         void Commit();
     }
 

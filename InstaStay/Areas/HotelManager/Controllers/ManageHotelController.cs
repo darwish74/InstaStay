@@ -6,7 +6,7 @@ using Models.Models;
 namespace InstaStay.Areas.hotelManager.Controllers
 {
     [Area("hotelManager")]
-    [Authorize(Roles = "User")]
+    [Authorize(Roles = "Hotel Manager")]
     public class ManageHotelController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;

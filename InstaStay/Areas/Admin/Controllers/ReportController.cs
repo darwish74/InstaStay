@@ -57,6 +57,11 @@ namespace InstaStay.Areas.Admin.Controllers
 
             return RedirectToAction("Requests");
         }
+        public IActionResult HotelRequestes()
+        {
+            
+            return View();
+        }
 
     }
 }
