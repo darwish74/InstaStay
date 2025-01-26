@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Models.Models
 {
-    public class Hotel
+    public class NewHotelRequests
     {
         public int Id { get; set; }
         [Required]
@@ -18,17 +18,10 @@ namespace Models.Models
         [Required]
         public string Description { get; set; }
         [Required]
-        public int Stars { get; set; }
+        public string HotelManager {  get; set; }
+        [ValidateNever]
         public string CoverImage { get; set; }
-        public string ContactInfo { get; set; }
-        public string policies { get; set; }
-        [ValidateNever]
-        public virtual ICollection<Room> Rooms { get; set; }
-        [ValidateNever]
-        public virtual ICollection<Review> Reviews { get; set; }
-        [ValidateNever]
-        public virtual ICollection<Promotion> Promotions { get; set; }
-        [ValidateNever]
-        public virtual Location Location { get; set; }
+        [Range(1, 5)]
+        public int stars { get; set; }
     }
 }

@@ -1,0 +1,128 @@
+﻿@{
+    ViewData["Title"] = "Hotel Manager Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts {
+        <script>
+            // Add interactivity or event handlers here
+            toastr.success('Welcome to the Hotel Manager Dashboard!');
+        </script>
+}
+<style>
+.sidebar-link {
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 10px 15px;
+    border-radius: 5px;
+    display: block;
+}
+
+.sidebar-link:hover {
+    background-color: #17a2b8; /* Bootstrap info color */
+    color: #fff;
+    text-decoration: none;
+}
+
+.sidebar-link i {
+    transition: transform 0.3s ease;
+}
+
+.sidebar-link:hover i {
+    transform: scale(1.2);
+}
+
+</style>
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div class="bg-dark text-light p-3" style="width: 250px; min-height: 100vh;">
+        <h4 class="mb-4 text-info">Hotel Manager</h4>
+        <ul class="nav flex-column">
+            <li class="nav-item mb-2">
+                <a href="/HotelManager/Dashboard" class="nav-link text-light sidebar-link">
+                    <i class="fas fa-home me-2"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="/HotelManager/ManageHotel/NewHotelRequest" class="nav-link text-light sidebar-link">
+                    <i class="fas fa-hotel me-2"></i> Add Hotel Request
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="/HotelManager/Bookings" class="nav-link text-light sidebar-link">
+                    <i class="fas fa-calendar-check me-2"></i> Bookings
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="/HotelManager/Guests" class="nav-link text-light sidebar-link">
+                    <i class="fas fa-user-friends me-2"></i> Guests
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/HotelManager/Settings" class="nav-link text-light sidebar-link">
+                    <i class="fas fa-cogs me-2"></i> Settings
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-grow-1 p-4">
+        <h2 class="mb-4">Welcome, @User.Identity.Name</h2>
+
+        <!-- Metrics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card shadow-sm p-3">
+                    <h5>Total Bookings</h5>
+                    <p class="fs-4">120</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm p-3">
+                    <h5>Checked-in Guests</h5>
+                    <p class="fs-4">45</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm p-3">
+                    <h5>Pending Requests</h5>
+                    <p class="fs-4">10</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Room Status Table -->
+        <div class="card shadow-sm p-4">
+            <h4>Room Status</h4>
+            <table class="table table-hover mt-3">
+                <thead>
+                    <tr>
+                        <th>Room</th>
+                        <th>Status</th>
+                        <th>Guest</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>101</td>
+                        <td><span class="badge bg-success">Occupied</span></td>
+                        <td>John Doe</td>
+                        <td>
+                            <button class="btn btn-sm btn-warning">Mark as Clean</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>102</td>
+                        <td><span class="badge bg-danger">Needs Cleaning</span></td>
+                        <td>-</td>
+                        <td>
+                            <button class="btn btn-sm btn-success">Assign</button>
+                        </td>
+                    </tr>
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

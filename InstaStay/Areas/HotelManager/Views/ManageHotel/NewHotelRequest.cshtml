@@ -1,0 +1,91 @@
+﻿@model Models.Models.NewHotelRequests
+
+@{
+    ViewData["Title"] = "New Hotel Request";
+}
+
+<h1 class="mb-4 text-primary">New Hotel Request</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow-sm p-4">
+            <h4 class="text-secondary mb-4">Enter Hotel Details</h4>
+            <form asp-action="NewHotelRequest" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="display:none;"></div>
+
+                <!-- Hotel ID -->
+                <div class="form-group mb-3">
+                    <label asp-for="Id" class="form-label">Hotel ID</label>
+                    <input asp-for="Id" class="form-control" placeholder="Enter hotel ID" />
+                    <span asp-validation-for="Id" class="text-danger"></span>
+                </div>
+
+                <!-- Hotel Name -->
+                <div class="form-group mb-3">
+                    <label asp-for="Name" class="form-label">Hotel Name</label>
+                    <input asp-for="Name" class="form-control" placeholder="Enter hotel name" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <!-- Address -->
+                <div class="form-group mb-3">
+                    <label asp-for="Address" class="form-label">Address</label>
+                    <input asp-for="Address" class="form-control" placeholder="Enter hotel address" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <!-- Description -->
+                <div class="form-group mb-3">
+                    <label asp-for="Description" class="form-label">Description</label>
+                    <textarea asp-for="Description" class="form-control" rows="3" placeholder="Brief description of the hotel"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <!-- Hotel Manager -->
+                <div class="form-group mb-3">
+                    <label asp-for="HotelManager" class="form-label">Hotel Manager</label>
+                    <input asp-for="HotelManager" class="form-control" placeholder="Manager's name" />
+                    <span asp-validation-for="HotelManager" class="text-danger"></span>
+                </div>
+
+                <!-- Cover Image -->
+                <div class="form-group mb-3">
+                    <label asp-for="CoverImage" class="form-label">Cover Image</label>
+                    <input asp-for="CoverImage" type="file" class="form-control" />
+                    <span asp-validation-for="CoverImage" class="text-danger"></span>
+                </div>
+
+                <!-- Star Rating -->
+                <div class="form-group mb-4">
+                    <label asp-for="stars" class="form-label">Star Rating</label>
+                    <input asp-for="stars" type="number" class="form-control" placeholder="1 to 5" min="1" max="5" />
+                    <span asp-validation-for="stars" class="text-danger"></span>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary w-100" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to List
+    </a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Display error alert if there are validation errors
+        const validationSummary = document.querySelector("[asp-validation-summary]");
+        if (validationSummary && validationSummary.innerHTML.trim().length > 0) {
+            validationSummary.style.display = "block";
+        }
+    </script>
+}
