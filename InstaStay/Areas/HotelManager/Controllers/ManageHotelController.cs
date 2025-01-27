@@ -1,7 +1,9 @@
 ﻿using DataAccess;
+using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Models.IRepositories;
 using Models.Models;
 namespace InstaStay.Areas.hotelManager.Controllers
@@ -56,6 +58,22 @@ namespace InstaStay.Areas.hotelManager.Controllers
                 return RedirectToAction("Dashboard");
             }
           return View(request);
+        }
+        [HttpGet]
+        public IActionResult ShowAllHotels(string UserName)
+        {
+            var Hotels = unitOfWork.hotelRepository.Get(e=>e.HotelManager.Name==UserName).ToList();
+            return View(Hotels);
+        }
+        [HttpGet]
+        public IActionResult AddRoom(int Id)
+        {
+        return View();
+        }
+        [HttpPost]
+        public IActionResult AddRoom(Room room) 
+        {
+        return View(room);  
         }
     }
 }

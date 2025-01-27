@@ -5,7 +5,6 @@
 
 @section Scripts {
         <script>
-            // Add interactivity or event handlers here
             toastr.success('Welcome to the Hotel Manager Dashboard!');
         </script>
 }
@@ -45,6 +44,11 @@
             <li class="nav-item mb-2">
                 <a href="/HotelManager/ManageHotel/NewHotelRequest" class="nav-link text-light sidebar-link">
                     <i class="fas fa-hotel me-2"></i> Add Hotel Request
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="/HotelManager/ManageHotel/ShowAllHotels?UserName=@User.Identity.Name" class="nav-link text-light sidebar-link">
+                    <i class="fas fa-clipboard-list me-2"></i></i> Manage Hotels
                 </a>
             </li>
             <li class="nav-item mb-2">

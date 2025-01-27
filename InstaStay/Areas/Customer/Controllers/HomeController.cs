@@ -1,22 +1,23 @@
 using Models.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Models.IRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace InstaStay.Areas.Customer.Controllers
-{
+{     //includeprops: e => e.Include(e => e.category)
     [Area("Customer")]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IUnitOfWork unitOfWork;
+        public HomeController(IUnitOfWork unitOfWork)
         {
-            _logger = logger;
+            this.unitOfWork = unitOfWork;
         }
-
         public IActionResult Index()
         {
-            return View();
+            var hotels=unitOfWork.hotelRepository.Get(includeprops:e=>e.Include(e=>e.HotelManager));
+            return View(hotels);
         }
 
         public IActionResult Privacy()

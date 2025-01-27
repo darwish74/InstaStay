@@ -1,12 +1,33 @@
-﻿
+﻿@model IEnumerable<Models.Models.Hotel>
+<h2>Existing Hotels</h2>
 
-
-
-
-
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Hotel Name</th>
+            <th>Location</th>
+            <th>Rating</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var hotel in Model)
+        {
+            <tr>
+                <td>@hotel.Name</td>
+                <td>@hotel.HotelManager.Name</td>
+                <td>
+                    <!-- Example actions -->
+                    <a href="/Hotels/Edit/@hotel.Id" class="btn btn-primary btn-sm">Edit</a>
+                    <a href="/Hotels/Delete/@hotel.Id" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @section Scripts {
-    @if (@TempData["success"] != null)
+    @if (TempData["success"] != null)
     {
         <script>
             toastr.success('@TempData["success"]')
