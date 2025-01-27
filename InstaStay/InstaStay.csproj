@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\Ads\" />
+    <Folder Include="wwwroot\images\HotelImages\" />
   </ItemGroup>
 
 </Project>

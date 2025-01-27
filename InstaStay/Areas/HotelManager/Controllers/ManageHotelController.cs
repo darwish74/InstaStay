@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DataAccess;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Models.IRepositories;
@@ -29,14 +30,31 @@ namespace InstaStay.Areas.hotelManager.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult NewHotelRequest(NewHotelRequests request)
+        public IActionResult NewHotelRequest(NewHotelRequests request,IFormFile? CoverImage)
         {
-
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-
+                if (CoverImage != null && CoverImage.Length > 0)
+                {
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(CoverImage.FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\HotelImages", fileName);
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        CoverImage.CopyTo(stream);
+                    }
+                    request.CoverImage = fileName;
+                }
+                else
+                {
+                    ModelState.AddModelError("Image", "Please upload an image.");
+                    return View(request);
+                }
+                unitOfWork.NewHotelRequestsRepository.Create(request);
+                unitOfWork.Commit();
+                TempData["success"] = "Request Created Successfully";
+                return RedirectToAction("Dashboard");
             }
-            return View();
+          return View(request);
         }
     }
 }

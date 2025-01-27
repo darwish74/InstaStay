@@ -10,18 +10,21 @@ namespace Models.Models
 {
     public class NewHotelRequests
     {
+        [ValidateNever]
         public int Id { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Hotel name is required.")]
+        [StringLength(100, ErrorMessage = "Hotel name cannot exceed 100 characters.")]
         public string Name { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Address is required.")]
         public string Address { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Description is required.")]
+        [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters.")]
         public string Description { get; set; }
-        [Required]
-        public string HotelManager {  get; set; }
         [ValidateNever]
         public string CoverImage { get; set; }
-        [Range(1, 5)]
+        [Required(ErrorMessage = "Star rating is required.")]
+        [Range(1, 5, ErrorMessage = "Star rating must be between 1 and 5.")]
         public int stars { get; set; }
     }
 }

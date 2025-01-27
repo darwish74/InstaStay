@@ -14,11 +14,6 @@
             </h4>
             <form asp-action="NewHotelRequest" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="display:none;"></div>
-                <!-- Hotel ID -->
-                <div class="form-group mb-3">
-                    <input asp-for="Id" hidden class="form-control" placeholder="Enter hotel ID" />
-                    <span asp-validation-for="Id" class="text-danger"></span>
-                </div>
                 <!-- Hotel Name -->
                 <div class="form-group mb-3">
                     <label asp-for="Name" class="form-label"><i class="fas fa-building me-2 text-info"></i>Hotel Name</label>
@@ -46,7 +41,9 @@
                     <input asp-for="CoverImage" type="file" class="form-control" />
                     <span asp-validation-for="CoverImage" class="text-danger"></span>
                 </div>
-
+                <div class="mb-3">
+                    <img id="imagePreview" src="#" alt="Image Preview" style="max-width: 20%; height: auto; display: none;" />
+                </div>
                 <!-- Star Rating -->
                 <div class="form-group mb-4">
                     <label asp-for="stars" class="form-label"><i class="fas fa-star me-2 text-info"></i>Star Rating</label>
@@ -62,18 +59,28 @@
         </div>
     </div>
 </div>
-
-<div class="mt-4 d-flex justify-content-center">
-    <a asp-action="Index" class="btn btn-secondary shadow-sm px-4">
-        <i class="fas fa-arrow-left"></i> Back to List
-    </a>
-</div>
-
 @section Scripts {
     <script>
         const validationSummary = document.querySelector("[asp-validation-summary]");
         if (validationSummary && validationSummary.innerHTML.trim().length > 0) {
             validationSummary.style.display = "block";
+        }
+    </script>
+    <script>
+        function previewImage(event) {
+            const input = event.target;
+            const imagePreview = document.getElementById("imagePreview");
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = "block";
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
         }
     </script>
 }
