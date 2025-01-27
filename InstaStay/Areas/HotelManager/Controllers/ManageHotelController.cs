@@ -30,7 +30,7 @@ namespace InstaStay.Areas.hotelManager.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult NewHotelRequest(NewHotelRequests request,IFormFile? CoverImage)
+        public IActionResult NewHotelRequest(NewHotelRequests request,IFormFile? CoverImage,string UserName)
         {
             if (ModelState.IsValid)
             {
@@ -49,6 +49,7 @@ namespace InstaStay.Areas.hotelManager.Controllers
                     ModelState.AddModelError("Image", "Please upload an image.");
                     return View(request);
                 }
+                request.HotelManager=UserName;
                 unitOfWork.NewHotelRequestsRepository.Create(request);
                 unitOfWork.Commit();
                 TempData["success"] = "Request Created Successfully";

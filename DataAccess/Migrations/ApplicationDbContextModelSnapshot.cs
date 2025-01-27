@@ -301,18 +301,19 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ContactInfo")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CoverImage")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("LocationId")
+                    b.Property<int>("HotelManagerId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LocationId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -322,15 +323,30 @@ namespace DataAccess.Migrations
                     b.Property<int>("Stars")
                         .HasColumnType("int");
 
-                    b.Property<string>("policies")
+                    b.HasKey("Id");
+
+                    b.HasIndex("HotelManagerId");
+
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("hotels");
+                });
+
+            modelBuilder.Entity("Models.Models.HotelManager", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LocationId");
-
-                    b.ToTable("hotels");
+                    b.ToTable("HotelManagers");
                 });
 
             modelBuilder.Entity("Models.Models.HotelManagerRequests", b =>
@@ -440,6 +456,9 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("HotelManager")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -792,13 +811,17 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Models.Models.Hotel", b =>
                 {
-                    b.HasOne("Models.Models.Location", "Location")
+                    b.HasOne("Models.Models.HotelManager", "HotelManager")
                         .WithMany("Hotels")
-                        .HasForeignKey("LocationId")
+                        .HasForeignKey("HotelManagerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Location");
+                    b.HasOne("Models.Models.Location", null)
+                        .WithMany("Hotels")
+                        .HasForeignKey("LocationId");
+
+                    b.Navigation("HotelManager");
                 });
 
             modelBuilder.Entity("Models.Models.HotelPromotion", b =>
@@ -877,6 +900,11 @@ namespace DataAccess.Migrations
                     b.Navigation("Reviews");
 
                     b.Navigation("Rooms");
+                });
+
+            modelBuilder.Entity("Models.Models.HotelManager", b =>
+                {
+                    b.Navigation("Hotels");
                 });
 
             modelBuilder.Entity("Models.Models.Location", b =>

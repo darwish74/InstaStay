@@ -8,10 +8,8 @@ namespace InstaStay.Areas.Admin.Controllers
     [Area("Admin")]
     public class RoleController : Controller
     {
-     
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<ApplicationUser> userManager;
-
         public RoleController(RoleManager<IdentityRole> roleManager,UserManager<ApplicationUser> userManager)
         {
             this.roleManager = roleManager;

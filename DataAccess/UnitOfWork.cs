@@ -19,6 +19,7 @@ namespace DataAccess
         private IProblemReports _problemReportRepository; 
         private IHotelManagerRequestsRepository _HotelManagerRequests;
         private INewHotelRequestsRepository _NewHotelRequestsRepository;
+        private IHotelManager _HotelManagerRepository;
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -33,6 +34,7 @@ namespace DataAccess
         public IProblemReports ProblemReportRepository =>_problemReportRepository ??= new ProblemReportRepository(_context);  
         public IHotelManagerRequestsRepository HotelManagerRequestsRepository => _HotelManagerRequests ??= new HotelManagerRequestsRepository(_context);
         public INewHotelRequestsRepository NewHotelRequestsRepository => _NewHotelRequestsRepository ??= new NewHotelRequestsRepository(_context);
+        public IHotelManager HotelManagerRepository => _HotelManagerRepository ??= new HotelManagerRepository(_context);
         public void Commit()
         {
             _context.SaveChanges();

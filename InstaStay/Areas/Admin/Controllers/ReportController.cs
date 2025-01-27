@@ -35,6 +35,11 @@ namespace InstaStay.Areas.Admin.Controllers
                 await userManager.RemoveFromRolesAsync(user, currentRoles);
             }
             var result = await userManager.AddToRoleAsync(user, "Hotel Manager");
+            var HotelManager=new HotelManager() {
+            Name=user.UserName
+            };
+            unitOfWork.HotelManagerRepository.Create(HotelManager);
+            unitOfWork.Commit();
             var request = unitOfWork.HotelManagerRequestsRepository.GetOne(r => r.Id == id);
             unitOfWork.HotelManagerRequestsRepository.Delete(request);
             unitOfWork.Commit();
