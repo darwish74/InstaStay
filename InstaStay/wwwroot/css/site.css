@@ -182,15 +182,16 @@ footer {
     box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.1);
 }
 
-footer a {
-  color: var(--text-color);
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
+    footer a {
+        color: var(--text-color);
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
 
-footer a:hover {
-  color: var(--hover-color);
-}
+        footer a:hover {
+            color: var(--hover-color);
+        }
+
 .sidebar {
     height: calc(100vh - 56px); /* Adjust for the navbar height */
     width: 250px;

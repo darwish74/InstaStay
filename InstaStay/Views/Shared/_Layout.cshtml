@@ -6,78 +6,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - InstaStay</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/toastr.js/toastr.min.css" asp-append-version="true" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-    <style>
-        .navbar {
-            transition: background-color 0.3s ease;
-        }
-
-            .navbar.scroll-navbar {
-                background-color: rgba(0, 0, 0, 0.8) !important;
-            }
-
-            .navbar .nav-link {
-                color: #fff;
-            }
-
-                .navbar .nav-link:hover {
-                    color: #f0ad4e;
-                }
-
-        .navbar-brand span.insta {
-            color: #f0ad4e;
-        }
-
-        .footer {
-            background-color: #f8f9fa;
-            padding: 20px 0;
-            color: #6c757d;
-            border-top: 1px solid #dee2e6;
-        }
-
-            .footer .social-icons a {
-                color: #6c757d;
-                margin-right: 15px;
-                font-size: 20px;
-            }
-
-                .footer .social-icons a:hover {
-                    color: #f0ad4e;
-                }
-
-        .btn-hover:hover {
-            background-color: #f0ad4e !important;
-            color: #fff !important;
-        }
-
-        .theme-icon:hover {
-            color: #f0ad4e !important;
-        }
-        /* Dark Mode Styles */
-        .dark-theme .navbar {
-            background-color: #343a40 !important;
-        }
-
-        .dark-theme .footer {
-            background-color: #212529;
-        }
-
-            .dark-theme .footer a {
-                color: #ccc;
-            }
-
-                .dark-theme .footer a:hover {
-                    color: #f0ad4e;
-                }
-    </style>
 </head>
 <body class="light-theme">
     <header>
-        <nav class="navbar navbar-expand-lg navbar-collapse navbar-text-light bg-gradient bg-primary shadow-sm position-relative" id="navbar">
+        <nav class="navbar navbar-expand-lg navbar-collapse navbar-text-light bg-gradient bg-primary shadow-sm position-relative">
             <div class="container-fluid fs-6">
                 <a class="navbar-brand d-flex align-items-center gap-2" href="/">
                     <i class="fas fa-plane-departure"></i>
@@ -93,12 +31,13 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="/Customer/Home/Index">Home</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item ">
                             <a class="nav-link active" href="/Customer/Home/Index">About</a>
                         </li>
                         @if (User.Identity.IsAuthenticated && User.IsInRole("Hotel Manager"))
                         {
-                            <li class="nav-item">
+
+                            <li class="nav-item ">
                                 <a class="nav-link active" href="/hotelManager/ManageHotel/Dashboard">Hotel Management</a>
                             </li>
                         }
@@ -107,6 +46,7 @@
                             <li class="nav-item">
                                 <a class="nav-link active" href="/Customer/Contact/Index">Contact</a>
                             </li>
+
                         }
                         @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                         {
@@ -120,7 +60,7 @@
                         {
                             <li class="nav-item d-flex align-items-center">
                                 <img src="@(_userManager.GetUserAsync(User).Result?.Photo ?? Url.Content("~/images/ProfileImage/profile.webp"))"
-                                     alt="User Photo" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;" />
+                                     alt="Admin Photo" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;" />
                                 <a class="nav-link ms-2 active" asp-area="Identity" asp-controller="Account" asp-action="Profile">
                                     Welcome, @User.Identity.Name
                                 </a>
@@ -156,6 +96,7 @@
                             </li>
                         }
                     </ul>
+
                     <div class="dropdown">
                         <button class="btn btn-outline-info bg-gradient theme-icon light-theme" type="button" id="themeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-lightbulb"></i>
@@ -169,27 +110,20 @@
             </div>
         </nav>
     </header>
-
-    <main class="container p-0 m-0">
+    <main class="container p-0 m-0 ">
         <div role="main" class="pb-3">
             @RenderBody()
         </div>
     </main>
-
-    <footer class="footer text-center">
+    <footer class="mb-0 bg-light bg-opacity-50">
         <div class="container">
             &copy; 2025 - InstaStay
             <br />
             <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
             <br />
-            <div class="social-icons">
-                <a href="#" target="_blank"><i class="fab fa-facebook"></i></a>
-                <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
-                <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
-            </div>
+            <i class="fab fa-facebook"></i> <i class="fab fa-twitter"></i> <i class="fab fa-instagram"></i>
         </div>
     </footer>
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/toastr.Js/toastr.min.js"></script>
@@ -213,15 +147,6 @@
             body.classList.add('dark-theme');
             localStorage.setItem('theme', 'dark-theme');
         });
-
-        // Change navbar color on scroll
-        window.onscroll = function () {
-            if (window.scrollY > 50) {
-                document.getElementById('navbar').classList.add('scroll-navbar');
-            } else {
-                document.getElementById('navbar').classList.remove('scroll-navbar');
-            }
-        };
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
