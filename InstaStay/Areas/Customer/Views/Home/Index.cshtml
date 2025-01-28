@@ -1,36 +1,119 @@
 ﻿@model IEnumerable<Models.Models.Hotel>
-<h2>Existing Hotels</h2>
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Hotel Name</th>
-            <th>Location</th>
-            <th>Rating</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var hotel in Model)
-        {
-            <tr>
-                <td>@hotel.Name</td>
-                <td>@hotel.HotelManager.Name</td>
-                <td>
-                    <!-- Example actions -->
-                    <a href="/Hotels/Edit/@hotel.Id" class="btn btn-primary btn-sm">Edit</a>
-                    <a href="/Hotels/Delete/@hotel.Id" class="btn btn-danger btn-sm">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-@section Scripts {
-    @if (TempData["success"] != null)
-    {
-        <script>
-            toastr.success('@TempData["success"]')
-        </script>
-    }
+@{
+    ViewData["Title"] = "Home";
 }
+
+<div class="search-banner d-flex align-items-center p-1">
+    <img src="~/images/Screenshot 2025-01-28 193920.png" alt="Banner Image" class="me-3" style="width: 100px; height: auto;">
+    <div>
+        <h1 class="display-4" style="color:palegoldenrod;">Find Your Next Stay</h1>
+        <p class="lead">Explore great deals on hotels, homes, and more, all at the best prices.</p>
+    </div>
+</div>
+
+<div class="container mt-1">
+    
+    <form id="searchForm" method="post" asp-action="Search" onsubmit="return validateForm()">
+        <div class="row mb-3 p-3 border rounded card-header bg-dark text-white">
+            
+            <div class="col-md-4">
+                <label for="StateId" class="form-label">Where are you going?</label>
+                <select class="form-select" id="StateId" name="StateId">
+                    <option value="" selected>Select State</option>
+                    
+                </select>
+            </div>
+
+            <!-- Check-in and Check-out Dates -->
+            <div class="col-md-4">
+                <label for="CheckInDate" class="form-label">Check-in date</label>
+                <input type="date" class="form-control" id="CheckInDate" name="CheckInDate"
+                       value=".CheckInDate?.ToString("yyyy-MM-dd")">
+            </div>
+
+            <div class="col-md-4 d-flex align-items-end">
+                <div class="w-100 d-flex gap-2">
+                    <div class="flex-grow-1">
+                        <label for="CheckOutDate" class="form-label">Check-out date</label>
+                        <input type="date" class="form-control" id="CheckOutDate" name="CheckOutDate"
+                               value="CheckOutDate?.ToString("yyyy-MM-dd")">
+                    </div>
+                    <button type="submit" class="btn btn-primary align-self-end">Search</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Hotel Results (Grid Layout) -->
+    <div class="row">
+        @{
+            foreach (var hotel in Model)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 d-flex flex-row align-items-center">
+                        <!-- Hotel Image (Link) -->
+                        <a asp-action="Hotel" asp-route-HotelId="@hotel.Id">
+                           
+                           
+                            <img src="~/images/HotelImages/@hotel.CoverImage" class="card-img-left" style="width:150px; height:150px; object-fit: cover;" alt="Hotel Image">
+                        </a>
+                        <!-- Hotel Details -->
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a asp-action="Hotel" asp-route-HotelId="@hotel.Id"
+                                   asp-route-CheckInDate="CheckInDate"
+                                   asp-route-CheckOutDate="CheckOutDate"
+                                   class="text-dark text-decoration-none">
+                                    @hotel.Name
+                                </a>
+                            </h5>
+                            <p class="text-muted mb-1">@hotel.Address</p>
+                            <span class="badge bg-primary mb-2">@hotel.Stars</span>
+                            
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<!-- Hover Effect for Images -->
+<style>
+    .card-img-left {
+        transition: transform 0.3s ease;
+    }
+
+        .card-img-left:hover {
+            transform: scale(1.1); /* Enlarge image on hover */
+        }
+
+    .card {
+        border: none;
+    }
+
+    .card-body a {
+        text-decoration: none;
+        color: #000;
+    }
+
+        .card-body a:hover {
+            color: ; /* Change color on hover */
+        }
+
+    .search-banner {
+        margin-bottom: 0px;
+        border-radius: 0px;
+    }
+
+        .search-banner h1 {
+            font-weight: 700;
+        }
+
+        .search-banner p {
+            color: gold;
+            font-weight: 400;
+            font-size: 1.2rem;
+        }
+</style>
+
