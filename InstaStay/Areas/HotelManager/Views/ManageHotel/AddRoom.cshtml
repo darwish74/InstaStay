@@ -1,85 +1,83 @@
 ﻿@model Models.Models.Room
+
 @{
     ViewData["Title"] = "Add Room";
 }
-<h1 class="mb-5 text-center">Add Room</h1>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0 text-center">Add Room</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="AddRoom" class="needs-validation" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-<div class="d-flex justify-content-center align-items-center" style="height: 100vh; mb-1">
-    <div class="card shadow-none p-4" style="max-width: 600px; width: 100%;">
-        <h4 class="card-title">Room Details</h4>
-        <hr />
-        <form asp-action="AddRoom">
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        <input type="hidden" name="HotelId" value="@ViewBag.Id"/>
 
-            <div class="form-group mb-3">
-                <label asp-for="Id" class="form-label">Room ID</label>
-                <input asp-for="Id" class="form-control" placeholder="Enter Room ID" />
-                <span asp-validation-for="Id" class="text-danger"></span>
+                        <div class="mb-3">
+                            <label asp-for="Capacity" class="form-label">Room Capacity</label>
+                            <input asp-for="Capacity" class="form-control" placeholder="Enter room capacity (e.g., 2, 4, etc.)" required />
+                            <span asp-validation-for="Capacity" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="PricePerNight" class="form-label">Price Per Night</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input asp-for="PricePerNight" class="form-control" placeholder="Enter price per night (e.g., 150)" required />
+                            </div>
+                            <span asp-validation-for="PricePerNight" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="RoomType" class="form-label">Room Type</label>
+                            <select asp-for="RoomType" class="form-select" required>
+                                <option value="">Select room type...</option>
+                                <option value="Single">Single</option>
+                                <option value="Double">Double</option>
+                                <option value="Suite">Suite</option>
+                            </select>
+                            <span asp-validation-for="RoomType" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="BedType" class="form-label">Bed Type</label>
+                            <select asp-for="BedType" class="form-select" required>
+                                <option value="">Select bed type...</option>
+                                <option value="Single">Single</option>
+                                <option value="Double">Double</option>
+                            </select>
+                            <span asp-validation-for="BedType" class="text-danger"></span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="reset" class="btn btn-secondary">Clear</button>
+                            <button type="submit" class="btn btn-primary">Create</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="Capacity" class="form-label">Capacity</label>
-                <input asp-for="Capacity" class="form-control" placeholder="Enter Room Capacity" />
-                <span asp-validation-for="Capacity" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="PricePerNight" class="form-label">Price Per Night</label>
-                <input asp-for="PricePerNight" class="form-control" placeholder="Enter Price" />
-                <span asp-validation-for="PricePerNight" class="text-danger"></span>
-            </div>
-
-            <div class="form-group form-check mb-3">
-                <input class="form-check-input" asp-for="Availbility" id="availability-check" />
-                <label class="form-check-label" for="availability-check">
-                    @Html.DisplayNameFor(model => model.Availbility)
-                </label>
-            </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="RoomType" class="form-label">Room Type</label>
-                <select asp-for="RoomType" class="form-select">
-                    <option value="">Select Room Type</option>
-                    <option value="Single">Single</option>
-                    <option value="Double">Double</option>
-                    <option value="Suite">Suite</option>
-                </select>
-                <span asp-validation-for="RoomType" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="BedType" class="form-label">Bed Type</label>
-                <select asp-for="BedType" class="form-select">
-                    <option value="">Select Bed Type</option>
-                    <option value="Single">Single</option>
-                    <option value="Double">Double</option>
-                    <option value="King">King</option>
-                    <option value="Queen">Queen</option>
-                </select>
-                <span asp-validation-for="BedType" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="HotelId" class="form-label">Hotel</label>
-                <select asp-for="HotelId" class="form-select">
-                    <option value="">Select Hotel</option>
-                    <!-- Populate with actual hotel IDs/names -->
-                    <option value="1">Hotel A</option>
-                    <option value="2">Hotel B</option>
-                </select>
-                <span asp-validation-for="HotelId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group text-center">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-plus me-2"></i>Create Room
-                </button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
-
 @section Scripts {
+    <script>
+        (function () {
+            'use strict'
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

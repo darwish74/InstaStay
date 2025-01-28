@@ -120,13 +120,23 @@ namespace InstaStay.Areas.hotelManager.Controllers
             return View(Hotels);
         }
         [HttpGet]
-        public IActionResult AddRoom(int Id)
+        public IActionResult AddRoom(int HotelId)
         {
+        ViewBag.Id= HotelId; 
         return View();
         }
         [HttpPost]
-        public IActionResult AddRoom(Room room) 
+        public IActionResult AddRoom(Room room,int HotelId) 
         {
+            var hotel = unitOfWork.hotelRepository.GetOne(e => e.Id == HotelId);
+            if (hotel != null)
+            {
+               room.HotelId = HotelId;  
+               unitOfWork.roomRepository.Create(room);
+               unitOfWork.Commit();
+               TempData["success"] = $"Room Added Successfully to Hotel {hotel.Name}";
+               return RedirectToAction("Dashboard");
+            }
         return View(room);  
         }
 
