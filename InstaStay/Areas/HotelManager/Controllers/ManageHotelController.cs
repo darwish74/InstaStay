@@ -1,4 +1,6 @@
-﻿using DataAccess;
+﻿using Azure.Core;
+using DataAccess;
+using DataAccess.Repositories;
 using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -60,6 +62,58 @@ namespace InstaStay.Areas.hotelManager.Controllers
           return View(request);
         }
         [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var Hotel =unitOfWork.hotelRepository.GetOne(filter: e => e.Id == id);
+            return View(Hotel);
+        }
+        [HttpPost]
+        public IActionResult Edit(Hotel hotel, IFormFile? CoverImage)
+        {
+            ModelState.Remove("CoverImage");
+            var oldHotel=unitOfWork.hotelRepository.GetOne(filter:e=>e.Id == hotel.Id);
+            if (ModelState.IsValid)
+            {
+                if (CoverImage != null && CoverImage.Length > 0)
+                {
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(CoverImage.FileName);
+
+                    // Save in wwwroot
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\HotelImages", fileName);
+
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        CoverImage.CopyTo(stream);
+                    }
+
+                    // Delete old img
+                    var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\HotelImages", oldHotel.CoverImage);
+                    if (System.IO.File.Exists(oldPath))
+                    {
+                        System.IO.File.Delete(oldPath);
+                    }
+
+                    hotel.CoverImage = fileName;
+                }
+                else
+                {
+                    hotel.CoverImage = oldHotel.CoverImage;
+                }
+                unitOfWork.hotelRepository.Alter(hotel);
+                unitOfWork.Commit();
+                TempData["success"] = "Edit Hotel Successfully";
+                return RedirectToAction("ShowAllHotels");
+
+
+            }
+            return RedirectToAction("ShowAllHotels");   
+        }
+
+
+
+
+
+        [HttpGet]
         public IActionResult ShowAllHotels(string UserName)
         {
             var Hotels = unitOfWork.hotelRepository.Get(e=>e.HotelManager.Name==UserName).ToList();
@@ -75,5 +129,11 @@ namespace InstaStay.Areas.hotelManager.Controllers
         {
         return View(room);  
         }
+
+
+
+
+
+
     }
 }

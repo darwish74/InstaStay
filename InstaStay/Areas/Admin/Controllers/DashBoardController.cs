@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.EntityFrameworkCore;
 using Models.IRepositories;
 using Models.Models;
 using Models.ViewModels;
@@ -67,6 +68,8 @@ namespace InstaStay.Areas.Admin.Controllers
         {
             var request = unitOfWork.NewHotelRequestsRepository.GetOne(e => e.Id == id);
             var hotelManager = unitOfWork.HotelManagerRepository.GetOne(r => r.Name == request.HotelManager);
+            
+            
             var hotel = new Hotel
             {
                 Name = request.Name,
