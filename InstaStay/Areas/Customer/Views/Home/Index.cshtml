@@ -3,73 +3,82 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="search-banner d-flex align-items-center p-1">
-    <img src="~/images/Screenshot 2025-01-28 193920.png" alt="Banner Image" class="me-3" style="width: 100px; height: auto;">
-    <div>
-        <h1 class="display-4" style="color:palegoldenrod;">Find Your Next Stay</h1>
-        <p class="lead">Explore great deals on hotels, homes, and more, all at the best prices.</p>
+<div class="search-banner bg-warning mt-1 ms-5 d-flex align-items-center justify-content-center p-5 position-relative"
+     style="background-image: url('~/images/HotelImages/06ecd7d2-4f4b-4a8d-b500-2ef1cd657496.jpg'); background-size: cover; background-position: center; border-radius: 20px; box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);">
+    <div class="position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(0, 0, 0, 0.6); border-radius: 20px;"></div>
+    <div class="text-center text-light position-relative">
+        <!-- Animated Icons -->
+        <div class="d-flex justify-content-center gap-4 mb-4">
+            <div class="icon-container text-center">
+                <i class="fas fa-map-marker-alt fa-3x text-info"></i>
+                <p class="mt-2 text-white fw-bold">Top Locations</p>
+            </div>
+            <div class="icon-container text-center">
+                <i class="fas fa-hotel fa-3x text-info"></i>
+                <p class="mt-2 text-white fw-bold">Luxury Hotels</p>
+            </div>
+            <div class="icon-container text-center">
+                <i class="fas fa-percentage fa-3x text-info"></i>
+                <p class="mt-2 text-white fw-bold">Best Deals</p>
+            </div>
+        </div>
+
+        <!-- Main Text -->
+        <h1 class="display-3 fw-bold animated-text">Welcome to Your Dream Stay</h1>
+        <p class="lead mb-4 fw-bold text-info">Search and book the best hotels for your perfect getaway</p>
+        <a href="#searchForm" class="btn  bg-transparent btn-outline-success btn-lg px-5 shadow-lg">
+            <i class="fas fa-search-location me-2"></i>Start Your Journey
+        </a>
     </div>
 </div>
-
-<div class="container mt-1">
-    
-    <form id="searchForm" method="post" asp-action="Search" onsubmit="return validateForm()">
-        <div class="row mb-3 p-3 border rounded card-header bg-dark text-white">
-            
+<div class="container ms-4 mt-5">
+    <form id="searchForm" method="post" asp-action="Search" class="bg-opacity-25 bg-info text-black shadow-sm p-4 rounded-4" onsubmit="return validateForm()">
+        <div class="row g-4">
             <div class="col-md-4">
-                <label for="StateId" class="form-label">Where are you going?</label>
+                <label for="StateId" class="form-label fw-bold text-secondary">Destination</label>
                 <select class="form-select" id="StateId" name="StateId">
-                    <option value="" selected>Select State</option>
-                    
+                    <option value="" selected>Select a State</option>
                 </select>
             </div>
-
-            <!-- Check-in and Check-out Dates -->
             <div class="col-md-4">
-                <label for="CheckInDate" class="form-label">Check-in date</label>
-                <input type="date" class="form-control" id="CheckInDate" name="CheckInDate"
-                       value=".CheckInDate?.ToString("yyyy-MM-dd")">
+                <label for="CheckInDate" class="form-label fw-bold text-secondary">Check-in Date</label>
+                <input type="date" class="form-control" id="CheckInDate" name="CheckInDate">
             </div>
-
-            <div class="col-md-4 d-flex align-items-end">
-                <div class="w-100 d-flex gap-2">
-                    <div class="flex-grow-1">
-                        <label for="CheckOutDate" class="form-label">Check-out date</label>
-                        <input type="date" class="form-control" id="CheckOutDate" name="CheckOutDate"
-                               value="CheckOutDate?.ToString("yyyy-MM-dd")">
-                    </div>
-                    <button type="submit" class="btn btn-primary align-self-end">Search</button>
-                </div>
+            <div class="col-md-4">
+                <label for="CheckOutDate" class="form-label fw-bold text-secondary">Check-out Date</label>
+                <input type="date" class="form-control" id="CheckOutDate" name="CheckOutDate">
             </div>
+        </div>
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-outline-success btn-lg px-5">Search</button>
         </div>
     </form>
 
-    <!-- Hotel Results (Grid Layout) -->
-    <div class="row">
+    <h2 class="mt-5 mb-4 text-center text-primary">Explore Our Top Hotels</h2>
+
+    <div class="row g-4">
         @{
             foreach (var hotel in Model)
             {
-                <div class="col-md-6 mb-4">
-                    <div class="card h-100 d-flex flex-row align-items-center">
-                        <!-- Hotel Image (Link) -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 border-0 shadow rounded-4">
                         <a asp-action="Hotel" asp-route-HotelId="@hotel.Id">
-                           
-                           
-                            <img src="~/images/HotelImages/@hotel.CoverImage" class="card-img-left" style="width:150px; height:150px; object-fit: cover;" alt="Hotel Image">
+                            <img src="~/images/HotelImages/@hotel.CoverImage" class="card-img-top rounded-top-4" style="height: 220px; object-fit: cover;" alt="Hotel Image">
                         </a>
-                        <!-- Hotel Details -->
                         <div class="card-body">
-                            <h5 class="card-title">
-                                <a asp-action="Hotel" asp-route-HotelId="@hotel.Id"
-                                   asp-route-CheckInDate="CheckInDate"
-                                   asp-route-CheckOutDate="CheckOutDate"
-                                   class="text-dark text-decoration-none">
+                            <h5 class="card-title text-truncate">
+                                <a asp-action="Hotel" asp-route-HotelId="@hotel.Id" class="text-dark text-decoration-none">
                                     @hotel.Name
                                 </a>
                             </h5>
-                            <p class="text-muted mb-1">@hotel.Address</p>
-                            <span class="badge bg-primary mb-2">@hotel.Stars</span>
-                            
+                            <p class="text-muted">@hotel.Address</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-info text-dark">@hotel.Stars Stars</span>
+                                <p class="mb-0 text-success fw-bold"></p>
+                            </div>
+                        </div>
+                        <div class="card-footer text-center bg-light">
+                            <a asp-action="Hotel" asp-route-HotelId="@hotel.Id" class="btn btn-outline-primary">View Details</a>
                         </div>
                     </div>
                 </div>
@@ -78,42 +87,66 @@
     </div>
 </div>
 
-<!-- Hover Effect for Images -->
 <style>
-    .card-img-left {
-        transition: transform 0.3s ease;
+    .card-title a:hover {
+        color: #007bff;
     }
 
-        .card-img-left:hover {
-            transform: scale(1.1); /* Enlarge image on hover */
-        }
-
-    .card {
-        border: none;
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
     }
 
-    .card-body a {
-        text-decoration: none;
-        color: #000;
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
     }
 
-        .card-body a:hover {
-            color: ; /* Change color on hover */
-        }
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
 
+    .btn-warning {
+        background-color: #ffc107;
+        border-color: #ffc107;
+    }
+
+    .btn-warning:hover {
+        background-color: #e0a800;
+        border-color: #d39e00;
+    }
     .search-banner {
-        margin-bottom: 0px;
-        border-radius: 0px;
+        margin-bottom: 50px;
+        position: relative;
+        overflow: hidden;
     }
 
-        .search-banner h1 {
-            font-weight: 700;
-        }
+    .animated-text {
+        animation: fadeIn 2s ease-in-out infinite alternate;
+    }
 
-        .search-banner p {
-            color: gold;
-            font-weight: 400;
-            font-size: 1.2rem;
-        }
+    @@keyframes fadeIn {
+        0% { opacity: 0.7; transform: scale(1); }
+        100% { opacity: 1; transform: scale(1.1); }
+    }
+
+    .icon-container i {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .icon-container:hover i {
+        transform: scale(1.2);
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        border-color: #ffc107;
+    }
+
+    .btn-warning:hover {
+        background-color: #e0a800;
+        border-color: #d39e00;
+    }
 </style>
-

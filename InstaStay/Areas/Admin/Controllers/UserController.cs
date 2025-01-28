@@ -79,6 +79,16 @@ namespace InstaStay.Areas.Admin.Controllers
             var user = await userManager.FindByIdAsync(userId);
             if (user != null)
             {
+                var roles = await userManager.GetRolesAsync(user);
+                if (roles.Any())
+                {
+                    var removeRolesResult = await userManager.RemoveFromRolesAsync(user, roles);
+                    if (!removeRolesResult.Succeeded)
+                    {
+                        TempData["error"] = "Failed to remove user roles before deletion.";
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
                 var result = await userManager.DeleteAsync(user);
                 if (result.Succeeded)
                 {
@@ -96,7 +106,6 @@ namespace InstaStay.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
         public async Task<IActionResult> UnBlockUser(string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
