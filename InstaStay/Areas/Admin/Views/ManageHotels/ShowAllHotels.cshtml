@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Models.Models.Hotel>
+
+@{
+    ViewData["Title"] = "Show All Hotels";
+}
+<h1 class="mb-4 text-lg-center">Manage Hotels</h1>
+<table class="table table-bordered text-center table-striped table-hover m-3">
+    <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Description</th>
+            <th>Stars</th>
+            <th>Cover Image</th>
+            <th>No.Rooms</th>
+            <th>Contact Info</th>
+            <th>Manager</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Address</td>
+                    <td>@item.Description</td>
+                    <td>@item.Stars</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.CoverImage))
+                        {
+                            <img src="~/images/HotelImages/@item.CoverImage" alt="Hotel Cover" style="width: 80px; height: 60px; object-fit: cover;" class="rounded" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">No Image</span>
+                        }
+                    </td>
+                    <td>@item.Rooms.Count</td>
+                    <td>@item.ContactInfo</td>
+                    <td>@item.HotelManager.Name</td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-@item.Id"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                Actions
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-@item.Id">
+                                <li>
+                                    <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id">
+                                        <i class="fas fa-edit me-2"></i>Edit
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-action="Details" asp-route-id="@item.Id">
+                                        <i class="fas fa-info-circle me-2"></i>Details
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-danger" asp-action="Delete" asp-route-id="@item.Id">
+                                        <i class="fas fa-trash me-2"></i>Delete
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="9" class="text-center text-muted">No hotels found.</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -20,6 +20,16 @@
         </script>
     }
 }
+<style>
+    .sidebar .nav-link {
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        .sidebar .nav-link:hover {
+            background-color: cadetblue; /* Darker background on hover */
+            color: #fff; /* White text on hover */
+        }
+</style>
 <div class="d-flex">
     <!-- Sidebar -->
     <div class="sidebar bg-dark text-white">
@@ -41,6 +51,7 @@
             <a class="nav-link text-white" href="/Admin/Report/Requests"><i class="fas fa-envelope me-2"></i>User Requests</a>
             <a class="nav-link text-white" href="/Admin/Report/Index"><i class="fas fa-exclamation-circle me-2"></i>Complaints</a>
             <a class="nav-link text-white" href="/Admin/Report/HotelRequestes"><i class="fas fa-envelope me-2"></i>Hotel Requests</a>
+            <a class="nav-link text-white" href="/Admin/ManageHotels/ShowAllHotels"><i class="fas fa-hotel me-2"></i>Manage Hotels</a>
         </nav>
     </div>
 
