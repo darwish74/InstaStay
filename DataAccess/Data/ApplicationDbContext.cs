@@ -4,6 +4,7 @@ using Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 namespace DataAccess.Data
@@ -27,7 +28,15 @@ namespace DataAccess.Data
         public DbSet<HotelManagerRequests> HotelManagerRequests { get; set; }
         public DbSet<NewHotelRequests> NewHotelRequests { get; set; }
         public DbSet<HotelManager> HotelManagers { get; set; }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<Room>()
+           .HasOne(r => r.Hotel)
+           .WithMany(h => h.Rooms)
+           .HasForeignKey(r => r.HotelId)
+           .OnDelete(DeleteBehavior.Cascade);
+        }
 
-  
     }
 }

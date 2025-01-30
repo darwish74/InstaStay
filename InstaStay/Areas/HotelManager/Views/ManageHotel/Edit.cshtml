@@ -1,59 +1,98 @@
 ﻿@model Models.Models.Hotel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Hotel";
 }
 
-<h1 class="text-center">Edit Hotel</h1>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0 p-4">
+                <h2 class="text-center text-primary mb-4">
+                    <i class="fas fa-hotel"></i> Edit Hotel
+                </h2>
+                <form asp-action="Edit" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <div class="form-group mb-3">
+                        <label asp-for="Name" class="form-label">
+                            <i class="fas fa-signature me-2 text-secondary"></i> Hotel Name
+                        </label>
+                        <input asp-for="Name" class="form-control" placeholder="Enter hotel name" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Address" class="form-label">
+                            <i class="fas fa-map-marker-alt me-2 text-secondary"></i> Address
+                        </label>
+                        <input asp-for="Address" class="form-control" placeholder="Enter hotel address" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Description" class="form-label">
+                            <i class="fas fa-align-left me-2 text-info"></i> Description
+                        </label>
+                        <textarea asp-for="Description" class="form-control" rows="3" placeholder="Brief description of the hotel"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="ContactInfo" class="form-label">
+                            <i class="fas fa-phone-alt me-2 text-success"></i> Contact Info
+                        </label>
+                        <input asp-for="ContactInfo" class="form-control" placeholder="Enter hotel contact details" />
+                        <span asp-validation-for="ContactInfo" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-image me-2 text-secondary"></i> Cover Image
+                        </label>
+                        <input type="file" id="coverImageInput" name="CoverImage" class="form-control" accept="image/*" />
+                        <span asp-validation-for="CoverImage" class="text-danger"></span>
 
+                        @if (!string.IsNullOrEmpty(Model.CoverImage))
+                        {
+                            <div class="mt-3 text-center">
+                                <img id="coverImagePreview" src="~/images/HotelImages/@Model.CoverImage" alt="Current Cover Image" class="img-thumbnail shadow-sm" width="200" />
+                            </div>
+                        }
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Stars" class="form-label">
+                            <i class="fas fa-star me-2 text-warning"></i> Star Rating
+                        </label>
+                        <input asp-for="Stars" type="number" class="form-control" min="1" max="5" placeholder="Enter hotel rating (1-5)" />
+                        <span asp-validation-for="Stars" class="text-danger"></span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary w-100 shadow-sm">
+                            <i class="fas fa-save me-1"></i> Save Changes
+                        </button>
+                    </div>
 
-
-<div class="row justify-content-center">
-    <div class="col-lg-8">
-        <div class="card shadow-sm border-0 p-4">
-            <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group mb-3">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                </form>
             </div>
-            <div class="form-group mb-3">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-           
-                <div class="form-group mb-3">
-                    <label asp-for="Description" class="form-label"><i class="fas fa-align-left me-2 text-info"></i>Description</label>
-                    <textarea asp-for="Description" class="form-control" rows="3" placeholder="Brief description of the hotel"></textarea>
-                    <span asp-validation-for="Description" class="text-danger"></span>
-                </div>
-            <div class="form-group mb-3">
-                <label asp-for="CoverImage"  class="control-label"></label>
-                <input asp-for="CoverImage" type="file" class="form-control" />
-                <span asp-validation-for="CoverImage" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group mb-3">
-                <label asp-for="Stars" class="control-label"></label>
-                <input asp-for="Stars" type="number" class="form-control" />
-                <span asp-validation-for="Stars" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group mb-3">
-                    <input type="submit" value="Save" class="btn btn-primary w-100 shadow-sm" />
-            </div>
-        </form>
-      </div>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.getElementById('coverImageInput').addEventListener('change', function (event) {
+            const preview = document.getElementById('coverImagePreview');
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = "block";
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 }

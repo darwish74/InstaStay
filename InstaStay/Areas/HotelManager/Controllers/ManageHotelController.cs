@@ -66,53 +66,7 @@ namespace InstaStay.Areas.hotelManager.Controllers
         {
             var Hotel =unitOfWork.hotelRepository.GetOne(filter: e => e.Id == id);
             return View(Hotel);
-        }
-        [HttpPost]
-        public IActionResult Edit(Hotel hotel, IFormFile? CoverImage)
-        {
-            ModelState.Remove("CoverImage");
-            var oldHotel=unitOfWork.hotelRepository.GetOne(filter:e=>e.Id == hotel.Id);
-            if (ModelState.IsValid)
-            {
-                if (CoverImage != null && CoverImage.Length > 0)
-                {
-                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(CoverImage.FileName);
-
-                    // Save in wwwroot
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\HotelImages", fileName);
-
-                    using (var stream = System.IO.File.Create(filePath))
-                    {
-                        CoverImage.CopyTo(stream);
-                    }
-
-                    // Delete old img
-                    var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\HotelImages", oldHotel.CoverImage);
-                    if (System.IO.File.Exists(oldPath))
-                    {
-                        System.IO.File.Delete(oldPath);
-                    }
-
-                    hotel.CoverImage = fileName;
-                }
-                else
-                {
-                    hotel.CoverImage = oldHotel.CoverImage;
-                }
-                unitOfWork.hotelRepository.Alter(hotel);
-                unitOfWork.Commit();
-                TempData["success"] = "Edit Hotel Successfully";
-                return RedirectToAction("ShowAllHotels");
-
-
-            }
-            return RedirectToAction("ShowAllHotels");   
-        }
-
-
-
-
-
+        }     
         [HttpGet]
         public IActionResult ShowAllHotels(string UserName)
         {
@@ -139,11 +93,65 @@ namespace InstaStay.Areas.hotelManager.Controllers
             }
         return View(room);  
         }
+        [HttpPost]
+        public IActionResult Edit(Hotel hotel, IFormFile? CoverImage)
+        {
+            var existingHotel = unitOfWork.hotelRepository.GetOne(e => e.Id == hotel.Id,includeprops:e=>e.Include(e=>e.HotelManager));
 
+            if (existingHotel == null)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                if (CoverImage != null && CoverImage.Length > 0)
+                {
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(CoverImage.FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\HotelImages", fileName);
 
-
-
-
-
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        CoverImage.CopyTo(stream);
+                    }
+                    if (existingHotel.CoverImage != null)
+                    {
+                        var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\HotelImages", existingHotel.CoverImage);
+                        if (System.IO.File.Exists(oldPath))
+                        {
+                            System.IO.File.Delete(oldPath);
+                        }
+                    }
+                    existingHotel.CoverImage = fileName;
+                }
+                existingHotel.Name = hotel.Name;
+                existingHotel.Address = hotel.Address;
+                existingHotel.Description = hotel.Description;
+                existingHotel.ContactInfo = hotel.ContactInfo;
+                existingHotel.Stars = hotel.Stars;
+                unitOfWork.hotelRepository.Alter(existingHotel);
+                unitOfWork.Commit();
+                TempData["success"] = "Hotel Edited Successfully";
+                return RedirectToAction("ShowAllHotels", new {UserName = existingHotel.HotelManager.Name});
+            }
+            return RedirectToAction("ShowAllHotels");
+        }
+        public IActionResult Delete(int id)
+        {
+            var hotel = unitOfWork.hotelRepository.GetOne(e => e.Id == id, includeprops: e => e.Include(e => e.HotelManager));
+            if (id != null)
+            {
+                unitOfWork.hotelRepository.Delete(hotel);
+                unitOfWork.Commit();
+                TempData["success"] = "Hotel and all its rooms deleted successfully!";
+                return RedirectToAction("ShowAllHotels", new { UserName = hotel.HotelManager.Name });
+            }
+            TempData["success"] = $"Can't delete this hotel";
+            return RedirectToAction("ShowAllHotels", new { UserName = hotel.HotelManager.Name });
+        }
+        public IActionResult Details(int id)
+        {
+            var Hotel = unitOfWork.hotelRepository.GetOne(e => e.Id == id);
+            return View(Hotel);
+        }
     }
 }

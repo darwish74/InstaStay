@@ -11,7 +11,6 @@ namespace Models.Models
     public class Hotel
     {
         public object Price;
-
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
@@ -31,5 +30,7 @@ namespace Models.Models
         public virtual ICollection<Review> Reviews { get; set; }
         [ValidateNever]
         public virtual ICollection<Promotion> Promotions { get; set; }
+        [ValidateNever]
+        public virtual ICollection<HotelImages> HotelImages { get; set; }
     }
 }
