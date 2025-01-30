@@ -4,7 +4,6 @@
 @inject UserManager<ApplicationUser> userManager
 @inject RoleManager<IdentityRole> roleManager
 @model UserPaginationViewModel
-
 @{
     ViewData["Title"] = "All Users";
     var allRoles = await roleManager.Roles.ToListAsync();
@@ -16,21 +15,16 @@
             </script>
         }
     }
-
 }
-
-<h3 class="m-3 text-center bg-dark text-info bg-transparent rounded-5">All Users</h3>
-
-
-<div class="m-5">
+<h3 class="m-2 text-center fw-bold bg-dark text-info bg-transparent rounded-5">Manage Users</h3>
+<div class="m-5 active">
     <form asp-action="SearchForUser" asp-controller="User" asp-area="Admin" method="post">
         <div class="col-md-3 d-flex">
             <input type="Text" class="form-control" placeholder="User Name Or Email" name="account" />
-            <button class="btn btn-primary" type="submit"> Search </button>
+            <button class="btn btn-primary me-sm-1" type="submit"> Search </button>
         </div>
     </form>
 </div>
-
 @if (Model.Users == null || !Model.Users.Any())
 {
     <div class="alert alert-info">

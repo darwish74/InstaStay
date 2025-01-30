@@ -3,7 +3,9 @@
 @{
     ViewData["Title"] = "Show All Hotels";
 }
+
 <h1 class="mb-4 text-lg-center">Manage Hotels</h1>
+
 <table class="table table-bordered text-center table-striped table-hover m-3">
     <thead class="table-dark">
         <tr>
@@ -59,9 +61,10 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item text-danger" asp-action="Delete" asp-route-id="@item.Id">
+                                    <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                            data-id="@item.Id" data-name="@item.Name">
                                         <i class="fas fa-trash me-2"></i>Delete
-                                    </a>
+                                    </button>
                                 </li>
                             </ul>
                         </div>
@@ -77,3 +80,39 @@
         }
     </tbody>
 </table>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="fw-bold text-success">Are you sure you want to delete <strong id="hotelName"></strong>?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a id="confirmDeleteBtn" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var hotelId = button.getAttribute('data-id');
+            var hotelName = button.getAttribute('data-name');
+
+            document.getElementById('hotelName').textContent = hotelName;
+            document.getElementById('confirmDeleteBtn').href = "/Admin/ManageHotels/Delete/" + hotelId;
+        });
+        if (@(TempData["success"] != null ? "true" : "false")) {
+            toastr.success('@TempData["success"]');
+        }
+    </script>
+}

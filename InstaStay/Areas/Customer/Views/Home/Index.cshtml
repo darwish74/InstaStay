@@ -2,7 +2,14 @@
 @{
     ViewData["Title"] = "Home";
 }
-
+@section scripts{
+    @if (@TempData["success"] != null)
+    {
+        <script>
+            toastr.success('@TempData["success"]')
+        </script>
+    }
+}
 <div class="search-banner bg-warning mt-1 ms-5 d-flex align-items-center justify-content-center p-5 position-relative"
      style="background-image: url('~/images/HotelImages/06ecd7d2-4f4b-4a8d-b500-2ef1cd657496.jpg'); background-size: cover; background-position: center; border-radius: 20px; box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);">
     <div class="position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(0, 0, 0, 0.6); border-radius: 20px;"></div>

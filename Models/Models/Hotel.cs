@@ -10,6 +10,8 @@ namespace Models.Models
 {
     public class Hotel
     {
+        public object Price;
+
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
@@ -21,8 +23,8 @@ namespace Models.Models
         public int Stars { get; set; }
         public string? CoverImage { get; set; }
         public string? ContactInfo { get; set; }
-        public int HotelManagerId { get; set; } 
-        public virtual HotelManager HotelManager { get; set; }
+        public int? HotelManagerId { get; set; } 
+        public virtual HotelManager? HotelManager { get; set; }
         [ValidateNever]
         public virtual ICollection<Room> Rooms { get; set; }
         [ValidateNever]
