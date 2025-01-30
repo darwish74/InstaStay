@@ -29,6 +29,7 @@ namespace InstaStay.Areas.Admin.Controllers
                 unitOfWork.hotelRepository.Delete(hotel);
                 unitOfWork.Commit();
                 TempData["success"] = $"Hotel Deleted Successfully It's Name {hotel.Name}";
+                return RedirectToAction("ShowAllHotels");
             }
             TempData["success"] = $"Can't delete this hotel";
             return RedirectToAction("ShowAllHotels");

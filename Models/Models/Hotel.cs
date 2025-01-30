@@ -31,6 +31,6 @@ namespace Models.Models
         [ValidateNever]
         public virtual ICollection<Promotion> Promotions { get; set; }
         [ValidateNever]
-        public virtual ICollection<HotelImages> HotelImages { get; set; }
+        public virtual ICollection<HotelImages>? HotelImages { get; set; }
     }
 }

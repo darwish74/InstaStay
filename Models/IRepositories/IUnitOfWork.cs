@@ -20,6 +20,7 @@ namespace Models.IRepositories
         IHotelManagerRequestsRepository HotelManagerRequestsRepository { get; }
         INewHotelRequestsRepository NewHotelRequestsRepository { get; }
         IHotelManager HotelManagerRepository { get; }
+        IHotelImagesRepository HotelImagesRepository { get; }   
         void Commit();
     }
 

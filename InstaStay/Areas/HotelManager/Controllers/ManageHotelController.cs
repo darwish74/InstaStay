@@ -64,7 +64,7 @@ namespace InstaStay.Areas.hotelManager.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var Hotel =unitOfWork.hotelRepository.GetOne(filter: e => e.Id == id);
+            var Hotel =unitOfWork.hotelRepository.GetOne(filter: e => e.Id == id,includeprops:e=>e.Include(e=>e.HotelImages));
             return View(Hotel);
         }     
         [HttpGet]
@@ -152,6 +152,31 @@ namespace InstaStay.Areas.hotelManager.Controllers
         {
             var Hotel = unitOfWork.hotelRepository.GetOne(e => e.Id == id);
             return View(Hotel);
+        }
+        public IActionResult AddHotelImages(int id,IFormFile hotelImages)
+        {
+          var hotel= unitOfWork.hotelRepository.GetOne(e => e.Id == id, includeprops: e => e.Include(e => e.HotelManager));
+            if (hotel != null)
+               {
+               var NewHotelImage = new HotelImages();
+               if(hotelImages != null && hotelImages.Length > 0)
+               {
+                    var fileName= Guid.NewGuid().ToString() + Path.GetExtension(hotelImages.FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\HIL", fileName);
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        hotelImages.CopyTo(stream);
+                    }
+                    NewHotelImage.ImageURL= fileName;
+                    NewHotelImage.HotelId = id; 
+                    unitOfWork.HotelImagesRepository.Create(NewHotelImage); 
+                    unitOfWork.Commit();
+                    TempData["success"] = "Hotel Image added successfully";
+                    return RedirectToAction("ShowAllHotels", new { UserName = hotel.HotelManager.Name });
+                }
+        }
+            TempData["success"] = "No Images added";
+            return RedirectToAction("ShowAllHotels", new { UserName = hotel.HotelManager.Name });
         }
     }
 }

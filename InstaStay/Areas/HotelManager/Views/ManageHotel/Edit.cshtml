@@ -1,98 +1,141 @@
 ﻿@model Models.Models.Hotel
-
 @{
     ViewData["Title"] = "Edit Hotel";
 }
 
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-lg border-0 p-4">
-                <h2 class="text-center text-primary mb-4">
-                    <i class="fas fa-hotel"></i> Edit Hotel
-                </h2>
-                <form asp-action="Edit" enctype="multipart/form-data">
-                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
-                    <input type="hidden" asp-for="Id" />
-                    <div class="form-group mb-3">
-                        <label asp-for="Name" class="form-label">
-                            <i class="fas fa-signature me-2 text-secondary"></i> Hotel Name
-                        </label>
-                        <input asp-for="Name" class="form-control" placeholder="Enter hotel name" />
-                        <span asp-validation-for="Name" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label asp-for="Address" class="form-label">
-                            <i class="fas fa-map-marker-alt me-2 text-secondary"></i> Address
-                        </label>
-                        <input asp-for="Address" class="form-control" placeholder="Enter hotel address" />
-                        <span asp-validation-for="Address" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label asp-for="Description" class="form-label">
-                            <i class="fas fa-align-left me-2 text-info"></i> Description
-                        </label>
-                        <textarea asp-for="Description" class="form-control" rows="3" placeholder="Brief description of the hotel"></textarea>
-                        <span asp-validation-for="Description" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label asp-for="ContactInfo" class="form-label">
-                            <i class="fas fa-phone-alt me-2 text-success"></i> Contact Info
-                        </label>
-                        <input asp-for="ContactInfo" class="form-control" placeholder="Enter hotel contact details" />
-                        <span asp-validation-for="ContactInfo" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="form-label">
-                            <i class="fas fa-image me-2 text-secondary"></i> Cover Image
-                        </label>
-                        <input type="file" id="coverImageInput" name="CoverImage" class="form-control" accept="image/*" />
-                        <span asp-validation-for="CoverImage" class="text-danger"></span>
+        <div class="col-md-10 col-lg-8 shadow-lg p-4 rounded bg-white">
+            <h1 class="mb-4 text-center fw-bold text-primary display-4">
+                <i class="fas fa-hotel"></i> Manage Hotel
+            </h1>
 
-                        @if (!string.IsNullOrEmpty(Model.CoverImage))
-                        {
-                            <div class="mt-3 text-center">
-                                <img id="coverImagePreview" src="~/images/HotelImages/@Model.CoverImage" alt="Current Cover Image" class="img-thumbnail shadow-sm" width="200" />
-                            </div>
-                        }
-                    </div>
-                    <div class="form-group mb-3">
-                        <label asp-for="Stars" class="form-label">
-                            <i class="fas fa-star me-2 text-warning"></i> Star Rating
-                        </label>
-                        <input asp-for="Stars" type="number" class="form-control" min="1" max="5" placeholder="Enter hotel rating (1-5)" />
-                        <span asp-validation-for="Stars" class="text-danger"></span>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <button type="submit" class="btn btn-primary w-100 shadow-sm">
-                            <i class="fas fa-save me-1"></i> Save Changes
-                        </button>
-                    </div>
+            <!-- Navigation Tabs -->
+            <ul class="nav nav-tabs" id="hotelTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active fw-bold" id="edit-tab" data-bs-toggle="tab" data-bs-target="#edit" type="button" role="tab">Edit Hotel</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold" id="images-tab" data-bs-toggle="tab" data-bs-target="#images" type="button" role="tab">Manage Images</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold" id="amenities-tab" data-bs-toggle="tab" data-bs-target="#amenities" type="button" role="tab">Manage Amenities</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link text-danger fw-bold" id="delete-tab" data-bs-toggle="tab" data-bs-target="#delete" type="button" role="tab">Delete Hotel</button>
+                </li>
+            </ul>
 
-                </form>
+            <!-- Tab Content -->
+            <div class="tab-content mt-4" id="hotelTabsContent">
+                <!-- Edit Hotel Form -->
+                <div class="tab-pane fade show active" id="edit" role="tabpanel">
+                    <h3 class="fw-bold text-primary">Edit Hotel Details</h3>
+                    <form asp-action="Edit" enctype="multipart/form-data">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label fw-bold text-dark">Hotel Name</label>
+                            <input asp-for="Name" class="form-control" placeholder="Enter hotel name" />
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Address" class="form-label fw-bold text-dark">Address</label>
+                            <input asp-for="Address" class="form-control" placeholder="Enter hotel address" />
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label fw-bold text-dark">Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Stars" class="form-label fw-bold text-dark">Star Rating</label>
+                            <input type="number" asp-for="Stars" class="form-control" min="1" max="5" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">Cover Image</label>
+                            <input type="file" name="CoverImage" class="form-control" />
+                            @if (!string.IsNullOrEmpty(Model.CoverImage))
+                            {
+                                <div class="mt-3 text-center">
+                                    <img src="~/images/HotelImages/@Model.CoverImage" class="img-thumbnail shadow-sm" width="200" />
+                                </div>
+                            }
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="ContactInfo" class="form-label fw-bold text-dark">Contact Info</label>
+                            <input asp-for="ContactInfo" class="form-control" placeholder="Enter contact info" />
+                        </div>
+                        <div class="mb-3 text-center">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Manage Images -->
+                <div class="tab-pane fade" id="images" role="tabpanel">
+                    <h3 class="fw-bold text-primary">Manage Hotel Images</h3>
+                    <form asp-action="AddHotelImages" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">Upload More Images</label>
+                            <input type="file" name="hotelImages" class="form-control" multiple />
+                        </div>
+                        <div class="mb-3 text-center">
+                            <button type="submit" class="btn btn-success">Upload</button>
+                        </div>
+                    </form>
+                    <div class="mt-4">
+                        <h5 class="fw-bold text-success">Existing Images</h5>
+                        <div class="d-flex flex-wrap">
+                            @foreach (var image in Model.HotelImages)
+                            {
+                                <div class="p-2">
+                                    <img src="~/images/HIL/@image.ImageURL" class="img-thumbnail" width="100" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Manage Amenities -->
+                <div class="tab-pane fade" id="amenities" role="tabpanel">
+                    <h3 class="fw-bold text-primary">Manage Hotel Amenities</h3>
+                    <form asp-action="UpdateAmenities" method="post">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">Amenities</label>
+                            @* <textarea asp-for="Amenities" class="form-control" rows="3"></textarea> *@
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-info">Save Amenities</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Delete Hotel -->
+                <div class="tab-pane fade" id="delete" role="tabpanel">
+                    <h3 class="fw-bold text-danger">Delete Hotel</h3>
+                    <div class="alert alert-danger text-center">
+                        <h5>Are you sure you want to delete this hotel?</h5>
+                        <p>This action cannot be undone.</p>
+                        <form asp-action="Delete" method="post">
+                            <input type="hidden" asp-for="Id" />
+                            <button type="submit" class="btn btn-danger">Delete Hotel</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-
     <script>
-        document.getElementById('coverImageInput').addEventListener('change', function (event) {
-            const preview = document.getElementById('coverImagePreview');
-            const file = event.target.files[0];
-
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    preview.src = e.target.result;
-                    preview.style.display = "block";
-                };
-                reader.readAsDataURL(file);
-            }
+        document.addEventListener("DOMContentLoaded", function () {
+            let triggerTabList = [].slice.call(document.querySelectorAll('#hotelTabs button'));
+            triggerTabList.forEach(function (tabEl) {
+                tabEl.addEventListener('click', function (event) {
+                    let tab = new bootstrap.Tab(tabEl);
+                    tab.show();
+                });
+            });
         });
     </script>
 }
