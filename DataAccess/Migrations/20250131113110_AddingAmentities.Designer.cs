@@ -4,6 +4,7 @@ using DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250131113110_AddingAmentities")]
+    partial class AddingAmentities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,6 +256,7 @@ namespace DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("HotelId")
@@ -383,6 +387,23 @@ namespace DataAccess.Migrations
                     b.ToTable("HotelImages");
                 });
 
+            modelBuilder.Entity("Models.Models.HotelManager", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HotelManagers");
+                });
+
             modelBuilder.Entity("Models.Models.HotelManagerRequests", b =>
                 {
                     b.Property<int>("Id")
@@ -409,23 +430,6 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("HotelManagerRequests");
-                });
-
-            modelBuilder.Entity("Models.Models.HotelManagers", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("HotelManagers");
                 });
 
             modelBuilder.Entity("Models.Models.HotelPromotion", b =>
@@ -875,7 +879,7 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Models.Models.Hotel", b =>
                 {
-                    b.HasOne("Models.Models.HotelManagers", "HotelManager")
+                    b.HasOne("Models.Models.HotelManager", "HotelManager")
                         .WithMany("Hotels")
                         .HasForeignKey("HotelManagerId");
 
@@ -979,7 +983,7 @@ namespace DataAccess.Migrations
                     b.Navigation("Rooms");
                 });
 
-            modelBuilder.Entity("Models.Models.HotelManagers", b =>
+            modelBuilder.Entity("Models.Models.HotelManager", b =>
                 {
                     b.Navigation("Hotels");
                 });

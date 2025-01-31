@@ -23,7 +23,7 @@ namespace Models.Models
         public string? CoverImage { get; set; }
         public string? ContactInfo { get; set; }
         public int? HotelManagerId { get; set; } 
-        public virtual HotelManager? HotelManager { get; set; }
+        public virtual HotelManagers? HotelManager { get; set; }
         [ValidateNever]
         public virtual ICollection<Room> Rooms { get; set; }
         [ValidateNever]
@@ -31,6 +31,8 @@ namespace Models.Models
         [ValidateNever]
         public virtual ICollection<Promotion> Promotions { get; set; }
         [ValidateNever]
-        public virtual ICollection<HotelImages>? HotelImages { get; set; }
+        public virtual ICollection<HotelImages>HotelImages { get; set; }
+        [ValidateNever]
+        public virtual ICollection<Amentities> Amentities { get; set; } = null;
     }
 }

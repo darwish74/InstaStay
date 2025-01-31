@@ -35,7 +35,7 @@ namespace InstaStay.Areas.Admin.Controllers
                 await userManager.RemoveFromRolesAsync(user, currentRoles);
             }
             var result = await userManager.AddToRoleAsync(user, "Hotel Manager");
-            var HotelManager=new HotelManager() {
+            var HotelManager=new HotelManagers() {
             Name=user.UserName
             };
             unitOfWork.HotelManagerRepository.Create(HotelManager);

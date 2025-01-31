@@ -2,15 +2,12 @@
 @{
     ViewData["Title"] = "Edit Hotel";
 }
-
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-10 col-lg-8 shadow-lg p-4 rounded bg-white">
             <h1 class="mb-4 text-center fw-bold text-primary display-4">
                 <i class="fas fa-hotel"></i> Manage Hotel
             </h1>
-
-            <!-- Navigation Tabs -->
             <ul class="nav nav-tabs" id="hotelTabs" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active fw-bold" id="edit-tab" data-bs-toggle="tab" data-bs-target="#edit" type="button" role="tab">Edit Hotel</button>
@@ -25,10 +22,7 @@
                     <button class="nav-link text-danger fw-bold" id="delete-tab" data-bs-toggle="tab" data-bs-target="#delete" type="button" role="tab">Delete Hotel</button>
                 </li>
             </ul>
-
-            <!-- Tab Content -->
             <div class="tab-content mt-4" id="hotelTabsContent">
-                <!-- Edit Hotel Form -->
                 <div class="tab-pane fade show active" id="edit" role="tabpanel">
                     <h3 class="fw-bold text-primary">Edit Hotel Details</h3>
                     <form asp-action="Edit" enctype="multipart/form-data">
@@ -68,8 +62,6 @@
                         </div>
                     </form>
                 </div>
-
-                <!-- Manage Images -->
                 <div class="tab-pane fade" id="images" role="tabpanel">
                     <h3 class="fw-bold text-primary">Manage Hotel Images</h3>
                     <form asp-action="AddHotelImages" method="post" enctype="multipart/form-data">
@@ -84,6 +76,7 @@
                     </form>
                     <div class="mt-4">
                         <h5 class="fw-bold text-success">Existing Images</h5>
+                        <a class="fw-bold text-primary btn btn-outline-info"  href="/hotelManager/Images/index/@Model.Id">Edit Images</a>
                         <div class="d-flex flex-wrap">
                             @foreach (var image in Model.HotelImages)
                             {
@@ -94,22 +87,45 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Manage Amenities -->
                 <div class="tab-pane fade" id="amenities" role="tabpanel">
                     <h3 class="fw-bold text-primary">Manage Hotel Amenities</h3>
-                    <form asp-action="UpdateAmenities" method="post">
+                    <form asp-action="AddAmentity" asp-controller="Amentities" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="id" value="@Model.Id" />
                         <div class="mb-3">
-                            <label class="form-label fw-bold text-dark">Amenities</label>
-                            @* <textarea asp-for="Amenities" class="form-control" rows="3"></textarea> *@
+                            <label class="form-label fw-bold text-dark">Amenity Name</label>
+                            <input type="text" name="AmenityName" class="form-control" placeholder="Enter amenity name" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">Amenity Image</label>
+                            <input type="file" name="AmenityImage" class="form-control" accept="image/*" required />
                         </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-info">Save Amenities</button>
+                            <button type="submit" class="btn btn-success">Add Amenity</button>
                         </div>
                     </form>
+                    <hr />
+                    <h4 class="fw-bold text-primary">Existing Amenities</h4>
+                    <div class="row">
+                        @if (Model.Amentities != null && Model.Amentities.Any())
+                        {
+                            @foreach (var amenity in Model.Amentities)
+                            {
+                                <div class="col-md-4 text-center mb-3">
+                                    <div class="card shadow-sm p-3">
+                                        <img src="~/images/Amentities/@amenity.Image" class="img-thumbnail" width="100" />
+                                        <h6 class="mt-2 fw-bold">@amenity.Name</h6>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-muted">No amenities added yet.</p>
+                        }
+                    </div>
                 </div>
 
-                <!-- Delete Hotel -->
                 <div class="tab-pane fade" id="delete" role="tabpanel">
                     <h3 class="fw-bold text-danger">Delete Hotel</h3>
                     <div class="alert alert-danger text-center">

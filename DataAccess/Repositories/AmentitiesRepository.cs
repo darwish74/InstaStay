@@ -6,13 +6,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace DataAccess.Repositories
 {
-    public class HotelManagerRepository : BaseRepository<HotelManagers>, IHotelManager
+    public class AmentitiesRepository : BaseRepository<Amentities>,IAmentitiesRepository
     {
-        public HotelManagerRepository(ApplicationDbContext _context) : base(_context)
+        public AmentitiesRepository(ApplicationDbContext _context) : base(_context)
         {
+
         }
     }
 }
