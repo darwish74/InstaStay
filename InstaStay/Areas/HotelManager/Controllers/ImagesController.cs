@@ -25,10 +25,21 @@ namespace InstaStay.Areas.HotelManager.Controllers
         }
         public IActionResult Delete(int id)
         {
-            var HotelImage = unitOfWork.HotelImagesRepository.GetOne(e=>e.Id==id);
-            unitOfWork.HotelImagesRepository.Delete(HotelImage);
+            var hotelImage = unitOfWork.HotelImagesRepository.GetOne(e => e.Id == id);
+
+            if (hotelImage == null)
+            {
+                return NotFound();
+            }
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/HIL", hotelImage.ImageURL);
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+            }
+            unitOfWork.HotelImagesRepository.Delete(hotelImage);
             unitOfWork.Commit();
-            return View();
+            TempData["success"] = "Hotel Image Deleted Successfully";
+            return RedirectToAction("Index", new {id=hotelImage.HotelId});   
         }
     }
 }

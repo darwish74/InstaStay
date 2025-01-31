@@ -40,8 +40,11 @@
 </div>
 @section Scripts {
     <script>
-         var successMessage = '@TempData["success"]';
-        if (successMessage && successMessage.trim() !== "") {
-            toastr.success(successMessage);
+        $(document).ready(function () {
+            var successMessage = '@TempData["success"]';
+            if (successMessage && successMessage.trim() !== "") {
+                toastr.success(successMessage);
+            }
+        });
     </script>
-    }
+}
