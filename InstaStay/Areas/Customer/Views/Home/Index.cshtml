@@ -39,12 +39,16 @@
     </div>
 </div>
 <div class="container ms-4 mt-5">
-    <form id="searchForm" method="post" asp-action="Search" class="bg-opacity-25 bg-info text-black shadow-sm p-4 rounded-4" onsubmit="return validateForm()">
+    <form id="searchForm" method="get" asp-action="Search" class="bg-opacity-25 bg-info text-black shadow-sm p-4 rounded-4" >
         <div class="row g-4">
             <div class="col-md-4">
-                <label for="StateId" class="form-label fw-bold text-secondary">Destination</label>
-                <select class="form-select" id="StateId" name="StateId">
-                    <option value="" selected>Select a State</option>
+                <label for="Address" class="form-label fw-bold text-secondary">City</label>
+                <select class="form-select" id="Address" name="Address">
+                    <option value="">-- Select Address --</option>
+                    @foreach (var item in ViewBag.HotelAddresses)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
                 </select>
             </div>
             <div class="col-md-4">
@@ -57,39 +61,44 @@
             </div>
         </div>
         <div class="text-center mt-4">
-            <button type="submit" class="btn btn-outline-success btn-lg px-5">Search</button>
+            <button type="submit" class="btn btn-outline-success btn-lg px-5" >Search</button>
         </div>
     </form>
 
-    <h2 class="mt-5 mb-4 text-center text-primary">Explore Our Top Hotels</h2>
+    <h2 class="mt-5 mb-4 text-center text-primary">
+        @(Model.Any() ? "Search Results" : "Explore Our Top Hotels")
+    </h2>
+
+    @if (TempData["error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["error"]</div>
+    }
 
     <div class="row g-4">
-        @{
-            foreach (var hotel in Model)
-            {
-                <div class="col-lg-4 col-md-6">
-                    <div class="card h-100 border-0 shadow rounded-4">
-                        <a asp-action="Hotel" asp-route-HotelId="@hotel.Id">
-                            <img src="~/images/HotelImages/@hotel.CoverImage" class="card-img-top rounded-top-4" style="height: 220px; object-fit: cover;" alt="Hotel Image">
-                        </a>
-                        <div class="card-body">
-                            <h5 class="card-title text-truncate">
-                                <a asp-action="Hotel" asp-route-HotelId="@hotel.Id" class="text-dark text-decoration-none">
-                                    @hotel.Name
-                                </a>
-                            </h5>
-                            <p class="text-muted">@hotel.Address</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-info text-dark">@hotel.Stars Stars</span>
-                                <p class="mb-0 text-success fw-bold"></p>
-                            </div>
-                        </div>
-                        <div class="card-footer text-center bg-light">
-                            <a asp-action="Hotel" asp-route-HotelId="@hotel.Id" class="btn btn-outline-primary">View Details</a>
+        @foreach (var hotel in Model)
+        {
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow rounded-4">
+                    <a asp-action="Hotel" asp-route-HotelId="@hotel.Id">
+                        <img src="~/images/HotelImages/@hotel.CoverImage" class="card-img-top rounded-top-4"
+                             style="height: 220px; object-fit: cover;" alt="Hotel Image">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate">
+                            <a asp-action="Hotel" asp-route-HotelId="@hotel.Id" class="text-dark text-decoration-none">
+                                @hotel.Name
+                            </a>
+                        </h5>
+                        <p class="text-muted">@hotel.Address</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge bg-info text-dark">@hotel.Stars Stars</span>
                         </div>
                     </div>
+                    <div class="card-footer text-center bg-light">
+                        <a asp-action="Hotel" asp-route-HotelId="@hotel.Id" class="btn btn-outline-primary">View Details</a>
+                    </div>
                 </div>
-            }
+            </div>
         }
     </div>
 </div>

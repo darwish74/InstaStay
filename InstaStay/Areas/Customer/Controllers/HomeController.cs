@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Models.IRepositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace InstaStay.Areas.Customer.Controllers
 {     //includeprops: e => e.Include(e => e.category)
@@ -14,11 +15,48 @@ namespace InstaStay.Areas.Customer.Controllers
         {
             this.unitOfWork = unitOfWork;
         }
+        [HttpGet]
         public IActionResult Index()
         {
-            var hotels=unitOfWork.hotelRepository.Get(includeprops:e=>e.Include(e=>e.HotelManager));
+            var hotels = unitOfWork.hotelRepository.Get(includeprops: e => e.Include(e => e.HotelManager));
+            ViewBag.HotelAddresses = hotels.Select(h => new SelectListItem
+            {
+                Value = h.Address,
+                Text = h.Address
+            }).Distinct().ToList();
+
             return View(hotels);
         }
+
+        [HttpGet]
+        public IActionResult Search(string Address)
+        {
+            var hotels = unitOfWork.hotelRepository.Get(filter: e => e.Address == Address).ToList();
+
+            ViewBag.HotelAddresses = unitOfWork.hotelRepository.Get()
+                .Select(h => new SelectListItem { Value = h.Address, Text = h.Address })
+                .Distinct()
+                .ToList();
+
+            return View("Index", hotels);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         public IActionResult Privacy()
         {
