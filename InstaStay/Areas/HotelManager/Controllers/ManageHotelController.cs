@@ -64,7 +64,7 @@ namespace InstaStay.Areas.hotelManager.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var Hotel =unitOfWork.hotelRepository.GetOne(filter: e => e.Id == id,includeprops:e=>e.Include(e=>e.HotelImages));
+            var Hotel =unitOfWork.hotelRepository.GetOne(filter: e => e.Id == id,includeprops:e=>e.Include(e=>e.HotelImages).Include(e=>e.Amentities));
             return View(Hotel);
         }     
         [HttpGet]
@@ -97,7 +97,6 @@ namespace InstaStay.Areas.hotelManager.Controllers
         public IActionResult Edit(Hotel hotel, IFormFile? CoverImage)
         {
             var existingHotel = unitOfWork.hotelRepository.GetOne(e => e.Id == hotel.Id,includeprops:e=>e.Include(e=>e.HotelManager));
-
             if (existingHotel == null)
             {
                 return NotFound();
@@ -157,7 +156,7 @@ namespace InstaStay.Areas.hotelManager.Controllers
         {
           var hotel= unitOfWork.hotelRepository.GetOne(e => e.Id == id, includeprops: e => e.Include(e => e.HotelManager));
             if (hotel != null)
-               {
+            {
                var NewHotelImage = new HotelImages();
                if(hotelImages != null && hotelImages.Length > 0)
                {
@@ -174,7 +173,7 @@ namespace InstaStay.Areas.hotelManager.Controllers
                     TempData["success"] = "Hotel Image added successfully";
                     return RedirectToAction("ShowAllHotels", new { UserName = hotel.HotelManager.Name });
                 }
-        }
+            }
             TempData["success"] = "No Images added";
             return RedirectToAction("ShowAllHotels", new { UserName = hotel.HotelManager.Name });
         }

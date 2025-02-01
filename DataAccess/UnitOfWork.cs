@@ -13,7 +13,7 @@ namespace DataAccess
         private IBookingRepository _bookingRepository;
         private IHotelRepository _hotelRepository;
         private ILocationRepository _locationRepository;
-        private IPaymentRepository _paymentRepository;
+        private IPaymentRepository _paymentRepository;                         
         private IRoomRepository _roomRepository;
         private IReviewRepository _reviewRepository;
         private IProblemReports _problemReportRepository; 
@@ -21,6 +21,7 @@ namespace DataAccess
         private INewHotelRequestsRepository _NewHotelRequestsRepository;
         private IHotelManager _HotelManagerRepository;
         private IHotelImagesRepository _HotelImagesRepository;
+        private IAmentitiesRepository _AmentitesRepository;
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -36,6 +37,7 @@ namespace DataAccess
         public INewHotelRequestsRepository NewHotelRequestsRepository => _NewHotelRequestsRepository ??= new NewHotelRequestsRepository(_context);
         public IHotelManager HotelManagerRepository => _HotelManagerRepository ??= new HotelManagerRepository(_context);
         public IHotelImagesRepository HotelImagesRepository => _HotelImagesRepository ??= new HotelImageRepository(_context);
+        public IAmentitiesRepository AmentitiesRepository => _AmentitesRepository ??= new AmentitiesRepository(_context);
         public void Commit()
         {
             _context.SaveChanges();
