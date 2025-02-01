@@ -4,121 +4,160 @@
 @inject UserManager<ApplicationUser> userManager
 @inject RoleManager<IdentityRole> roleManager
 @model UserPaginationViewModel
+
 @{
-    ViewData["Title"] = "All Users";
+    ViewData["Title"] = "Manage Users";
     var allRoles = await roleManager.Roles.ToListAsync();
-    @section Scripts {
-        @if (@TempData["success"] != null)
-        {
-            <script>
-                toastr.success('@TempData["success"]')
-            </script>
-        }
+}
+
+@section Scripts {
+    @if (TempData["success"] != null)
+    {
+        <script>
+            toastr.success('@TempData["success"]');
+        </script>
     }
 }
+
 <h3 class="m-2 text-center fw-bold bg-dark text-info bg-transparent rounded-5">Manage Users</h3>
-<div class="m-5 active">
-    <form asp-action="SearchForUser" asp-controller="User" asp-area="Admin" method="post">
-        <div class="col-md-3 d-flex">
-            <input type="Text" class="form-control" placeholder="User Name Or Email" name="account" />
-            <button class="btn btn-primary me-sm-1" type="submit"> Search </button>
-        </div>
+<div class="m-5">
+    <form asp-action="SearchForUser" asp-controller="User" asp-area="Admin" method="post" class="d-flex">
+        <input type="text" class="form-control me-2" placeholder="Search by username or email..." name="account" />
+        <button class="btn btn-primary" type="submit">
+            <i class="fas fa-search"></i> Search
+        </button>
     </form>
 </div>
+
 @if (Model.Users == null || !Model.Users.Any())
 {
-    <div class="alert alert-info">
-        <i class="fas fa-info-circle"></i> No users available to display.
+    <div class="alert alert-info text-center">
+        <i class="fas fa-info-circle"></i> No users available.
     </div>
 }
 else
 {
-    <table class="table table-hover table-striped table-bordered m-3">
-        <thead class="table-dark">
-            <tr>
-                <th>User Name</th>
-                <th>First Name</th>
-                <th>Email</th>
-                <th>Block | Unblock</th>
-                <th>Current Role(s)</th>
-                <th>Assign Role</th>
-                <th>Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in Model.Users)
-            {
-                var roles = await userManager.GetRolesAsync(user);
+    <div class="table-responsive">
+        <table class="table table-hover table-striped table-bordered m-3 text-center">
+            <thead class="table-dark">
                 <tr>
-                    <td>@user.UserName</td>
-                    <td>@user.FirstName</td>
-                    <td>@user.Email</td>
-                    <td>
-                        @if (user.ISBlocked.HasValue && user.ISBlocked.Value)
-                        {
-                            <a class="btn btn-outline-info btn-sm" asp-action="UnBlockUser" asp-route-userId="@user.Id" title="Unblock this user">
-                                <i class="fas fa-unlock"></i> Unblock
-                            </a>
-                        }
-                        else
-                        {
-                            <a class="btn btn-outline-danger btn-sm" asp-action="BlockUser" asp-route-userId="@user.Id" title="Block this user">
-                                <i class="fas fa-ban"></i> Block
-                            </a>
-                        }
-                    </td>
-                    <td>
-                        @if (roles.Any())
-                        {
-                            <span class="badge bg-primary">@string.Join(", ", roles)</span>
-                        }
-                        else
-                        {
-                            <span class="text-muted">No roles assigned</span>
-                        }
-                    </td>
-                    <td>
-                        <form asp-action="ChangeRole" asp-controller="Role" method="post" class="d-flex">
-                            <input type="hidden" name="userId" value="@user.Id" />
-                            <select name="roleName" class="form-select form-select-sm me-2">
-                                <option value="" disabled selected>Select a role</option>
-                                @foreach (var role in allRoles)
-                                {
-                                    <option value="@role.Name">@role.Name</option>
-                                }
-                            </select>
-                            <button type="submit" class="btn btn-outline-success btn-sm">Assign</button>
-                        </form>
-                    </td>
-                    <td>
-                        <a asp-action="DeleteUser" asp-route-userId="@user.Id" class="btn btn-outline-danger btn-sm" title="Delete this user"
-                           onclick="return confirm('Are you sure you want to delete this user?');">
-                            <i class="fas fa-trash"></i> Delete
-                        </a>
-                    </td>
+                    <th>User Name</th>
+                    <th>First Name</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Current Role(s)</th>
+                    <th>Assign Role</th>
+                    <th>Actions</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Users)
+                {
+                    var roles = await userManager.GetRolesAsync(user);
+                    <tr class="@(user.ISBlocked.HasValue && user.ISBlocked.Value ? "table-danger" : "")">
+                        <td>@user.UserName</td>
+                        <td>@user.FirstName</td>
+                        <td>@user.Email</td>
+                        <td>
+                            @if (user.ISBlocked.HasValue && user.ISBlocked.Value)
+                            {
+                                <a class="btn btn-outline-info btn-sm" asp-action="UnBlockUser" asp-route-userId="@user.Id" title="Unblock this user">
+                                    <i class="fas fa-unlock"></i> Unblock
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#blockUserModal-@user.Id">
+                                    <i class="fas fa-ban"></i> Block
+                                </a>
+                            }
+                        </td>
+                        <td>
+                            @if (roles.Any())
+                            {
+                                <span class="badge bg-primary">@string.Join(", ", roles)</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">No roles assigned</span>
+                            }
+                        </td>
+                        <td>
+                            <form asp-action="ChangeRole" asp-controller="Role" method="post" class="d-flex">
+                                <input type="hidden" name="userId" value="@user.Id" />
+                                <select name="roleName" class="form-select form-select-sm me-2">
+                                    <option value="" disabled selected>Select a role</option>
+                                    @foreach (var role in allRoles)
+                                    {
+                                        <option value="@role.Name">@role.Name</option>
+                                    }
+                                </select>
+                                <button type="submit" class="btn btn-outline-success btn-sm">Assign</button>
+                            </form>
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteUserModal-@user.Id">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                    <div class="modal fade" id="blockUserModal-@user.Id" tabindex="-1" aria-labelledby="blockUserLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-warning text-dark">
+                                    <h5 class="modal-title" id="blockUserLabel">Block User</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to block <strong>@user.UserName</strong>?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <a class="btn btn-danger" asp-action="BlockUser" asp-route-userId="@user.Id">Confirm</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="deleteUserModal-@user.Id" tabindex="-1" aria-labelledby="deleteUserLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-danger text-white">
+                                    <h5 class="modal-title" id="deleteUserLabel">Delete User</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to delete <strong>@user.UserName</strong>? This action cannot be undone.
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <a class="btn btn-danger" asp-action="DeleteUser" asp-route-userId="@user.Id">Confirm</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </tbody>
+        </table>
+    </div>
     <nav class="mt-4">
         <ul class="pagination justify-content-center">
             <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
-                <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.CurrentPage - 1)" asp-route-pageSize="@Model.PageSize" title="Previous">
-                    &laquo;
-                </a>
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="1" asp-route-pageSize="@Model.PageSize">First</a>
+            </li>
+            <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.CurrentPage - 1)" asp-route-pageSize="@Model.PageSize">&laquo;</a>
             </li>
             @for (int i = 1; i <= Model.TotalPages; i++)
             {
                 <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
-                    <a class="page-link" asp-action="Index" asp-route-pageNumber="@i" asp-route-pageSize="@Model.PageSize">
-                        @i
-                    </a>
+                    <a class="page-link" asp-action="Index" asp-route-pageNumber="@i" asp-route-pageSize="@Model.PageSize">@i</a>
                 </li>
             }
             <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
-                <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.CurrentPage + 1)" asp-route-pageSize="@Model.PageSize" title="Next">
-                    &raquo;
-                </a>
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.CurrentPage + 1)" asp-route-pageSize="@Model.PageSize">&raquo;</a>
+            </li>
+            <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@Model.TotalPages" asp-route-pageSize="@Model.PageSize">Last</a>
             </li>
         </ul>
     </nav>

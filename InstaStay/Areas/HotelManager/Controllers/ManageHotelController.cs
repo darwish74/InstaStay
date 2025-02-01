@@ -64,7 +64,7 @@ namespace InstaStay.Areas.hotelManager.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var Hotel =unitOfWork.hotelRepository.GetOne(filter: e => e.Id == id,includeprops:e=>e.Include(e=>e.HotelImages).Include(e=>e.Amentities));
+            var Hotel =unitOfWork.hotelRepository.GetOne(filter: e => e.Id == id,includeprops:e=>e.Include(e=>e.HotelImages).Include(e=>e.Amentities).Include(e=>e.Rooms));
             return View(Hotel);
         }     
         [HttpGet]

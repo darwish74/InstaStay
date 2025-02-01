@@ -127,31 +127,42 @@
                     </div>
                 </div>
 
-                <div class="tab-pane fade" id="rooms" role="tabpanel">
-                    <h3 class="fw-bold text-primary">Manage Rooms</h3>
-                    <form asp-action="AddRoom" asp-controller="Rooms" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="hotelId" value="@Model.Id" />
-                        <div class="mb-3">
-                            <label class="form-label fw-bold text-dark">Room Name</label>
-                            <input type="text" name="RoomName" class="form-control" placeholder="Enter room name" required />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold text-dark">Room Type</label>
-                            <input type="text" name="RoomType" class="form-control" placeholder="Enter room type" required />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold text-dark">Room Price</label>
-                            <input type="number" name="RoomPrice" class="form-control" placeholder="Enter price per night" required />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold text-dark">Room Image</label>
-                            <input type="file" name="RoomImage" class="form-control" accept="image/*" required />
-                        </div>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-success">Add Room</button>
-                        </div>
-                    </form>
-                </div>
+               <div class="tab-pane fade" id="rooms" role="tabpanel">
+               <h3 class="fw-bold text-primary">Rooms Dashboard</h3>
+
+               <div class="table-responsive">
+               <table class="table table-striped table-bordered border-dark text-center">
+               <thead class="table-dark">
+                <tr>
+                    <th>Room Type</th>
+                    <th>Bed Type</th>
+                    <th>Price Per Night</th>
+                    <th>Capacity</th>
+                    <th>Actions</th>
+                </tr>
+               </thead>
+              <tbody>
+                @foreach (var room in Model.Rooms)
+                {
+                    <tr>
+                        <td>@room.RoomType</td>
+                        <td>@room.BedType</td>
+                        <td>$@room.PricePerNight</td>
+                        <td>@room.Capacity</td>
+                        <td>
+                            <a href="@Url.Action("EditRoom", "Rooms", new { id = room.Id })" class="btn btn-warning btn-sm">Edit</a>
+                            <form asp-action="DeleteRoom" asp-controller="Rooms" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@room.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this room?');">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
             </div>
         </div>
     </div>

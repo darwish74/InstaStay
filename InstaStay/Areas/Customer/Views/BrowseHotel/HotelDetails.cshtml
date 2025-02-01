@@ -1,0 +1,142 @@
+﻿@model Models.Models.Hotel
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="container my-5">
+    <div class="card shadow-lg">
+        <div class="row g-0">
+            <div class="col-md-5">
+                @if (!string.IsNullOrEmpty(Model.CoverImage))
+                {
+                    <img src="~/images/HotelImages/@Model.CoverImage" class="img-fluid rounded-start" alt="@Model.Name" style="height: 100%; width: 100%; object-fit: cover;">
+                }
+                else
+                {
+                    <img src="~/images/HotelImages/@Model.CoverImage" class="img-fluid rounded-start" alt="Default Hotel Image">
+                }
+            </div>
+            <div class="col-md-7">
+                <div class="card-body">
+                    <h2 class="card-title">@Model.Name</h2>
+                    <p class="card-text text-muted">
+                        <i class="fas fa-map-marker-alt"></i> @Model.Address
+                    </p>
+                    <p class="card-text">
+                        @for (int i = 0; i < Model.Stars; i++)
+                        {
+                            <i class="fas fa-star text-warning"></i>
+                        }
+                        @for (int i = Model.Stars; i < 5; i++)
+                        {
+                            <i class="far fa-star text-muted"></i>
+                        }
+                    </p>
+
+                    <p class="card-text">@Model.Description</p>
+
+                    <p class="card-text">
+                        <strong>Contact Info:</strong>
+                        <i class="fas fa-phone"></i> @Model.ContactInfo
+                    </p>
+                    <a class="btn btn-secondary" asp-action="Index">
+                        <i class="fas fa-arrow-left"></i> Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ul class="nav nav-tabs mt-4" id="hotelTabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-bs-toggle="tab" href="#rooms">Rooms</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#reviews">Reviews</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#promotions">Promotions</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#amenities">Amenities</a>
+        </li>
+    </ul>
+    <div class="tab-content mt-3">
+        <div class="tab-pane fade show active" id="rooms">
+            <div class="row">
+                @if (Model.Rooms != null && Model.Rooms.Any())
+                {
+                    @foreach (var room in Model.Rooms)
+                    {
+                        <div class="col-md-4">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">Room @room.Id</h5>
+                                    <p class="card-text">Capacity: @room.Capacity</p>
+                                    @* <p class="card-text">Price: $@room.Price / night</p> *@
+                                    <a href="#" class="btn btn-sm btn-outline-primary">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="text-muted">No rooms available.</p>
+                }
+            </div>
+        </div>
+        <div class="tab-pane fade" id="reviews">
+            @if (Model.Reviews != null && Model.Reviews.Any())
+            {
+                @foreach (var review in Model.Reviews)
+                {
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            @* <h6 class="card-subtitle mb-2 text-muted">@review.ReviewerName</h6> *@
+                            @* <p class="card-text">@review.Comment</p> *@
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-muted">No reviews available.</p>
+            }
+        </div>
+        <div class="tab-pane fade" id="promotions">
+            @if (Model.Promotions != null && Model.Promotions.Any())
+            {
+                <ul class="list-group">
+                    @* @foreach (var promo in Model.Promotions) *@
+                    {
+                        <li class="list-group-item">
+                            @* <strong>@promo.Title</strong> - @promo.Discount% off *@
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No promotions available.</p>
+            }
+        </div>
+        <div class="tab-pane fade" id="amenities">
+            @if (Model.Amentities != null && Model.Amentities.Any())
+            {
+                <ul class="list-group">
+                    @foreach (var amenity in Model.Amentities)
+                    {
+                        <li class="list-group-item">
+                            <i class="fas fa-check text-success"></i> @amenity.Name
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No amenities listed.</p>
+            }
+        </div>
+    </div>
+</div>
