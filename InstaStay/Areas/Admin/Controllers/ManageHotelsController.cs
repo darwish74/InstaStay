@@ -23,9 +23,14 @@ namespace InstaStay.Areas.Admin.Controllers
         }
         public IActionResult Delete(int id)
         {
-            var hotel = unitOfWork.hotelRepository.GetOne(e => e.Id == id);
             if (id != null)
             {
+                var hotel = unitOfWork.hotelRepository.GetOne(e => e.Id == id);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/HotelImages", hotel.CoverImage);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
                 unitOfWork.hotelRepository.Delete(hotel);
                 unitOfWork.Commit();
                 TempData["success"] = $"Hotel Deleted Successfully It's Name {hotel.Name}";

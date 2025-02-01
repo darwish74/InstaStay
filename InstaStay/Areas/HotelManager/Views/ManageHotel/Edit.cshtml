@@ -19,7 +19,7 @@
                     <button class="nav-link fw-bold" id="amenities-tab" data-bs-toggle="tab" data-bs-target="#amenities" type="button" role="tab">Manage Amenities</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link text-danger fw-bold" id="delete-tab" data-bs-toggle="tab" data-bs-target="#delete" type="button" role="tab">Delete Hotel</button>
+                    <button class="nav-link fw-bold" id="rooms-tab" data-bs-toggle="tab" data-bs-target="#rooms" type="button" role="tab">Manage Rooms</button>
                 </li>
             </ul>
             <div class="tab-content mt-4" id="hotelTabsContent">
@@ -106,6 +106,7 @@
                     </form>
                     <hr />
                     <h4 class="fw-bold text-primary">Existing Amenities</h4>
+                    <a href="/HotelManager/Amentities/Index/@Model.Id" class="fw-bold text-primary btn btn-outline-info my-1">Edit</a>
                     <div class="row">
                         @if (Model.Amentities != null && Model.Amentities.Any())
                         {
@@ -113,7 +114,7 @@
                             {
                                 <div class="col-md-4 text-center mb-3">
                                     <div class="card shadow-sm p-3">
-                                        <img src="~/images/Amentities/@amenity.Image" class="img-thumbnail" width="100" />
+                                        <img src="~/images/Amentities/@amenity.Image" class="img-thumbnail ms-5" width="100" />
                                         <h6 class="mt-2 fw-bold">@amenity.Name</h6>
                                     </div>
                                 </div>
@@ -126,16 +127,30 @@
                     </div>
                 </div>
 
-                <div class="tab-pane fade" id="delete" role="tabpanel">
-                    <h3 class="fw-bold text-danger">Delete Hotel</h3>
-                    <div class="alert alert-danger text-center">
-                        <h5>Are you sure you want to delete this hotel?</h5>
-                        <p>This action cannot be undone.</p>
-                        <form asp-action="Delete" method="post">
-                            <input type="hidden" asp-for="Id" />
-                            <button type="submit" class="btn btn-danger">Delete Hotel</button>
-                        </form>
-                    </div>
+                <div class="tab-pane fade" id="rooms" role="tabpanel">
+                    <h3 class="fw-bold text-primary">Manage Rooms</h3>
+                    <form asp-action="AddRoom" asp-controller="Rooms" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="hotelId" value="@Model.Id" />
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">Room Name</label>
+                            <input type="text" name="RoomName" class="form-control" placeholder="Enter room name" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">Room Type</label>
+                            <input type="text" name="RoomType" class="form-control" placeholder="Enter room type" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">Room Price</label>
+                            <input type="number" name="RoomPrice" class="form-control" placeholder="Enter price per night" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">Room Image</label>
+                            <input type="file" name="RoomImage" class="form-control" accept="image/*" required />
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success">Add Room</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

@@ -139,6 +139,11 @@ namespace InstaStay.Areas.hotelManager.Controllers
             var hotel = unitOfWork.hotelRepository.GetOne(e => e.Id == id, includeprops: e => e.Include(e => e.HotelManager));
             if (id != null)
             {
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/HotelImages", hotel.CoverImage);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
                 unitOfWork.hotelRepository.Delete(hotel);
                 unitOfWork.Commit();
                 TempData["success"] = "Hotel and all its rooms deleted successfully!";

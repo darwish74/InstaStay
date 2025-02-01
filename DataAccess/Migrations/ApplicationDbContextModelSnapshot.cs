@@ -34,7 +34,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("PromotionsPromotionId");
 
-                    b.ToTable("HotelPromotion");
+                    b.ToTable("HotelPromotion", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -270,7 +270,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("Amentities");
+                    b.ToTable("Amentities", (string)null);
                 });
 
             modelBuilder.Entity("Models.Models.Booking", b =>
@@ -314,7 +314,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("bookings");
+                    b.ToTable("bookings", (string)null);
                 });
 
             modelBuilder.Entity("Models.Models.Hotel", b =>
@@ -358,7 +358,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("LocationId");
 
-                    b.ToTable("hotels");
+                    b.ToTable("hotels", (string)null);
                 });
 
             modelBuilder.Entity("Models.Models.HotelImages", b =>
@@ -380,7 +380,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("HotelImages");
+                    b.ToTable("HotelImages", (string)null);
                 });
 
             modelBuilder.Entity("Models.Models.HotelManagerRequests", b =>
@@ -408,7 +408,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HotelManagerRequests");
+                    b.ToTable("HotelManagerRequests", (string)null);
                 });
 
             modelBuilder.Entity("Models.Models.HotelManagers", b =>
@@ -425,7 +425,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HotelManagers");
+                    b.ToTable("HotelManagers", (string)null);
                 });
 
             modelBuilder.Entity("Models.Models.HotelPromotion", b =>
@@ -452,7 +452,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("PromotionId");
 
-                    b.ToTable("hotelpromotions");
+                    b.ToTable("hotelpromotions", (string)null);
                 });
 
             modelBuilder.Entity("Models.Models.Location", b =>
@@ -484,7 +484,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("locations");
+                    b.ToTable("locations", (string)null);
                 });
 
             modelBuilder.Entity("Models.Models.NewHotelRequests", b =>
@@ -521,7 +521,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("NewHotelRequests");
+                    b.ToTable("NewHotelRequests", (string)null);
                 });
 
             modelBuilder.Entity("Models.Models.Notification", b =>
@@ -560,7 +560,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("notifications");
+                    b.ToTable("notifications", (string)null);
                 });
 
             modelBuilder.Entity("Models.Models.Payment", b =>
@@ -592,7 +592,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("BookingId");
 
-                    b.ToTable("payments");
+                    b.ToTable("payments", (string)null);
                 });
 
             modelBuilder.Entity("Models.Models.ProblemReport", b =>
@@ -620,7 +620,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProblemReports");
+                    b.ToTable("ProblemReports", (string)null);
                 });
 
             modelBuilder.Entity("Models.Models.Promotion", b =>
@@ -650,7 +650,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("PromotionId");
 
-                    b.ToTable("Promotion");
+                    b.ToTable("Promotion", (string)null);
                 });
 
             modelBuilder.Entity("Models.Models.Review", b =>
@@ -689,7 +689,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("reviews");
+                    b.ToTable("reviews", (string)null);
                 });
 
             modelBuilder.Entity("Models.Models.Room", b =>
@@ -731,7 +731,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("rooms");
+                    b.ToTable("rooms", (string)null);
                 });
 
             modelBuilder.Entity("Models.Models.ApplicationUser", b =>

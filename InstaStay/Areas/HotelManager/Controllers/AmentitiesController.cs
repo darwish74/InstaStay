@@ -41,5 +41,74 @@ namespace InstaStay.Areas.HotelManager.Controllers
             TempData["success"] = "No Images added";
             return RedirectToAction("ShowAllHotels", "ManageHotel", new { UserName = hotel.HotelManager.Name });
         }
-    }
+        public IActionResult Index(int id)
+        {
+            var hotel = unitOfWork.hotelRepository.GetOne(e=>e.Id==id,includeprops:e=>e.Include(e=>e.Amentities));
+            return View(hotel);  
+        }
+        public IActionResult Delete(int id)
+        {
+            var hotelAmenity = unitOfWork.AmentitiesRepository.GetOne(e => e.Id == id);
+
+            if (hotelAmenity == null)
+            {
+                return NotFound();
+            }
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/Amentities", hotelAmenity.Image);
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+            }
+            unitOfWork.AmentitiesRepository.Delete(hotelAmenity);
+            unitOfWork.Commit();
+            TempData["success"] = "Hotel Image Deleted Successfully";
+            return RedirectToAction("Index", new { id = hotelAmenity.HotelId });
+        }
+        [HttpGet]
+        public IActionResult Edit(int id) 
+        {
+          var Amenity = unitOfWork.AmentitiesRepository.GetOne(e => e.Id == id);
+          return View(Amenity);
+        }
+        [HttpPost]
+        public IActionResult Edit(Amentities amenity, IFormFile ImageFile)
+        {
+            var existingAmentity = unitOfWork.AmentitiesRepository.GetOne(e => e.Id == amenity.Id);
+            if (existingAmentity == null)
+            {
+                return NotFound();
+            }
+            ModelState.Remove("ImageFile");
+            if (ModelState.IsValid)
+            {
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(ImageFile.FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\Amentities", fileName);
+
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        ImageFile.CopyTo(stream);
+                    }
+                    if (existingAmentity.Image != null)
+                    {
+                        var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\Amentities", existingAmentity.Image);
+                        if (System.IO.File.Exists(oldPath))
+                        {
+                            System.IO.File.Delete(oldPath);
+                        }
+                    }
+                    existingAmentity.Image = fileName;
+                }
+                existingAmentity.Name = amenity.Name;
+                existingAmentity.Description = amenity.Description;
+                unitOfWork.AmentitiesRepository.Alter(existingAmentity);
+                unitOfWork.Commit();
+                TempData["success"] = "Amenity Edited Successfully";
+                return RedirectToAction("index", new { id = existingAmentity.HotelId });
+            }
+            TempData["success"] = "No Amenity updates Added Successfully";
+            return RedirectToAction("index", new { id = existingAmentity.HotelId });
+        }
+        }
 }

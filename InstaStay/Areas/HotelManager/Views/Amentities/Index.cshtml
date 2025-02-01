@@ -1,0 +1,44 @@
+﻿@model Models.Models.Hotel;
+<div class="container mt-4">
+    <h2 class="text-center text-primary fw-bold">Hotel List</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered border-warning table-hover shadow-sm">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                    <th>Hotel Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Amentities)
+                {
+                    <tr class="align-middle text-center">
+                        <td>@item.Name</td>
+                        <td>@item.Description</td>
+                        <td><img src="~/images/Amentities/@item.Image" alt="Alternate Text" class="img-thumbnail shadow-sm " width=100 /></td>
+                        <td>@Model.Name</td>                         
+                        <td>
+                            <a href="@Url.Action("Edit", "Amentities", new { id = item.Id })" class="btn btn-sm btn-warning table-hover">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a href="@Url.Action("Delete", "Amentities", new { id = item.Id })" class="btn btn-sm btn-danger table-hover" onclick="return confirm('Are you sure you want to delete this hotel?');">
+                                <i class="fas fa-trash"></i> Delete
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@section scripts {
+    @if (@TempData["success"] != null)
+    {
+        <script>
+            toastr.success('@TempData["success"]')
+        </script>
+    }
+}
