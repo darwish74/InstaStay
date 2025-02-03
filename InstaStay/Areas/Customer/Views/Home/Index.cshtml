@@ -32,7 +32,7 @@
 
         <!-- Main Text -->
         <h1 class="display-3 fw-bold animated-text">Welcome to Your Dream Stay</h1>
-        <p class="lead mb-4 fw-bold text-info">Search and book the best hotels for your perfect getaway</p>
+        <p class="lead mb-4 fw-bold text-info">Find exclusive Genius rewards in every corner of the world!</p>
         <a href="#searchForm" class="btn  bg-transparent btn-outline-success btn-lg px-5 shadow-lg">
             <i class="fas fa-search-location me-2"></i>Start Your Journey
         </a>
@@ -78,29 +78,46 @@
         @foreach (var hotel in Model)
         {
             <div class="col-lg-4 col-md-6">
-                <div class="card h-100 border-0 shadow rounded-4">
-                    <a asp-action="Hotel" asp-route-HotelId="@hotel.Id">
+                <div class="card h-100 border-0 shadow rounded-4 position-relative">
                         <img src="~/images/HotelImages/@hotel.CoverImage" class="card-img-top rounded-top-4"
                              style="height: 220px; object-fit: cover;" alt="Hotel Image">
-                    </a>
-                    <div class="card-body">
+                    <div class="position-absolute top-0 start-0 p-2">
+                        <span class="badge btn-warning text-dark">@hotel.Stars Stars</span>
+                    </div>
+
+                    <div class="card-body text-center">
                         <h5 class="card-title text-truncate">
-                            <a asp-action="Hotel" asp-route-HotelId="@hotel.Id" class="text-dark text-decoration-none">
+                            <a asp-action="HotelDetails" asp-controller="BrowseHotel" asp-route-HotelId="@hotel.Id" class="text-success fw-bold text-capitalize bg-gradient text-decoration-none ">
                                 @hotel.Name
                             </a>
                         </h5>
-                        <p class="text-muted">@hotel.Address</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="badge bg-info text-dark">@hotel.Stars Stars</span>
+                        <p class="text-secondary bg-gradient text-start">
+                            @hotel.Description
+                        </p>
+                        <p class="text-primary alert-info active  align-content-around">@hotel.Address</p>
+                       @*  <div class="d-flex justify-content-start align-items-center">
+                            <i class="fas fa-star text-warning"></i>
+                            <span class="ms-1">@hotel.Rating / 5 (Based on @hotel.ReviewsCount reviews)</span>
+                        </div>
+ *@
+                        <!-- Amenities (Example: Wi-Fi, Pool, etc.) -->
+                        <div class="d-flex mt-2 text-lg-center">
+                            <i class="fas fa-wifi me-2 text-primary"></i>
+                            <i class="fas fa-swimmer me-2 text-info"></i>
+                            <i class="fas fa-parking me-2 text-success"></i>
                         </div>
                     </div>
+
+                    <!-- Card Footer with Price or Offers -->
                     <div class="card-footer text-center bg-light">
-                        <a asp-action="HotelDetails" asp-controller="BrowseHotel" asp-route-HotelId="@hotel.Id" class="btn btn-outline-primary">View Details</a>
+                      @*   <span class="d-block mb-2">From $@hotel.PricePerNight / night</span> *@
+                        <a asp-action="HotelDetails" asp-controller="BrowseHotel" asp-route-HotelId="@hotel.Id" class="btn btn-outline-primary w-100">View Details</a>
                     </div>
                 </div>
             </div>
         }
     </div>
+
 </div>
 
 <style>
@@ -164,5 +181,10 @@
     .btn-warning:hover {
         background-color: #e0a800;
         border-color: #d39e00;
+    }
+    .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
     }
 </style>

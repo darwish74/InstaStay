@@ -2,24 +2,57 @@
 
 @{
     ViewData["Title"] = Model.Name;
+    var hotelImagesList = Model.HotelImages?.ToList() ?? new List<HotelImages>();
 }
 
+<style>
+    .fade-in {
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hover-zoom:hover {
+        transform: scale(1.05);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .custom-card {
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-gradient {
+        background: linear-gradient(to right, #ff7e5f, #feb47b);
+        color: white;
+        border: none;
+    }
+
+    .btn-gradient:hover {
+        background: linear-gradient(to right, #feb47b, #ff7e5f);
+    }
+</style>
+
 <div class="container my-5">
-    <div class="card shadow-lg">
+    <div class="card shadow-lg fade-in custom-card">
         <div class="row g-0">
             <div class="col-md-5">
                 @if (!string.IsNullOrEmpty(Model.CoverImage))
                 {
-                    <img src="~/images/HotelImages/@Model.CoverImage" class="img-fluid rounded-start" alt="@Model.Name" style="height: 100%; width: 100%; object-fit: cover;">
+                    <img src="~/images/HotelImages/@Model.CoverImage" class="img-fluid rounded-start hover-zoom" alt="@Model.Name" style="height: 100%; width: 100%; object-fit: cover;">
                 }
                 else
                 {
-                    <img src="~/images/HotelImages/@Model.CoverImage" class="img-fluid rounded-start" alt="Default Hotel Image">
+                    <img src="~/images/default-hotel.jpg" class="img-fluid rounded-start" alt="Default Hotel Image">
                 }
             </div>
             <div class="col-md-7">
                 <div class="card-body">
-                    <h2 class="card-title">@Model.Name</h2>
+                    <h2 class="card-title text-primary">@Model.Name</h2>
                     <p class="card-text text-muted">
                         <i class="fas fa-map-marker-alt"></i> @Model.Address
                     </p>
@@ -33,21 +66,46 @@
                             <i class="far fa-star text-muted"></i>
                         }
                     </p>
-
                     <p class="card-text">@Model.Description</p>
-
                     <p class="card-text">
-                        <strong>Contact Info:</strong>
+                        <strong>Contact:</strong>
                         <i class="fas fa-phone"></i> @Model.ContactInfo
                     </p>
-                    <a class="btn btn-secondary" asp-action="Index">
-                        <i class="fas fa-arrow-left"></i> Back to Home
-                    </a>
                 </div>
             </div>
         </div>
     </div>
-    <ul class="nav nav-tabs mt-4" id="hotelTabs">
+    <div id="hotelImageCarousel" class="carousel slide mt-4 ms-1" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            @if (hotelImagesList.Any())
+            {
+                @for (int i = 0; i < hotelImagesList.Count; i++)
+                {
+                    var image = hotelImagesList[i];
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <img src="~/images/HIL/@image.ImageURL" class="d-block w-70" alt="Hotel Image @i">
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="carousel-item active">
+                    <img src="~/images/HotelImages/@Model.CoverImage" class="d-block w-70" alt="Default Hotel Image">
+                </div>
+            }
+        </div>
+
+        <button class="carousel-control-prev text-warning" type="button" data-bs-target="#hotelImageCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next text-warning" type="button" data-bs-target="#hotelImageCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <ul class="nav nav-tabs mt-4 fade-in" id="hotelTabs">
         <li class="nav-item">
             <a class="nav-link active" data-bs-toggle="tab" href="#rooms">Rooms</a>
         </li>
@@ -61,7 +119,7 @@
             <a class="nav-link" data-bs-toggle="tab" href="#amenities">Amenities</a>
         </li>
     </ul>
-    <div class="tab-content mt-3">
+    <div class="tab-content mt-3 fade-in">
         <div class="tab-pane fade show active" id="rooms">
             <div class="row">
                 @if (Model.Rooms != null && Model.Rooms.Any())
@@ -69,12 +127,11 @@
                     @foreach (var room in Model.Rooms)
                     {
                         <div class="col-md-4">
-                            <div class="card mb-3">
+                            <div class="card mb-3 hover-zoom custom-card">
                                 <div class="card-body">
                                     <h5 class="card-title">Room @room.Id</h5>
                                     <p class="card-text">Capacity: @room.Capacity</p>
-                                    @* <p class="card-text">Price: $@room.Price / night</p> *@
-                                    <a href="#" class="btn btn-sm btn-outline-primary">View Details</a>
+                                    <a href="#" class="btn btn-sm btn-gradient">View Details</a>
                                 </div>
                             </div>
                         </div>
@@ -91,10 +148,9 @@
             {
                 @foreach (var review in Model.Reviews)
                 {
-                    <div class="card mb-3">
+                    <div class="card mb-3 hover-zoom custom-card">
                         <div class="card-body">
-                            @* <h6 class="card-subtitle mb-2 text-muted">@review.ReviewerName</h6> *@
-                            @* <p class="card-text">@review.Comment</p> *@
+                            @* <p class="card-text">"@review.Comment"</p> *@
                         </div>
                     </div>
                 }
@@ -108,10 +164,10 @@
             @if (Model.Promotions != null && Model.Promotions.Any())
             {
                 <ul class="list-group">
-                    @* @foreach (var promo in Model.Promotions) *@
+                    @foreach (var promo in Model.Promotions)
                     {
                         <li class="list-group-item">
-                            @* <strong>@promo.Title</strong> - @promo.Discount% off *@
+                            <strong>@promo.Title</strong> - @promo.Discount% off
                         </li>
                     }
                 </ul>
@@ -129,6 +185,14 @@
                     {
                         <li class="list-group-item">
                             <i class="fas fa-check text-success"></i> @amenity.Name
+                            @if (!string.IsNullOrEmpty(amenity.Description))
+                            {
+                                <p class="text-muted">@amenity.Description</p>
+                            }
+                            @if (!string.IsNullOrEmpty(amenity.Image))
+                            {
+                                <img src="~/images/Amentities/@amenity.Image" alt="@amenity.Name" class="img-thumbnail" width="100" />
+                            }
                         </li>
                     }
                 </ul>
@@ -138,5 +202,6 @@
                 <p class="text-muted">No amenities listed.</p>
             }
         </div>
+
     </div>
 </div>
