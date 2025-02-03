@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Models.IRepositories;
@@ -57,8 +58,18 @@ namespace InstaStay.Areas.HotelManager.Controllers
         }
         public IActionResult ShowAllRoomImages(int id)
         { 
-            var roomImages=unitOfWork.RoomImagesRepository.GetOne(e=>e.RoomId==id); 
-            return View(roomImages);    
+            var room=unitOfWork.roomRepository.GetOne(e=>e.Id==id);
+            return View(room.RoomImages ?? new List<RoomImages>());
+        }
+        [HttpGet]
+        public IActionResult AddRoomImage()
+        {
+            return View();  
+        }
+        [HttpPost]
+        public IActionResult AddRoomImage(int id,IFormFile RoomImage )
+        {
+            return View(id);
         }
     }
 }

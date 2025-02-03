@@ -62,7 +62,7 @@
                         <div class="text-center">
                             <button type="submit" class="btn btn-success w-100">Save Changes</button>
                             <a href="/HotelManager/ManageHotel/Edit/@Model.HotelId" class="btn btn-secondary mt-2 w-100">Back to List</a>
-                            <a href="/HotelManager/ManageRooms/ShowAllRoomImages/@Model.Id" class="btn btn-secondary mt-2 w-100">Manage Images</a>
+                            <a href="/HotelManager/ManageRooms/ShowAllRoomImages/@Model.Id" class="btn btn-warning mt-2 w-100">Manage Images</a>
                         </div>
                     </form>
                 </div>
@@ -70,7 +70,6 @@
         </div>
     </div>
 </div>
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
