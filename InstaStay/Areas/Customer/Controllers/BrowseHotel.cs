@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models.IRepositories;
+using Models.Models;
 
 namespace InstaStay.Areas.Customer.Controllers
 {
@@ -20,8 +21,12 @@ namespace InstaStay.Areas.Customer.Controllers
                                                                                        Include(e=>e.Promotions).
                                                                                        Include(e=>e.HotelImages).
                                                                                        Include(e=>e.Rooms));
-
             return View(hotel);
+        }
+        public IActionResult RoomDetails(int id)
+        {
+            var room = unitOfWork.roomRepository.GetOne(e=>e.Id==id);
+            return View(room);
         }
     }
 }

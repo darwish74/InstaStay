@@ -1,0 +1,78 @@
+﻿@model Models.Models.Room
+
+@{
+    ViewData["Title"] = "Edit Room";
+    var roomTypes = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "Single", Text = "Single" },
+        new SelectListItem { Value = "Double", Text = "Double" },
+        new SelectListItem { Value = "Suite", Text = "Suite" }
+    };
+
+    var bedTypes = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "Single", Text = "Single" },
+        new SelectListItem { Value = "Double", Text = "Double" }
+    };
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>Edit Room</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Capacity" class="form-label fw-bold"></label>
+                            <input asp-for="Capacity" class="form-control" placeholder="Enter room capacity" />
+                            <span asp-validation-for="Capacity" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="PricePerNight" class="form-label fw-bold"></label>
+                            <input asp-for="PricePerNight" class="form-control" placeholder="Enter price per night" />
+                            <span asp-validation-for="PricePerNight" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input class="form-check-input" type="checkbox" asp-for="Availbility" id="availabilityCheck" />
+                            <label class="form-check-label fw-bold" for="availabilityCheck">
+                                @Html.DisplayNameFor(model => model.Availbility)
+                            </label>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="RoomType" class="form-label fw-bold"></label>
+                            <select asp-for="RoomType" class="form-control" asp-items="roomTypes">
+                                <option value="">Select Room Type</option>
+                            </select>
+                            <span asp-validation-for="RoomType" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="BedType" class="form-label fw-bold"></label>
+                            <select asp-for="BedType" class="form-control" asp-items="bedTypes">
+                                <option value="">Select Bed Type</option>
+                            </select>
+                            <span asp-validation-for="BedType" class="text-danger"></span>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success w-100">Save Changes</button>
+                            <a href="/HotelManager/ManageHotel/Edit/@Model.HotelId" class="btn btn-secondary mt-2 w-100">Back to List</a>
+                            <a href="/HotelManager/ManageRooms/ShowAllRoomImages/@Model.Id" class="btn btn-secondary mt-2 w-100">Manage Images</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

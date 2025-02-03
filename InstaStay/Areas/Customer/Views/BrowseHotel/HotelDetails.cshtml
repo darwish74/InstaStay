@@ -37,7 +37,7 @@
     }
 </style>
 
-<div class="container my-5">
+<div class="container my-5 mx-4">
     <div class="card shadow-lg fade-in custom-card">
         <div class="row g-0">
             <div class="col-md-5">
@@ -53,8 +53,8 @@
             <div class="col-md-7">
                 <div class="card-body">
                     <h2 class="card-title text-primary">@Model.Name</h2>
-                    <p class="card-text text-muted">
-                        <i class="fas fa-map-marker-alt"></i> @Model.Address
+                    <p class="card-text text-dark">
+                        <i class="fas fa-map-marker-alt text-success"></i> @Model.Address
                     </p>
                     <p class="card-text">
                         @for (int i = 0; i < Model.Stars; i++)
@@ -119,27 +119,37 @@
             <a class="nav-link" data-bs-toggle="tab" href="#amenities">Amenities</a>
         </li>
     </ul>
+
     <div class="tab-content mt-3 fade-in">
+        <!-- Rooms Tab -->
         <div class="tab-pane fade show active" id="rooms">
             <div class="row">
                 @if (Model.Rooms != null && Model.Rooms.Any())
                 {
                     @foreach (var room in Model.Rooms)
                     {
-                        <div class="col-md-4">
-                            <div class="card mb-3 hover-zoom custom-card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Room @room.Id</h5>
-                                    <p class="card-text">Capacity: @room.Capacity</p>
-                                    <a href="#" class="btn btn-sm btn-gradient">View Details</a>
-                                </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="card-body bg-info bg-opacity-50 rounded-3 progress-bar-animated">
+                                <h5 class="card-title text-primary display-5 text-lg-center m-2">@room.RoomType</h5>
+                                <p class="card-text m-1"><i class="fas fa-bed text-body"></i> <strong class="text-dark">Bed Type :</strong>  @room.BedType</p>
+                                <p class="card-text m-1"><i class="fas fa-users text-warning"></i> <strong class="text-dark">Capacity :</strong>  @room.Capacity</p>
+                                <p class="card-text m-1 fw-bold text-dark">
+                                    <i class="fas @(room.Availbility ? "fa-check-circle text-success" : "fa-times-circle text-danger")"></i>
+                                    @(room.Availbility ? "Available" : "Not Available")
+                                </p>
+                                <p class="card-text m-1 ">
+                                    <i class="fas fa-coins text-light"></i> <strong class="text-dark">Price :</strong>  $@room.PricePerNight per night
+                                </p>
+                                <a href="/Customer/BrowseHotel/RoomDetails/@room.Id" class="btn btn-gradient w-100 mt-2">View Details</a>
                             </div>
                         </div>
                     }
                 }
                 else
                 {
-                    <p class="text-muted">No rooms available.</p>
+                    <div class="col-12 text-center">
+                        <p class="text-muted fs-5">No rooms available at the moment.</p>
+                    </div>
                 }
             </div>
         </div>
@@ -157,7 +167,7 @@
             }
             else
             {
-                <p class="text-muted">No reviews available.</p>
+                <p class="text-danger">No reviews available.</p>
             }
         </div>
         <div class="tab-pane fade" id="promotions">
@@ -174,7 +184,7 @@
             }
             else
             {
-                <p class="text-muted">No promotions available.</p>
+                <p class="text-danger">No promotions available.</p>
             }
         </div>
         <div class="tab-pane fade" id="amenities">
@@ -199,9 +209,8 @@
             }
             else
             {
-                <p class="text-muted">No amenities listed.</p>
+                <p class="text-danger">No amenities listed.</p>
             }
         </div>
-
     </div>
-</div>
+    </div>

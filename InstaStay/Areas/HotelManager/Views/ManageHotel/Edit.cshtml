@@ -1,7 +1,4 @@
 ﻿@model Models.Models.Hotel
-@{
-    ViewData["Title"] = "Edit Hotel";
-}
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-10 col-lg-8 shadow-lg p-4 rounded bg-white">
@@ -150,8 +147,8 @@
                         <td>$@room.PricePerNight</td>
                         <td>@room.Capacity</td>
                         <td>
-                            <a href="@Url.Action("EditRoom", "Rooms", new { id = room.Id })" class="btn btn-warning btn-sm">Edit</a>
-                            <form asp-action="DeleteRoom" asp-controller="Rooms" method="post" class="d-inline">
+                            <a href="@Url.Action("Edit", "ManageRooms", new { id = room.Id })" class="btn btn-warning btn-sm">Edit</a>
+                            <form asp-action="Delete" asp-controller="ManageRooms" method="post" class="d-inline">
                                 <input type="hidden" name="id" value="@room.Id" />
                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this room?');">Delete</button>
                             </form>
@@ -180,4 +177,10 @@
             });
         });
     </script>
+    @if (@TempData["success"] != null)
+    {
+        <script>
+            toastr.success('@TempData["success"]')
+        </script>
+    }
 }

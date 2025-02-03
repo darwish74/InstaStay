@@ -22,6 +22,7 @@ namespace DataAccess
         private IHotelManager _HotelManagerRepository;
         private IHotelImagesRepository _HotelImagesRepository;
         private IAmentitiesRepository _AmentitesRepository;
+        private IRoomImagesRepository _RoomImagesRepository;
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -38,6 +39,7 @@ namespace DataAccess
         public IHotelManager HotelManagerRepository => _HotelManagerRepository ??= new HotelManagerRepository(_context);
         public IHotelImagesRepository HotelImagesRepository => _HotelImagesRepository ??= new HotelImageRepository(_context);
         public IAmentitiesRepository AmentitiesRepository => _AmentitesRepository ??= new AmentitiesRepository(_context);
+        public IRoomImagesRepository RoomImagesRepository => _RoomImagesRepository ??=new RoomImagesRepository(_context);   
         public void Commit()
         {
             _context.SaveChanges();

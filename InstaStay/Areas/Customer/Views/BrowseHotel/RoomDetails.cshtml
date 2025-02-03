@@ -1,0 +1,53 @@
+﻿@model Models.Models.Room
+
+@{
+    ViewData["Title"] = "Room Details";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white text-center">
+            <h2>Room Details</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="https://via.placeholder.com/500x300" alt="Room Image" class="img-fluid rounded">
+                </div>
+                <div class="col-md-6">
+                    <h4 class="text-secondary">Room Information</h4>
+                    <hr />
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong>ID:</strong> @Html.DisplayFor(model => model.Id)</li>
+                        <li class="list-group-item"><strong>Capacity:</strong> @Html.DisplayFor(model => model.Capacity) People</li>
+                        <li class="list-group-item"><strong>Price Per Night:</strong> <span class="badge bg-success">$@Html.DisplayFor(model => model.PricePerNight)</span></li>
+                        <li class="list-group-item">
+                            <strong>Availability:</strong>
+                            @if (Model.Availbility)
+                            {
+                                <span class="badge bg-success">Available</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Not Available</span>
+                            }
+                        </li>
+                        <li class="list-group-item"><strong>Room Type:</strong> @Html.DisplayFor(model => model.RoomType)</li>
+                        <li class="list-group-item"><strong>Bed Type:</strong> @Html.DisplayFor(model => model.BedType)</li>
+                        <li class="list-group-item"><strong>Hotel ID:</strong> @Html.DisplayFor(model => model.Hotel.Name)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-center">
+            @if (Model.Availbility)
+            {
+                <a asp-action="Book" asp-route-id="@Model.Id" class="btn btn-success">
+                    <i class="fas fa-calendar-check"></i> Book Now
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
+

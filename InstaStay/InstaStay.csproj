@@ -28,6 +28,7 @@
     <Folder Include="wwwroot\images\HotelImages\" />
     <Folder Include="wwwroot\images\HIL\" />
     <Folder Include="wwwroot\images\Amentities\" />
+    <Folder Include="wwwroot\images\RoomImages\" />
   </ItemGroup>
 
   <ItemGroup>

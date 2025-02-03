@@ -28,6 +28,9 @@ namespace DataAccess.Data
         public DbSet<HotelManagerRequests> HotelManagerRequests { get; set; }
         public DbSet<NewHotelRequests> NewHotelRequests { get; set; }
         public DbSet<HotelManagers> HotelManagers { get; set; }
+        public DbSet<RoomImages> roomImages { get; set; }   
+        public DbSet<HotelImages> hotelImages { get; set; } 
+        public DbSet<Amentities> Amentities { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -37,6 +40,5 @@ namespace DataAccess.Data
            .HasForeignKey(r => r.HotelId)
            .OnDelete(DeleteBehavior.Cascade);
         }
-
     }
 }

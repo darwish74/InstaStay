@@ -1,4 +1,5 @@
 ﻿using InstaStay.Utilities;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Models.Utilities;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,12 @@ namespace Models.Models
         public String BedType { get; set; }
         [Required(ErrorMessage = "Hotel ID is required.")]
         public int HotelId { get; set; }
+        [ValidateNever]
         public virtual Hotel Hotel { get; set; }
+        [ValidateNever]
         public virtual ICollection<Booking> Bookings { get; set; }
+        [ValidateNever]
+        public virtual ICollection<RoomImages> RoomImages { get; set; }     
+
     }
 }
