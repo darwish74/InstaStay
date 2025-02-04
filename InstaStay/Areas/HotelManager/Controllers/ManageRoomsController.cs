@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.EntityFrameworkCore;
 using Models.IRepositories;
 using Models.Models;
-
 namespace InstaStay.Areas.HotelManager.Controllers
 {
     [Area("hotelManager")]
@@ -58,18 +59,43 @@ namespace InstaStay.Areas.HotelManager.Controllers
         }
         public IActionResult ShowAllRoomImages(int id)
         { 
-            var room=unitOfWork.roomRepository.GetOne(e=>e.Id==id);
+            var room=unitOfWork.roomRepository.GetOne(e=>e.Id==id,includeprops:e=>e.Include(e=>e.RoomImages));
+            ViewBag.Id=room.Id; 
             return View(room.RoomImages ?? new List<RoomImages>());
         }
         [HttpGet]
-        public IActionResult AddRoomImage()
+        public IActionResult AddRoomImage(int id)
         {
+            var room = unitOfWork.roomRepository.GetOne(e => e.Id == id);
+            ViewBag.Id = room.Id;
             return View();  
         }
         [HttpPost]
-        public IActionResult AddRoomImage(int id,IFormFile RoomImage )
+        public IActionResult AddRoomImage(int id, IFormFile RoomImage)
         {
-            return View(id);
+                var room = unitOfWork.roomRepository.GetOne(e => e.Id == id);
+                if (room != null)
+                {
+                    var NewRoomImage = new RoomImages();
+                    if (RoomImage != null && RoomImage.Length > 0)
+                    {
+                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(RoomImage.FileName);
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\RoomImages", fileName);
+                        using (var stream = System.IO.File.Create(filePath))
+                        {
+                          RoomImage.CopyTo(stream);
+                        }
+                        NewRoomImage.Image = fileName;
+                        NewRoomImage.RoomId = id;
+                        unitOfWork.RoomImagesRepository.Create(NewRoomImage);
+                        unitOfWork.Commit();
+                        TempData["success"] = "Room Image added successfully";
+                        return RedirectToAction("ShowAllRoomImages", new {id= room.Id});
+                    }
+                }
+                TempData["success"] = "No Images added";
+                return RedirectToAction("ShowAllRoomImages", new { id = room.Id });
         }
-    }
+            
+    }    
 }

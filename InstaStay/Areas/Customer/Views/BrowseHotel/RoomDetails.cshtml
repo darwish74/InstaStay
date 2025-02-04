@@ -2,25 +2,60 @@
 
 @{
     ViewData["Title"] = "Room Details";
+    var RoomImagesList = Model.RoomImages ?? new List<RoomImages>();
 }
 
 <div class="container mt-4">
     <div class="card shadow-lg">
-        <div class="card-header bg-primary text-white text-center">
-            <h2>Room Details</h2>
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">Room Details</h2>
+            <a asp-action="Index" class="btn btn-light">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
         </div>
+
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
-                    <img src="https://via.placeholder.com/500x300" alt="Room Image" class="img-fluid rounded">
+                    <div id="roomImagesCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            @if (RoomImagesList.Any())
+                            {
+                                int counter = 0;
+                                @foreach (var image in RoomImagesList)
+                                {
+                                    <div class="carousel-item @(counter == 0 ? "active" : "")">
+                                        <img src="~/images/RoomImages/@image.Image" class="d-block w-100 rounded" alt="Room Image" style="height: 250px; object-fit: cover;">
+                                    </div>
+                                    counter++;
+                                }
+                            }
+                            else
+                            {
+                                <div class="carousel-item active">
+                                    <img src="~/images/no-image.jpg" class="d-block w-100 rounded" alt="No Image" style="height: 250px; object-fit: cover;">
+                                </div>
+                            }
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#roomImagesCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#roomImagesCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        </button>
+                    </div>
                 </div>
+
+                <!-- Room Information -->
                 <div class="col-md-6">
-                    <h4 class="text-secondary">Room Information</h4>
+                    <h4 class="text-secondary"><i class="fas fa-info-circle"></i> Room Information</h4>
                     <hr />
                     <ul class="list-group">
-                        <li class="list-group-item"><strong>ID:</strong> @Html.DisplayFor(model => model.Id)</li>
-                        <li class="list-group-item"><strong>Capacity:</strong> @Html.DisplayFor(model => model.Capacity) People</li>
-                        <li class="list-group-item"><strong>Price Per Night:</strong> <span class="badge bg-success">$@Html.DisplayFor(model => model.PricePerNight)</span></li>
+                        <li class="list-group-item"><strong>ID:</strong> @Model.Id</li>
+                        <li class="list-group-item"><strong>Capacity:</strong> @Model.Capacity People</li>
+                        <li class="list-group-item">
+                            <strong>Price Per Night:</strong> <span class="badge bg-success">$@Model.PricePerNight</span>
+                        </li>
                         <li class="list-group-item">
                             <strong>Availability:</strong>
                             @if (Model.Availbility)
@@ -32,13 +67,14 @@
                                 <span class="badge bg-danger">Not Available</span>
                             }
                         </li>
-                        <li class="list-group-item"><strong>Room Type:</strong> @Html.DisplayFor(model => model.RoomType)</li>
-                        <li class="list-group-item"><strong>Bed Type:</strong> @Html.DisplayFor(model => model.BedType)</li>
-                        <li class="list-group-item"><strong>Hotel ID:</strong> @Html.DisplayFor(model => model.Hotel.Name)</li>
+                        <li class="list-group-item"><strong>Room Type:</strong> @Model.RoomType</li>
+                        <li class="list-group-item"><strong>Bed Type:</strong> @Model.BedType</li>
                     </ul>
                 </div>
             </div>
         </div>
+
+        <!-- Footer Buttons -->
         <div class="card-footer text-center">
             @if (Model.Availbility)
             {
@@ -46,8 +82,20 @@
                     <i class="fas fa-calendar-check"></i> Book Now
                 </a>
             }
+            <a asp-action="ManageImages" asp-route-id="@Model.Id" class="btn btn-warning">
+                <i class="fas fa-images"></i> Manage Images
+            </a>
         </div>
     </div>
 </div>
 
-
+@section Scripts {
+    <script>
+        // Initialize Bootstrap Carousel
+        var myCarousel = document.querySelector('#roomImagesCarousel');
+        var carousel = new bootstrap.Carousel(myCarousel, {
+            interval: 3000, // Auto-slide every 3 seconds
+            ride: 'carousel'
+        });
+    </script>
+}

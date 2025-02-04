@@ -25,8 +25,18 @@ namespace InstaStay.Areas.Customer.Controllers
         }
         public IActionResult RoomDetails(int id)
         {
-            var room = unitOfWork.roomRepository.GetOne(e=>e.Id==id);
+            var room = unitOfWork.roomRepository.GetOne(
+                e => e.Id == id,
+                includeprops: e => e.Include(e => e.RoomImages)
+            );
+            if (room == null)
+            {
+                return NotFound();
+            }
+            room.RoomImages = room.RoomImages ?? new List<RoomImages>();
+
             return View(room);
         }
+
     }
 }

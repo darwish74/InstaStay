@@ -8,7 +8,7 @@
     <div class="card shadow-lg">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <h3 class="mb-0"><i class="fas fa-image"></i> Add Room Image</h3>
-            <a href="/HotelManager/ManageRooms/ShowAllRoomImages/id" class="btn btn-light"><i class="fas fa-arrow-left"></i> Back</a>
+            <a href="/HotelManager/ManageRooms/ShowAllRoomImages/@ViewBag.Id" class="btn btn-light"><i class="fas fa-arrow-left"></i> Back</a>
         </div>
 
         <div class="card-body">
@@ -17,7 +17,7 @@
 
                 <div class="mb-3">
                     <label asp-for="Image" class="form-label fw-bold"><i class="fas fa-file-image"></i> Upload Image</label>
-                    <input type="file" id="imageUpload" class="form-control" accept="image/*" onchange="previewImage(event)" />
+                    <input type="file" id="imageUpload" name="RoomImage" class="form-control" accept="image/*" onchange="previewImage(event)" />
                     <span asp-validation-for="Image" class="text-danger"></span>
                     <div class="mt-2">
                         <img id="imagePreview" src="#" alt="Image Preview" class="img-thumbnail d-none" style="max-width: 200px; height: auto;" />

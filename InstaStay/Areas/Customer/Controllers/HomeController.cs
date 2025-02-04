@@ -41,23 +41,6 @@ namespace InstaStay.Areas.Customer.Controllers
             return View("Index", hotels);
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         public IActionResult Privacy()
         {
             return View();
