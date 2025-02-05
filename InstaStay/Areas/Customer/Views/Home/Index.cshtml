@@ -14,7 +14,6 @@
      style="background-image: url('~/images/HotelImages/06ecd7d2-4f4b-4a8d-b500-2ef1cd657496.jpg'); background-size: cover; background-position: center; border-radius: 20px; box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);">
     <div class="position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(0, 0, 0, 0.6); border-radius: 20px;"></div>
     <div class="text-center text-light position-relative">
-        <!-- Animated Icons -->
         <div class="d-flex justify-content-center gap-4 mb-4">
             <div class="icon-container text-center">
                 <i class="fas fa-map-marker-alt fa-3x text-info"></i>
@@ -29,8 +28,6 @@
                 <p class="mt-2 text-white fw-bold">Best Deals</p>
             </div>
         </div>
-
-        <!-- Main Text -->
         <h1 class="display-3 fw-bold animated-text">Welcome to Your Dream Stay</h1>
         <p class="lead mb-4 fw-bold text-info">Find exclusive Genius rewards in every corner of the world!</p>
         <a href="#searchForm" class="btn  bg-transparent btn-outline-success btn-lg px-5 shadow-lg">
@@ -91,16 +88,14 @@
                                 @hotel.Name
                             </a>
                         </h5>
-                        <p class="text-secondary bg-gradient text-start">
+                        <p class="text-primary text-start">
                             @hotel.Description
                         </p>
-                        <p class="text-primary alert-info active  align-content-around">@hotel.Address</p>
-                       @*  <div class="d-flex justify-content-start align-items-center">
+                        <p class="text-danger alert-info active  fw-bold align-content-around">@hotel.Address</p>
+                        <div class="d-flex justify-content-start align-items-center">
                             <i class="fas fa-star text-warning"></i>
-                            <span class="ms-1">@hotel.Rating / 5 (Based on @hotel.ReviewsCount reviews)</span>
+                            @* <span class="ms-1">@hotel.Reviews / 5 (Based on @hotel.ReviewsCount reviews)</span> *@
                         </div>
- *@
-                        <!-- Amenities (Example: Wi-Fi, Pool, etc.) -->
                         <div class="d-flex mt-2 text-lg-center">
                             <i class="fas fa-wifi me-2 text-primary"></i>
                             <i class="fas fa-swimmer me-2 text-info"></i>
@@ -108,44 +103,36 @@
                         </div>
                     </div>
 
-                    <!-- Card Footer with Price or Offers -->
-                    <div class="card-footer text-center bg-light">
-                      @*   <span class="d-block mb-2">From $@hotel.PricePerNight / night</span> *@
+                    <div class="card-footer text-center bg-white">
+             
                         <a asp-action="HotelDetails" asp-controller="BrowseHotel" asp-route-HotelId="@hotel.Id" class="btn btn-outline-primary w-100">View Details</a>
                     </div>
                 </div>
             </div>
         }
     </div>
-
 </div>
-
 <style>
     .card-title a:hover {
         color: #007bff;
     }
-
     .card:hover {
         transform: translateY(-10px);
         box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
         transition: all 0.3s ease;
     }
-
     .btn-primary {
         background-color: #007bff;
         border-color: #007bff;
     }
-
     .btn-primary:hover {
         background-color: #0056b3;
         border-color: #0056b3;
     }
-
     .btn-warning {
         background-color: #ffc107;
         border-color: #ffc107;
     }
-
     .btn-warning:hover {
         background-color: #e0a800;
         border-color: #d39e00;
@@ -155,7 +142,6 @@
         position: relative;
         overflow: hidden;
     }
-
     .animated-text {
         animation: fadeIn 2s ease-in-out infinite alternate;
     }

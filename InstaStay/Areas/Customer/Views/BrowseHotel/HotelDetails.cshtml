@@ -1,42 +1,8 @@
 ﻿@model Models.Models.Hotel
-
 @{
     ViewData["Title"] = Model.Name;
     var hotelImagesList = Model.HotelImages?.ToList() ?? new List<HotelImages>();
 }
-
-<style>
-    .fade-in {
-        animation: fadeIn 0.8s ease-in-out;
-    }
-
-    @@keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .hover-zoom:hover {
-        transform: scale(1.05);
-        transition: transform 0.3s ease-in-out;
-    }
-
-    .custom-card {
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .btn-gradient {
-        background: linear-gradient(to right, #ff7e5f, #feb47b);
-        color: white;
-        border: none;
-    }
-
-    .btn-gradient:hover {
-        background: linear-gradient(to right, #feb47b, #ff7e5f);
-    }
-</style>
-
 <div class="container my-5 mx-4">
     <div class="card shadow-lg fade-in custom-card">
         <div class="row g-0">
@@ -83,14 +49,14 @@
                 {
                     var image = hotelImagesList[i];
                     <div class="carousel-item @(i == 0 ? "active" : "")">
-                        <img src="~/images/HIL/@image.ImageURL" class="d-block w-70" alt="Hotel Image @i">
+                        <img src="~/images/HIL/@image.ImageURL" class="d-block w-100" alt="Hotel Image @i">
                     </div>
                 }
             }
             else
             {
                 <div class="carousel-item active">
-                    <img src="~/images/HotelImages/@Model.CoverImage" class="d-block w-70" alt="Default Hotel Image">
+                    <img src="~/images/HotelImages/@Model.CoverImage" class="d-block w-100" alt="Default Hotel Image">
                 </div>
             }
         </div>
@@ -105,40 +71,39 @@
         </button>
     </div>
 
-    <ul class="nav nav-tabs mt-4 fade-in" id="hotelTabs">
-        <li class="nav-item">
-            <a class="nav-link active" data-bs-toggle="tab" href="#rooms">Rooms</a>
+    <ul class="nav nav-tabs mt-4 fade-in" id="hotelTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="rooms-tab" data-bs-toggle="tab" href="#rooms" role="tab" aria-controls="rooms" aria-selected="true">Rooms</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#reviews">Reviews</a>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="reviews-tab" data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Reviews</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#promotions">Promotions</a>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="promotions-tab" data-bs-toggle="tab" href="#promotions" role="tab" aria-controls="promotions" aria-selected="false">Promotions</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#amenities">Amenities</a>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="amenities-tab" data-bs-toggle="tab" href="#amenities" role="tab" aria-controls="amenities" aria-selected="false">Amenities</a>
         </li>
     </ul>
 
     <div class="tab-content mt-3 fade-in">
-        <!-- Rooms Tab -->
-        <div class="tab-pane fade show active" id="rooms">
+        <div class="tab-pane fade show active" id="rooms" role="tabpanel" aria-labelledby="rooms-tab">
             <div class="row">
                 @if (Model.Rooms != null && Model.Rooms.Any())
                 {
                     @foreach (var room in Model.Rooms)
                     {
-                        <div class="col-lg-4 col-md-6">
-                            <div class="card-body bg-info bg-opacity-50 rounded-3 progress-bar-animated">
-                                <h5 class="card-title text-primary display-5 text-lg-center m-2">@room.RoomType</h5>
-                                <p class="card-text m-1"><i class="fas fa-bed text-body"></i> <strong class="text-dark">Bed Type :</strong>  @room.BedType</p>
-                                <p class="card-text m-1"><i class="fas fa-users text-warning"></i> <strong class="text-dark">Capacity :</strong>  @room.Capacity</p>
+                        <div class="col-lg-4 col-md-6 mb-3">
+                            <div class="card-body bg-info bg-opacity-50 rounded-3">
+                                <h5 class="card-title text-primary display-5 text-center">@room.RoomType</h5>
+                                <p class="card-text m-1"><i class="fas fa-bed text-body"></i> <strong class="text-dark">Bed Type:</strong> @room.BedType</p>
+                                <p class="card-text m-1"><i class="fas fa-users text-warning"></i> <strong class="text-dark">Capacity:</strong> @room.Capacity</p>
                                 <p class="card-text m-1 fw-bold text-dark">
                                     <i class="fas @(room.Availbility ? "fa-check-circle text-success" : "fa-times-circle text-danger")"></i>
                                     @(room.Availbility ? "Available" : "Not Available")
                                 </p>
-                                <p class="card-text m-1 ">
-                                    <i class="fas fa-coins text-light"></i> <strong class="text-dark">Price :</strong>  $@room.PricePerNight per night
+                                <p class="card-text m-1">
+                                    <i class="fas fa-coins text-light"></i> <strong class="text-dark">Price:</strong> $@room.PricePerNight per night
                                 </p>
                                 <a href="/Customer/BrowseHotel/RoomDetails/@room.Id" class="btn btn-gradient w-100 mt-2">View Details</a>
                             </div>
@@ -153,14 +118,25 @@
                 }
             </div>
         </div>
-        <div class="tab-pane fade" id="reviews">
+        <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+            <h3 class="mb-3">User Reviews</h3>
+            <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                Write a Review
+            </button>
+
             @if (Model.Reviews != null && Model.Reviews.Any())
             {
                 @foreach (var review in Model.Reviews)
                 {
                     <div class="card mb-3 hover-zoom custom-card">
                         <div class="card-body">
-                            @* <p class="card-text">"@review.Comment"</p> *@
+                            <h5 class="card-title">
+                                <strong>@review.User.UserName</strong>
+                                <span class="text-warning">★★★★★ @review.Rate</span>
+                            </h5>
+                            <h6 class="card-subtitle text-muted">@review.ReviewTitle</h6>
+                            <p class="card-text">@review.ReviewText</p>
+                            <small class="text-muted">Reviewed on @review.ReviewDate.ToString("MMMM dd, yyyy")</small>
                         </div>
                     </div>
                 }
@@ -170,7 +146,7 @@
                 <p class="text-danger">No reviews available.</p>
             }
         </div>
-        <div class="tab-pane fade" id="promotions">
+        <div class="tab-pane fade" id="promotions" role="tabpanel" aria-labelledby="promotions-tab">
             @if (Model.Promotions != null && Model.Promotions.Any())
             {
                 <ul class="list-group">
@@ -187,7 +163,7 @@
                 <p class="text-danger">No promotions available.</p>
             }
         </div>
-        <div class="tab-pane fade" id="amenities">
+        <div class="tab-pane fade" id="amenities" role="tabpanel" aria-labelledby="amenities-tab">
             @if (Model.Amentities != null && Model.Amentities.Any())
             {
                 <ul class="list-group">
@@ -213,4 +189,75 @@
             }
         </div>
     </div>
+</div>
+<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary fw-bold " id="reviewModalLabel"><i class="fas fa-plus-circle text-black"></i> Write a Review</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="AddReview" asp-controller="Review" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="HotelId" value="@Model.Id" />
+                    <div class="mb-3">
+                        <label for="ReviewTitle" class="form-label text-dark fw-bold border-success border-5">Title</label>
+                        <input type="text" class="form-control" placeholder="Enter Review Title" name="ReviewTitle" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="ReviewText" class="form-label text-dark fw-bold border-success border-5">Your Review</label>
+                        <textarea class="form-control" placeholder="Enter Your Review"  name="ReviewText" rows="3" required ></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Rate" class="form-label">Rating</label>
+                        <select class="form-select" name="Rate" required>
+                            <option value="5">★★★★★ (5 Stars)</option>
+                            <option value="4">★★★★☆ (4 Stars)</option>
+                            <option value="3">★★★☆☆ (3 Stars)</option>
+                            <option value="2">★★☆☆☆ (2 Stars)</option>
+                            <option value="1">★☆☆☆☆ (1 Star)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
+<style>
+    .fade-in {
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hover-zoom:hover {
+        transform: scale(1.05);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .custom-card {
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-gradient {
+        background: linear-gradient(to right, #ff7e5f, #feb47b);
+        color: white;
+    }
+</style>
+@section scripts{
+    @if (@TempData["success"] != null)
+    {
+        <script>
+            toastr.success('@TempData["success"]')
+        </script>
+    }
+}

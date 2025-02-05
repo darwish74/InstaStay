@@ -14,13 +14,15 @@ namespace InstaStay.Areas.Customer.Controllers
         {
             this.unitOfWork = unitOfWork;
         }
-        public IActionResult HotelDetails(int hotelId)
+          public IActionResult HotelDetails(int hotelId)
         {
             var hotel= unitOfWork.hotelRepository.GetOne(e=>e.Id== hotelId, includeprops:e=>e.Include(e=>e.Amentities).
                                                                                        Include(e=>e.HotelManager).
                                                                                        Include(e=>e.Promotions).
                                                                                        Include(e=>e.HotelImages).
-                                                                                       Include(e=>e.Rooms));
+                                                                                       Include(e => e.Rooms).
+                                                                                       Include(e=>e.Reviews).ThenInclude(e=>e.User));
+
             return View(hotel);
         }
         public IActionResult RoomDetails(int id)

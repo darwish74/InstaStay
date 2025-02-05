@@ -15,7 +15,6 @@
                 </h4>
                 <form asp-action="Login">
                     <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert" style="display: none;">
-                        <!-- Validation summary will appear here -->
                     </div>
                      
                     <div class="form-group mb-3 bg-gradient">
@@ -72,7 +71,6 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            // Show validation summary if there are errors
             if ($(".text-danger").text().trim() !== "") {
                 $(".alert-danger").show();
             }
@@ -80,5 +78,11 @@
     </script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    @if (@TempData["success"] != null)
+    {
+        <script>
+            toastr.success('@TempData["success"]')
+        </script>
     }
 }

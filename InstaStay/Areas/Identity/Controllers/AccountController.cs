@@ -42,30 +42,24 @@ namespace InstaStay.Areas.Identity.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser
-                {
-                    UserName = userVM.UserName,
-                    Email = userVM.Email
-                    
-                };
-
+                var user = new ApplicationUser { UserName = userVM.UserName, Email = userVM.Email };
                 var result = await _userManager.CreateAsync(user, userVM.Password);
 
                 if (result.Succeeded)
                 {
+                    if (!await _roleManager.RoleExistsAsync("User"))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole("User"));
+                    }
                     await _userManager.AddToRoleAsync(user, "User");
                     await _signInManager.SignInAsync(user, false);
                     return RedirectToAction("Index", "Home", new { area = "Customer" });
                 }
-                else
+                foreach (var error in result.Errors)
                 {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error.Description);
-                    }
+                    ModelState.AddModelError("", error.Description);
                 }
             }
-
             ViewBag.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             return View(userVM);
         }
@@ -90,29 +84,14 @@ namespace InstaStay.Areas.Identity.Controllers
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
+                ModelState.AddModelError("", "Error loading external login information.");
                 return RedirectToAction(nameof(Register));
             }
 
-            var signInResult = await _signInManager.ExternalLoginSignInAsync(
-                info.LoginProvider,
-                info.ProviderKey,
-                isPersistent: false,
-                bypassTwoFactor: true);
-
-            if (signInResult.Succeeded)
-            {
-                return LocalRedirect(returnUrl);
-            }
-
-            if (signInResult.RequiresTwoFactor)
-            {
-                return RedirectToAction(nameof(LoginWith2fa), new { ReturnUrl = returnUrl });
-            }
-
-            if (signInResult.IsLockedOut)
-            {
-                return RedirectToAction(nameof(Lockout));
-            }
+            var signInResult = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false, true);
+            if (signInResult.Succeeded) return LocalRedirect(returnUrl);
+            if (signInResult.RequiresTwoFactor) return RedirectToAction(nameof(LoginWith2fa), new { ReturnUrl = returnUrl });
+            if (signInResult.IsLockedOut) return RedirectToAction(nameof(Lockout));
 
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
             if (email != null)
@@ -122,22 +101,19 @@ namespace InstaStay.Areas.Identity.Controllers
 
                 if (result.Succeeded)
                 {
-                    result = await _userManager.AddLoginAsync(user, info);
-                    
-
-                    if (result.Succeeded)
-                    {
-                        await _userManager.AddToRoleAsync(user, "User");
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
-                    }
+                    await _userManager.AddToRoleAsync(user, "User");
+                    await _signInManager.SignInAsync(user, false);
+                    return LocalRedirect(returnUrl);
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
                 }
             }
 
             ViewData["ErrorMessage"] = "Error signing in with external provider.";
             return RedirectToAction(nameof(Register));
         }
-
         [HttpGet]
         public async Task<IActionResult> Login()
         {
@@ -172,13 +148,11 @@ namespace InstaStay.Areas.Identity.Controllers
 
             return View(loginVM);
         }
-
         public async Task<IActionResult> SignOut()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login", "Account");
-        }
-
+        }  
         [HttpGet]
         public async Task<IActionResult> Profile()
         {

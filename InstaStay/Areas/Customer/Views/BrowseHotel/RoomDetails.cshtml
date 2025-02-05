@@ -45,8 +45,6 @@
                         </button>
                     </div>
                 </div>
-
-                <!-- Room Information -->
                 <div class="col-md-6">
                     <h4 class="text-secondary"><i class="fas fa-info-circle"></i> Room Information</h4>
                     <hr />
@@ -73,8 +71,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Footer Buttons -->
         <div class="card-footer text-center">
             @if (Model.Availbility)
             {
@@ -90,8 +86,7 @@
 </div>
 
 @section Scripts {
-    <script>
-        // Initialize Bootstrap Carousel
+    <script
         var myCarousel = document.querySelector('#roomImagesCarousel');
         var carousel = new bootstrap.Carousel(myCarousel, {
             interval: 3000, // Auto-slide every 3 seconds
