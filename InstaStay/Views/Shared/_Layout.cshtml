@@ -55,6 +55,17 @@
                                 <a class="nav-link active" href="/Admin/Dashboard/Index">Dashboard</a>
                             </li>
                         }
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            {
+                                <li class="nav-item position-relative">
+                                    <a class="nav-link active" asp-controller="Booking" asp-action="MyBookings" asp-area="Customer">
+                                        <i class="fas fa-calendar-check"></i> Bookings
+                                    </a>
+                                </li>
+                            }
+
+                        }
                     </ul>
                     <ul class="navbar-nav align-items-center">
                         @if (User.Identity.IsAuthenticated)

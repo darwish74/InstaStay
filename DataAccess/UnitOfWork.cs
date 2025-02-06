@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Models.IRepositories;
 using Models.Models;
 using System;
-
 namespace DataAccess
 {
     public class UnitOfWork : IUnitOfWork
@@ -23,6 +22,7 @@ namespace DataAccess
         private IHotelImagesRepository _HotelImagesRepository;
         private IAmentitiesRepository _AmentitesRepository;
         private IRoomImagesRepository _RoomImagesRepository;
+        private ICouponRepository _CouponRepository;
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -40,6 +40,7 @@ namespace DataAccess
         public IHotelImagesRepository HotelImagesRepository => _HotelImagesRepository ??= new HotelImageRepository(_context);
         public IAmentitiesRepository AmentitiesRepository => _AmentitesRepository ??= new AmentitiesRepository(_context);
         public IRoomImagesRepository RoomImagesRepository => _RoomImagesRepository ??=new RoomImagesRepository(_context);   
+        public ICouponRepository CouponRepository => _CouponRepository ??= new CouponRepository(_context);  
         public void Commit()
         {
             _context.SaveChanges();
