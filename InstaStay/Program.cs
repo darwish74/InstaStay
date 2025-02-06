@@ -1,5 +1,6 @@
 using DataAccess;
 using DataAccess.Data;
+using InstaStay.HubChat;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Models.IRepositories;
@@ -13,6 +14,7 @@ namespace InstaStay
             var builder = WebApplication.CreateBuilder(args);
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSignalR();
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
@@ -41,6 +43,7 @@ namespace InstaStay
                 name: "default",
                 pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
+            app.MapHub<ChatHub>("/chatHub");
             app.Run();
         }
     }
