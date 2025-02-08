@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Models.IRepositories;
 using Models.Models;
+using Models.Utilities;
+using Stripe;
+
 namespace InstaStay
 {
     public class Program
@@ -11,20 +14,30 @@ namespace InstaStay
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
             builder.Services.AddControllersWithViews();
+            builder.Services.Configure<StripeSetting>(builder.Configuration.GetSection("Authentication:Stripe"));
+
+            var stripeKey = builder.Configuration["Authentication:Stripe:SecretKey"];
+            Console.WriteLine($"Stripe API Key: {stripeKey}"); 
+            StripeConfiguration.ApiKey = stripeKey;
+
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
-                )
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders();
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddSignalR();
             builder.Services.AddAuthentication().AddGoogle(googleOptions =>
             {
                 googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
                 googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
-            });       
+            });
+
             var app = builder.Build();
             if (!app.Environment.IsDevelopment())
             {
