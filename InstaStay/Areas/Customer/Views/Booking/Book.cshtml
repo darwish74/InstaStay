@@ -1,0 +1,60 @@
+﻿@model Models.ViewModels.BookingVM
+@{
+    ViewData["Title"] = "Book a Room";
+}
+<div class="container mt-5 ms-3">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header text-center" style="background-color: #1e3a8a; color: white; font-family: 'Poppins', sans-serif;">
+            <h2 class="mb-0"><i class="fas fa-bed"></i> Book Your Stay</h2>
+        </div>
+        <div class="card-body">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <p>@error.ErrorMessage</p>
+                    }
+                </div>
+            }
+
+            <form asp-action="CreateBooking" method="post">
+                <input type="hidden" asp-for="RoomId" id="RoomId" />
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="fas fa-door-open"></i> Room Type:</label>
+                        <input type="text" class="form-control" value="@Model.RoomType" readonly />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="fas fa-tag"></i> Price per Night:</label>
+                        <input type="text" class="form-control" value="$@Model.PricePerNight" readonly />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="fas fa-calendar-check"></i> Check-In Date:</label>
+                        <input type="date" asp-for="CheckINDate" class="form-control" id="CheckINDate" required />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="fas fa-calendar-times"></i> Check-Out Date:</label>
+                        <input type="date" asp-for="CheckOutDate" class="form-control" id="CheckOutDate" required />
+                    </div>
+                </div>
+
+                @if (Model != null && !Model.IsAvailable)
+                {
+                    <div class="alert alert-danger">
+                        <p>Sorry, this room is no longer available.</p>
+                    </div>
+                }
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success btn-lg w-100" id="submitBooking"
+                    @(Model != null && !Model.IsAvailable ? "disabled" : "")>
+                        <i class="fas fa-book"></i> Book Now
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

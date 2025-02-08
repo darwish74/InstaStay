@@ -22,7 +22,6 @@ namespace InstaStay.Areas.Customer.Controllers
                                                                                        Include(e=>e.HotelImages).
                                                                                        Include(e => e.Rooms).
                                                                                        Include(e=>e.Reviews).ThenInclude(e=>e.User));
-
             return View(hotel);
         }
         public IActionResult RoomDetails(int id)

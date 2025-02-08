@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Home";
 }
-@section scripts{
+@section scripts {
     @if (@TempData["success"] != null)
     {
         <script>
@@ -36,29 +36,44 @@
     </div>
 </div>
 <div class="container ms-4 mt-5">
-    <form id="searchForm" method="get" asp-action="Search" class="bg-opacity-25 bg-info text-black shadow-sm p-4 rounded-4" >
+    <form id="searchForm" method="get" asp-action="Search" class="bg-opacity-25 bg-info text-black shadow-sm p-4 rounded-4">
         <div class="row g-4">
             <div class="col-md-4">
                 <label for="Address" class="form-label fw-bold text-secondary">City</label>
                 <select class="form-select" id="Address" name="Address">
                     <option value="">-- Select Address --</option>
-                    @foreach (var item in ViewBag.HotelAddresses)
+                    @foreach (var item in @ViewBag.HotelAddresses)
                     {
                         <option value="@item.Value">@item.Text</option>
                     }
                 </select>
             </div>
             <div class="col-md-4">
-                <label for="CheckInDate" class="form-label fw-bold text-secondary">Check-in Date</label>
-                <input type="date" class="form-control" id="CheckInDate" name="CheckInDate">
+                <label for="MinPrice" class="form-label fw-bold text-secondary">Min Price</label>
+                <input type="number" class="form-control" id="MinPrice" name="MinPrice" placeholder="Enter minimum price">
             </div>
             <div class="col-md-4">
-                <label for="CheckOutDate" class="form-label fw-bold text-secondary">Check-out Date</label>
-                <input type="date" class="form-control" id="CheckOutDate" name="CheckOutDate">
+                <label for="MaxPrice" class="form-label fw-bold text-secondary">Max Price</label>
+                <input type="number" class="form-control" id="MaxPrice" name="MaxPrice" placeholder="Enter maximum price">
             </div>
         </div>
+        <div class="row g-4 mt-3">
+            <label class="form-label fw-bold text-secondary">Amenities</label>
+            <div class="d-flex flex-wrap">
+                @foreach (var amenity in @ViewBag.Amenities)
+                {
+                    <div class="form-check me-3">
+                        <input class="form-check-input" type="checkbox" id="amenity_@amenity.Value" name="Amenities" value="@amenity.Value">
+                        <label class="form-check-label text-dark" for="amenity_@amenity.Value">@amenity.Text</label>
+                    </div>
+                }
+            </div>
+        </div>
+
         <div class="text-center mt-4">
-            <button type="submit" class="btn btn-outline-success btn-lg px-5" >Search</button>
+            <button type="submit" class="btn btn-outline-success btn-lg px-5">
+                <i class="fas fa-search-location me-2"></i>Search
+            </button>
         </div>
     </form>
 
@@ -76,79 +91,91 @@
         {
             <div class="col-lg-4 col-md-6">
                 <div class="card h-100 border-0 shadow rounded-4 position-relative">
-                        <img src="~/images/HotelImages/@hotel.CoverImage" class="card-img-top rounded-top-4"
-                             style="height: 220px; object-fit: cover;" alt="Hotel Image">
+                    <img src="~/images/HotelImages/@hotel.CoverImage" class="card-img-top rounded-top-4"
+                         style="height: 220px; object-fit: cover;" alt="Hotel Image">
+
                     <div class="position-absolute top-0 start-0 p-2">
-                        <span class="badge btn-warning text-dark">@hotel.Stars Stars</span>
+                        <span class="badge bg-warning text-dark fw-bold">
+                            <i class="fas fa-star"></i> @hotel.Stars Stars
+                        </span>
                     </div>
 
                     <div class="card-body text-center">
                         <h5 class="card-title text-truncate">
-                            <a asp-action="HotelDetails" asp-controller="BrowseHotel" asp-route-HotelId="@hotel.Id" class="text-success fw-bold text-capitalize bg-gradient text-decoration-none ">
+                            <a asp-action="HotelDetails" asp-controller="BrowseHotel" asp-route-HotelId="@hotel.Id"
+                               class="text-success fw-bold text-capitalize text-decoration-none">
                                 @hotel.Name
                             </a>
                         </h5>
-                        <p class="text-primary text-start">
-                            @hotel.Description
+
+                        <p class="text-muted text-start small">
+                            <i class="fas fa-info-circle me-2 text-secondary"></i>@hotel.Description
                         </p>
-                        <p class="text-danger alert-info active  fw-bold align-content-around">@hotel.Address</p>
-                        <div class="d-flex justify-content-start align-items-center">
-                            <i class="fas fa-star text-warning"></i>
-                            @* <span class="ms-1">@hotel.Reviews / 5 (Based on @hotel.ReviewsCount reviews)</span> *@
-                        </div>
-                        <div class="d-flex mt-2 text-lg-center">
-                            <i class="fas fa-wifi me-2 text-primary"></i>
-                            <i class="fas fa-swimmer me-2 text-info"></i>
-                            <i class="fas fa-parking me-2 text-success"></i>
+
+                        <p class="text-dark fw-bold d-flex align-items-center justify-content-center">
+                            <i class="fas fa-map-marker-alt text-danger me-2"></i>@hotel.Address
+                        </p>
+                        <div class="d-flex flex-wrap justify-content-center gap-2 mt-2">
+                            @foreach (var amenity in hotel.Amentities)
+                            {
+                                <span class="badge bg-info text-dark">@amenity.Name</span>
+                            }
                         </div>
                     </div>
 
-                    <div class="card-footer text-center bg-white">
-             
-                        <a asp-action="HotelDetails" asp-controller="BrowseHotel" asp-route-HotelId="@hotel.Id" class="btn btn-outline-primary w-100">View Details</a>
+                    <div class="card-footer text-center bg-light">
+                        <a asp-action="HotelDetails" asp-controller="BrowseHotel" asp-route-HotelId="@hotel.Id"
+                           class="btn btn-outline-primary w-100 fw-bold">
+                            <i class="fas fa-eye me-2"></i>View Details
+                        </a>
                     </div>
                 </div>
             </div>
         }
     </div>
 </div>
+
 <style>
     .card-title a:hover {
         color: #007bff;
     }
+
     .card:hover {
         transform: translateY(-10px);
         box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
         transition: all 0.3s ease;
     }
+
     .btn-primary {
         background-color: #007bff;
         border-color: #007bff;
     }
-    .btn-primary:hover {
-        background-color: #0056b3;
-        border-color: #0056b3;
-    }
-    .btn-warning {
-        background-color: #ffc107;
-        border-color: #ffc107;
-    }
-    .btn-warning:hover {
-        background-color: #e0a800;
-        border-color: #d39e00;
-    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
     .search-banner {
         margin-bottom: 50px;
         position: relative;
         overflow: hidden;
     }
+
     .animated-text {
         animation: fadeIn 2s ease-in-out infinite alternate;
     }
 
     @@keyframes fadeIn {
-        0% { opacity: 0.7; transform: scale(1); }
-        100% { opacity: 1; transform: scale(1.1); }
+        0% {
+            opacity: 0.7;
+            transform: scale(1);
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1.1);
+        }
     }
 
     .icon-container i {
@@ -159,18 +186,9 @@
         transform: scale(1.2);
     }
 
-    .btn-warning {
-        background-color: #ffc107;
-        border-color: #ffc107;
-    }
-
-    .btn-warning:hover {
-        background-color: #e0a800;
-        border-color: #d39e00;
-    }
     .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease-in-out;
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease-in-out;
     }
 </style>

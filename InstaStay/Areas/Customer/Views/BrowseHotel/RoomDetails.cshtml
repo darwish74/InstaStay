@@ -4,28 +4,27 @@
     ViewData["Title"] = "Room Details";
     var RoomImagesList = Model.RoomImages ?? new List<RoomImages>();
 }
-
-<div class="container mt-4">
-    <div class="card shadow-lg">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h2 class="mb-0">Room Details</h2>
-            <a asp-action="Index" class="btn btn-light">
+<div class="container m-5">
+    <div class="card shadow-lg rounded-4 border-0">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center rounded-top-4">
+            <h2 class="mb-0"><i class="fas fa-bed me-2"></i>Room Details</h2>
+            <a href="javascript:history.back()" class="btn btn-light shadow-sm">
                 <i class="fas fa-arrow-left"></i> Back
             </a>
         </div>
-
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
                     <div id="roomImagesCarousel" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
+                        <div class="carousel-inner rounded-3 shadow-sm">
                             @if (RoomImagesList.Any())
                             {
                                 int counter = 0;
                                 @foreach (var image in RoomImagesList)
                                 {
                                     <div class="carousel-item @(counter == 0 ? "active" : "")">
-                                        <img src="~/images/RoomImages/@image.Image" class="d-block w-100 rounded" alt="Room Image" style="height: 250px; object-fit: cover;">
+                                        <img src="~/images/RoomImages/@image.Image" class="d-block w-100 rounded-3"
+                                             alt="Room Image" style="height: 300px; object-fit: cover;">
                                     </div>
                                     counter++;
                                 }
@@ -33,7 +32,8 @@
                             else
                             {
                                 <div class="carousel-item active">
-                                    <img src="~/images/no-image.jpg" class="d-block w-100 rounded" alt="No Image" style="height: 250px; object-fit: cover;">
+                                    <img src="~/images/no-image.jpg" class="d-block w-100 rounded-3"
+                                         alt="No Image" style="height: 300px; object-fit: cover;">
                                 </div>
                             }
                         </div>
@@ -44,12 +44,19 @@
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         </button>
                     </div>
+                    <div class="d-flex mt-2 overflow-auto">
+                        @foreach (var image in RoomImagesList)
+                        {
+                            <img src="~/images/RoomImages/@image.Image"
+                                 class="img-thumbnail me-2 shadow-sm"
+                                 style="width: 80px; height: 60px; cursor: pointer; object-fit: cover;" />
+                        }
+                    </div>
                 </div>
                 <div class="col-md-6">
-                    <h4 class="text-secondary"><i class="fas fa-info-circle"></i> Room Information</h4>
+                    <h4 class="text-secondary fw-bolder"><i class="fas fa-info-circle me-2"></i> Room Information</h4>
                     <hr />
                     <ul class="list-group">
-                        <li class="list-group-item"><strong>ID:</strong> @Model.Id</li>
                         <li class="list-group-item"><strong>Capacity:</strong> @Model.Capacity People</li>
                         <li class="list-group-item">
                             <strong>Price Per Night:</strong> <span class="badge bg-success">$@Model.PricePerNight</span>
@@ -71,26 +78,27 @@
                 </div>
             </div>
         </div>
-        <div class="card-footer text-center">
+        <div class="card-footer text-center bg-light rounded-bottom-4">
             @if (Model.Availbility)
             {
-                <a asp-action="Book" asp-route-id="@Model.Id" class="btn btn-success">
+                <a asp-action="Book" asp-controller="Booking" asp-route-id="@Model.Id" class="btn btn-success me-2 shadow-sm">
                     <i class="fas fa-calendar-check"></i> Book Now
                 </a>
             }
-            <a asp-action="ManageImages" asp-route-id="@Model.Id" class="btn btn-warning">
-                <i class="fas fa-images"></i> Manage Images
-            </a>
         </div>
     </div>
 </div>
-
 @section Scripts {
-    <script
+    <script>
         var myCarousel = document.querySelector('#roomImagesCarousel');
         var carousel = new bootstrap.Carousel(myCarousel, {
-            interval: 3000, // Auto-slide every 3 seconds
+            interval: 3000,
             ride: 'carousel'
         });
+
+        function setActiveSlide(index) {
+            var myCarousel = new bootstrap.Carousel(document.querySelector('#roomImagesCarousel'));
+            myCarousel.to(index);
+        }
     </script>
 }

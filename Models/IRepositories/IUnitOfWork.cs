@@ -23,6 +23,7 @@ namespace Models.IRepositories
         IHotelImagesRepository HotelImagesRepository { get; }   
         IAmentitiesRepository AmentitiesRepository { get; }   
         IRoomImagesRepository RoomImagesRepository { get; }   
+        ICouponRepository CouponRepository { get; } 
         void Commit();
     }
 }

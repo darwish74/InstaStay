@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models.IRepositories;
 using Models.Models;
-
 namespace InstaStay.Areas.HotelManager.Controllers
 {
     [Area("hotelManager")]
@@ -110,5 +109,5 @@ namespace InstaStay.Areas.HotelManager.Controllers
             TempData["success"] = "No Amenity updates Added Successfully";
             return RedirectToAction("index", new { id = existingAmentity.HotelId });
         }
-        }
+    }
 }

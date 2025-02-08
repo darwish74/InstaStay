@@ -4,25 +4,33 @@
     var hotelImagesList = Model.HotelImages?.ToList() ?? new List<HotelImages>();
 }
 <div class="container my-5 mx-4">
-    <div class="card shadow-lg fade-in custom-card">
+    <div class="card shadow-lg fade-in custom-card rounded-4 border-0 overflow-hidden bg-gradient bg-opacity-25">
         <div class="row g-0">
-            <div class="col-md-5">
+            <div class="col-md-5 position-relative">
                 @if (!string.IsNullOrEmpty(Model.CoverImage))
                 {
-                    <img src="~/images/HotelImages/@Model.CoverImage" class="img-fluid rounded-start hover-zoom" alt="@Model.Name" style="height: 100%; width: 100%; object-fit: cover;">
+                    <img src="~/images/HotelImages/@Model.CoverImage" class="img-fluid rounded-start hover-zoom"
+                         alt="@Model.Name" style="height: 100%; width: 100%; object-fit: cover;">
                 }
                 else
                 {
                     <img src="~/images/default-hotel.jpg" class="img-fluid rounded-start" alt="Default Hotel Image">
                 }
+                <span class="position-absolute top-0 start-0 m-2 badge bg-warning text-dark fw-bold px-3 py-2">
+                    <i class="fas fa-star"></i> @Model.Stars Stars
+                </span>
             </div>
             <div class="col-md-7">
-                <div class="card-body">
-                    <h2 class="card-title text-primary">@Model.Name</h2>
-                    <p class="card-text text-dark">
-                        <i class="fas fa-map-marker-alt text-success"></i> @Model.Address
+                <div class="card-body bg-light p-4">
+                    <h2 class="card-title text-primary fw-bold">
+                        <i class="fas fa-hotel text-info me-2"></i>@Model.Name
+                    </h2>
+
+                    <p class="card-text text-muted fw-semibold">
+                        <i class="fas fa-map-marker-alt text-danger me-2"></i>@Model.Address
                     </p>
-                    <p class="card-text">
+
+                    <p class="card-text mb-2">
                         @for (int i = 0; i < Model.Stars; i++)
                         {
                             <i class="fas fa-star text-warning"></i>
@@ -32,17 +40,27 @@
                             <i class="far fa-star text-muted"></i>
                         }
                     </p>
-                    <p class="card-text">@Model.Description</p>
-                    <p class="card-text">
-                        <strong>Contact:</strong>
-                        <i class="fas fa-phone"></i> @Model.ContactInfo
+
+                    <p class="card-text text-secondary small">
+                        <i class="fas fa-info-circle text-primary me-2"></i>@Model.Description
                     </p>
+                    <p class="card-text fw-bold">
+                        <i class="fas fa-phone-alt text-success me-2"></i>@Model.ContactInfo
+                    </p>
+                    <div class="d-flex justify-content-end">
+                        <a href="javascript:history.back()" class="btn btn-primary rounded-pill">
+                            <i class="fas fa-arrow-left me-2"></i> Return
+                        </a>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
-    <div id="hotelImageCarousel" class="carousel slide mt-4 ms-1" data-bs-ride="carousel">
-        <div class="carousel-inner">
+</div>
+
+    <div id="hotelImageCarousel" class="carousel slide mt-4 ms-5 rounded-2" data-bs-ride="carousel">
+        <div class="carousel-inner rounded-3">
             @if (hotelImagesList.Any())
             {
                 @for (int i = 0; i < hotelImagesList.Count; i++)
@@ -71,7 +89,7 @@
         </button>
     </div>
 
-    <ul class="nav nav-tabs mt-4 fade-in" id="hotelTabs" role="tablist">
+    <ul class="nav nav-tabs mt-4 ms-3 fade-in" id="hotelTabs" role="tablist">
         <li class="nav-item" role="presentation">
             <a class="nav-link active" id="rooms-tab" data-bs-toggle="tab" href="#rooms" role="tab" aria-controls="rooms" aria-selected="true">Rooms</a>
         </li>
@@ -86,7 +104,7 @@
         </li>
     </ul>
 
-    <div class="tab-content mt-3 fade-in">
+    <div class="tab-content mt-3 ms-5 fade-in">
         <div class="tab-pane fade show active" id="rooms" role="tabpanel" aria-labelledby="rooms-tab">
             <div class="row">
                 @if (Model.Rooms != null && Model.Rooms.Any())
@@ -121,7 +139,7 @@
         <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
             <h3 class="mb-3">User Reviews</h3>
             <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#reviewModal">
-                Write a Review
+                <i class="fas fa-plus-circle text-black"></i> Write a Review
             </button>
 
             @if (Model.Reviews != null && Model.Reviews.Any())
@@ -163,38 +181,52 @@
                 <p class="text-danger">No promotions available.</p>
             }
         </div>
-        <div class="tab-pane fade" id="amenities" role="tabpanel" aria-labelledby="amenities-tab">
+        <div class="tab-pane fade show p-3" id="amenities" role="tabpanel" aria-labelledby="amenities-tab">
             @if (Model.Amentities != null && Model.Amentities.Any())
             {
-                <ul class="list-group">
+                <div class="row row-cols-1 row-cols-md-2 g-3">
                     @foreach (var amenity in Model.Amentities)
                     {
-                        <li class="list-group-item">
-                            <i class="fas fa-check text-success"></i> @amenity.Name
-                            @if (!string.IsNullOrEmpty(amenity.Description))
-                            {
-                                <p class="text-muted">@amenity.Description</p>
-                            }
-                            @if (!string.IsNullOrEmpty(amenity.Image))
-                            {
-                                <img src="~/images/Amentities/@amenity.Image" alt="@amenity.Name" class="img-thumbnail" width="100" />
-                            }
-                        </li>
+                        <div class="col">
+                            <div class="card shadow-sm border-0 p-3 bg-light bg-opacity-25 rounded-4 h-100 d-flex flex-column align-items-center justify-content-center">
+                                <div class="d-flex align-items-center w-100">
+                                    <div class="me-2">
+                                        <i class="@GetAmenityIcon(amenity.Name) text-warning text-opacity-50 fa-2x"></i>
+                                    </div>
+                                    <div class="flex-grow-1 text-center">
+                                        <h5 class="text-dark fw-bold m-0">@amenity.Name</h5>
+                                        @if (!string.IsNullOrEmpty(amenity.Description))
+                                        {
+                                            <p class="text-white fw-normal mt-1">@amenity.Description</p>
+                                        }
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(amenity.Image))
+                                    {
+                                        <img src="~/images/Amentities/@amenity.Image" alt="@amenity.Name"
+                                             class="img-thumbnail rounded-circle ms-2" width="60" height="60" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
                     }
-                </ul>
+                </div>
             }
             else
             {
-                <p class="text-danger">No amenities listed.</p>
+                <div class="alert alert-warning text-center">
+                    <i class="fas fa-info-circle"></i> No amenities listed.
+                </div>
             }
         </div>
+
+
     </div>
 </div>
-<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+<div class="modal fade ms-5" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title text-primary fw-bold " id="reviewModalLabel"><i class="fas fa-plus-circle text-black"></i> Write a Review</h5>
+                <h5 class="modal-title text-primary fw-bold " id="reviewModalLabel"> Write a Review</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form asp-action="AddReview" asp-controller="Review" method="post">
@@ -252,6 +284,34 @@
         background: linear-gradient(to right, #ff7e5f, #feb47b);
         color: white;
     }
+
+    .custom-card {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+        .custom-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+    .hover-zoom {
+        transition: transform 0.4s ease-in-out;
+    }
+
+        .hover-zoom:hover {
+            transform: scale(1.05);
+        }
+
+    .badge {
+        font-size: 14px;
+        padding: 6px 12px;
+        border-radius: 8px;
+    }
+
+    .card-body {
+        border-radius: 0 8px 8px 0;
+    }
+
 </style>
 @section scripts{
     @if (@TempData["success"] != null)
@@ -260,4 +320,20 @@
             toastr.success('@TempData["success"]')
         </script>
     }
+    @functions {
+    string GetAmenityIcon(string amenityName)
+    {
+        return amenityName.ToLower() switch
+        {
+            "wifi" => "fas fa-wifi",
+            "parking" => "fas fa-parking",
+            "pool" => "fas fa-swimmer",
+            "gym" => "fas fa-dumbbell",
+            "restaurant" => "fas fa-utensils",
+            "spa" => "fas fa-spa",
+            "bar" => "fas fa-cocktail",
+            _ => "fas fa-check"
+        };
+    }
+}
 }
