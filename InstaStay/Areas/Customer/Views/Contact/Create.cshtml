@@ -1,0 +1,59 @@
+﻿@using Models.Models
+@model ProblemReport
+
+@{
+    ViewData["Title"] = "Create";
+    
+}
+
+<h1 class="text-center text-primary mb-4">Create Complaint or Suggestion</h1>
+<hr />
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="Create" enctype="multipart/form-data" class="p-4 shadow-lg">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Request" class="form-label ">Request Type</label>
+                    <select asp-for="Request" class="form-select" required>
+                        <option selected disabled hidden>Open this select menu</option>
+                        <option value="Complaint">Complaint</option>
+                        <option value="Suggestion">Suggestion</option>
+                        
+                    </select>
+                    <span asp-validation-for="Request" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="ProblemDescription" class="form-label ">Your Request</label>
+                    <textarea asp-for="ProblemDescription" class="form-control" rows="4" placeholder="Enter your request here..."></textarea>
+                    <span asp-validation-for="ProblemDescription" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="PhoneNumber" class="form-label ">Phone Number (Optional)</label>
+                    <input asp-for="PhoneNumber" class="form-control" type="number" placeholder="Enter your phone number for contact (optional)" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="UserImgRequest" class="form-label ">Upload Image (Optional)</label>
+                    <input asp-for="UserImgRequest" class="form-control" type="file" name="ImgFile" />
+                    <span asp-validation-for="UserImgRequest" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Back to Home
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle"></i> Create
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

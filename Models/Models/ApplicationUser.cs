@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,8 @@ namespace Models.Models
         public string Photo { get; set; }
         public virtual ICollection<Booking> Bookings { get; set; }
         public virtual ICollection<Room> Wishlist { get; set; }
+        [ValidateNever]
+        public IList<Message>? Description { get; set; } = new List<Message>();
         public virtual ICollection<Notification> Notifications { get; set; }
         public bool? ISBlocked { get; set; } = false;
     }

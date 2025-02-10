@@ -32,6 +32,7 @@ namespace DataAccess.Data
         public DbSet<HotelImages> hotelImages { get; set; } 
         public DbSet<Amentities> Amentities { get; set; }
         public DbSet<Coupon> Coupons { get; set; }
+        public DbSet<Message> Message { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

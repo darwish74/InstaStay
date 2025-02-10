@@ -1,5 +1,7 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using DataAccess.Data
+@using Microsoft.AspNetCore.Identity
 @inject UserManager<ApplicationUser> _userManager
+@inject ApplicationDbContext Context
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,17 +37,25 @@
                         <li class="nav-item ">
                             <a class="nav-link active" href="/Customer/Home/Index">About</a>
                         </li>
+                       
+
                         @if (User.Identity.IsAuthenticated && User.IsInRole("Hotel Manager"))
                         {
 
                             <li class="nav-item ">
                                 <a class="nav-link active" href="/hotelManager/ManageHotel/Dashboard">Hotel Management</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="/Customer/Contact/create">ContactUs</a>
+                            </li>
                         }
                         @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link active" href="/Customer/Contact/Index">Contact</a>
+                                <a class="nav-link active" href="/Customer/Contact/Index">Contact Hotel</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="/Customer/Contact/create">ContactUs</a>
                             </li>
 
                         }
@@ -54,6 +64,7 @@
                             <li class="nav-item">
                                 <a class="nav-link active" href="/Admin/Dashboard/Index">Dashboard</a>
                             </li>
+                            
                         }
                         @if (User.Identity.IsAuthenticated)
                         {
@@ -77,8 +88,9 @@
                                     Welcome, @User.Identity.Name
                                 </a>
                             </li>
+
                             <li class="nav-item position-relative">
-                                <a class="nav-link active" asp-controller="Messages" asp-action="Inbox">
+                                <a class="nav-link active" asp-controller="Chat" asp-action="Index">
                                     <i class="fas fa-envelope"></i>
                                     @if (ViewBag.UnreadMessages > 0)
                                     {
@@ -86,8 +98,10 @@
                                             @ViewBag.UnreadMessages
                                         </span>
                                     }
+
                                 </a>
                             </li>
+
                             <li class="nav-item">
                                 <a class="nav-link active" asp-area="Identity" asp-controller="Account" asp-action="SignOut">
                                     <i class="fas fa-sign-out-alt"></i> Logout
@@ -140,6 +154,14 @@
     <script src="~/lib/toastr.Js/toastr.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/lib/signalr/signalr.min.js"></script>
+    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
+    <script type="module" src="~/js/site.js"></script> <!-- Marked as Module -->
+    @section Scripts {
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.18/signalr.min.js"></script>
+        <script src="/js/site.js"></script>
+    }
     <script>
         const lightTheme = document.getElementById('light-theme');
         const darkTheme = document.getElementById('dark-theme');
@@ -160,5 +182,6 @@
         });
     </script>
     @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("SignalR", required: false)
 </body>
 </html>

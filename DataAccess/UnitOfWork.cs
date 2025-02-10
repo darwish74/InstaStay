@@ -23,6 +23,8 @@ namespace DataAccess
         private IAmentitiesRepository _AmentitesRepository;
         private IRoomImagesRepository _RoomImagesRepository;
         private ICouponRepository _CouponRepository;
+        private IMessageRepository _MessageRepository;  
+
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -41,9 +43,14 @@ namespace DataAccess
         public IAmentitiesRepository AmentitiesRepository => _AmentitesRepository ??= new AmentitiesRepository(_context);
         public IRoomImagesRepository RoomImagesRepository => _RoomImagesRepository ??=new RoomImagesRepository(_context);   
         public ICouponRepository CouponRepository => _CouponRepository ??= new CouponRepository(_context);  
+        public IMessageRepository MessageRepository => _MessageRepository ??= new MessageRepository(_context);
         public void Commit()
         {
             _context.SaveChanges();
+        }
+        public Task CommitAsync()
+        {
+            return _context.SaveChangesAsync();
         }
         public void Dispose()
         {
