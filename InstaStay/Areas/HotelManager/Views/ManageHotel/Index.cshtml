@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Models.ViewModels.HotelManagerDashboardVM
+
+@{
     ViewData["Title"] = "Hotel Manager Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -11,29 +13,7 @@
         </script>
     }
 }
-<style>
-.sidebar-link {
-    transition: background-color 0.3s ease, color 0.3s ease;
-    padding: 10px 15px;
-    border-radius: 5px;
-    display: block;
-}
 
-.sidebar-link:hover {
-    background-color: #17a2b8;
-    color: #fff;
-    text-decoration: none;
-}
-
-.sidebar-link i {
-    transition: transform 0.3s ease;
-}
-
-.sidebar-link:hover i {
-    transform: scale(1.2);
-}
-
-</style>
 <div class="d-flex">
     <div class="bg-dark text-light p-3" style="width: 250px; min-height: 100vh;">
         <h4 class="mb-4 text-info">Hotel Manager</h4>
@@ -50,7 +30,7 @@
             </li>
             <li class="nav-item mb-2">
                 <a href="/HotelManager/ManageHotel/ShowAllHotels?UserName=@User.Identity.Name" class="nav-link text-light sidebar-link">
-                    <i class="fas fa-clipboard-list me-2"></i></i> Manage Hotels
+                    <i class="fas fa-clipboard-list me-2"></i> Manage Hotels
                 </a>
             </li>
             <li class="nav-item mb-2">
@@ -70,34 +50,28 @@
             </li>
         </ul>
     </div>
-
-    <!-- Main Content -->
     <div class="flex-grow-1 p-4">
         <h2 class="mb-4">Welcome, @User.Identity.Name</h2>
-
-        <!-- Metrics Cards -->
         <div class="row mb-4">
             <div class="col-md-4">
                 <div class="card shadow-sm p-3">
                     <h5>Total Bookings</h5>
-                    <p class="fs-4">120</p>
+                    <p class="fs-4">@Model.TotalBookings</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card shadow-sm p-3">
                     <h5>Checked-in Guests</h5>
-                    <p class="fs-4">45</p>
+                    <p class="fs-4">@Model.CheckedInGuests</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card shadow-sm p-3">
                     <h5>Pending Requests</h5>
-                    <p class="fs-4">10</p>
+                    <p class="fs-4">@Model.PendingRequests</p>
                 </div>
             </div>
         </div>
-
-        <!-- Room Status Table -->
         <div class="card shadow-sm p-4">
             <h4>Room Status</h4>
             <table class="table table-hover mt-3">
@@ -110,23 +84,33 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>101</td>
-                        <td><span class="badge bg-success">Occupied</span></td>
-                        <td>John Doe</td>
-                        <td>
-                            <button class="btn btn-sm btn-warning">Mark as Clean</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>102</td>
-                        <td><span class="badge bg-danger">Needs Cleaning</span></td>
-                        <td>-</td>
-                        <td>
-                            <button class="btn btn-sm btn-success">Assign</button>
-                        </td>
-                    </tr>
-                    <!-- Add more rows as needed -->
+                    @foreach (var room in Model.Rooms)
+                    {
+                        <tr>
+                            <td>@room.RoomType</td>
+                            <td>
+                                @if (room.Status == "Occupied")
+                                {
+                                    <span class="badge bg-success">Occupied</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Available</span>
+                                }
+                            </td>
+                            <td>@room.GuestName</td>
+                            <td>
+                                @if (room.Status == "Occupied")
+                                {
+                                    <button class="btn btn-sm btn-warning">Mark as Clean</button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-sm btn-success">Assign</button>
+                                }
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>

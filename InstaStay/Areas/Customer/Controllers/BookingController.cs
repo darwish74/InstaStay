@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Models.IRepositories;
 using Models.Models;
+using Models.Utilities;
 using Models.ViewModels;
 using System;
 using System.Linq;
@@ -17,10 +18,13 @@ namespace InstaStay.Areas.Customer.Controllers
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly UserManager<ApplicationUser> userManager;
-        public BookingController(IUnitOfWork unitOfWork,UserManager<ApplicationUser> userManager)
+        private readonly IEmailSender emailSender;
+
+        public BookingController(IUnitOfWork unitOfWork,UserManager<ApplicationUser> userManager,IEmailSender emailSender)
         {
             this.unitOfWork = unitOfWork;
             this.userManager = userManager;
+            this.emailSender = emailSender;
         }
         public async Task<IActionResult> Book(int id)
         {
@@ -36,7 +40,6 @@ namespace InstaStay.Areas.Customer.Controllers
                 TempData["success"] = "This room is currently unavailable.";
                 return RedirectToAction("Index", "Home");
             }
-
             var model = new BookingVM
             {
                 RoomId = room.Id,
@@ -50,8 +53,6 @@ namespace InstaStay.Areas.Customer.Controllers
 
             return View(model);
         }
-
-
         [HttpGet]
         public IActionResult CheckRoomAvailability(int roomId, string checkInDate, string checkOutDate)
         {
@@ -83,12 +84,16 @@ namespace InstaStay.Areas.Customer.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateBooking(BookingVM model)
         {
+            if (model.CheckOutDate <= model.CheckINDate)
+            {
+                ModelState.AddModelError("", "Check-out date must be after the check-in date.");
+                return View("Book", model);
+            }
             var user = await userManager.GetUserAsync(User);
             if (user == null)
             {
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
-
             var room = unitOfWork.roomRepository.GetOne(e => e.Id == model.RoomId);
             if (room == null || !room.Availbility)
             {
@@ -96,16 +101,13 @@ namespace InstaStay.Areas.Customer.Controllers
                 model.IsAvailable = false;
                 return View("Book", model);
             }
-
             if (!IsRoomAvailable(model.RoomId, model.CheckINDate, model.CheckOutDate))
             {
                 ModelState.AddModelError("", "Sorry, this room is already booked for the selected dates.");
                 model.IsAvailable = false;
                 return View("Book", model);
             }
-
             decimal totalAmount = (decimal)(room.PricePerNight * (model.CheckOutDate - model.CheckINDate).Days);
-
             if (!string.IsNullOrEmpty(model.CouponCode))
             {
                 var coupon = unitOfWork.CouponRepository.GetOne(c => c.Code == model.CouponCode && c.IsActive);
@@ -126,7 +128,6 @@ namespace InstaStay.Areas.Customer.Controllers
                     return View("Book", model);
                 }
             }
-
             var booking = new Booking
             {
                 UserId = user.Id,
@@ -137,13 +138,12 @@ namespace InstaStay.Areas.Customer.Controllers
                 BookingStatus = "Pending",
                 TotalAmount = totalAmount
             };
-
             unitOfWork.BookingRepository.Create(booking);
             unitOfWork.Commit();
+
             TempData["success"] = "Room booked successfully";
             return RedirectToAction("Index", "Home");
         }
-
         [HttpGet]
         public async Task<IActionResult> MyBookings()
         {

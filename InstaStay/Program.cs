@@ -1,12 +1,13 @@
 using DataAccess;
 using DataAccess.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Models.IRepositories;
 using Models.Models;
 using Models.Utilities;
 using Stripe;
-
+using IEmailSender = Models.Utilities.IEmailSender;
 namespace InstaStay
 {
     public class Program
@@ -29,7 +30,6 @@ namespace InstaStay
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddSignalR();
             builder.Services.AddAuthentication().AddGoogle(googleOptions =>
@@ -37,7 +37,8 @@ namespace InstaStay
                 googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
                 googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
             });
-
+            builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
             var app = builder.Build();
             if (!app.Environment.IsDevelopment())
             {

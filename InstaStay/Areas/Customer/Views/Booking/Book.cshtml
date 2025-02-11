@@ -55,3 +55,16 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("submitBooking").addEventListener("click", function (event) {
+            let checkInDate = new Date(document.getElementById("CheckINDate").value);
+            let checkOutDate = new Date(document.getElementById("CheckOutDate").value);
+
+            if (checkOutDate <= checkInDate) {
+                alert("Check-out date must be after the check-in date.");
+                event.preventDefault();
+            }
+        });
+    });
+</script>

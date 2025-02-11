@@ -39,7 +39,7 @@
                         <td>
                             @if (item.BookingStatus == "Pending")
                             {
-                                <a class="btn btn-outline-success btn-sm animate-hover" asp-action="Pay" asp-controller="Payment" asp-route-id="@item.Id">
+                                <a class="btn btn-outline-success btn-sm animate-hover" asp-action="PaySingleBooking" asp-controller="Payment" asp-route-id="@item.Id">
                                     <i class="fas fa-credit-card"></i> Pay Now
                                 </a>
                             }
@@ -65,8 +65,9 @@
     </div>
     <div class="card shadow-lg p-3 bg-white rounded text-center">
         <div class="card-body">
-            <h3 class="fw-bold text-primary">Total Amount: <span class="text-success">@totalAmount.ToString("C")</span></h3>
-            <a href="/Customer/Payment/Pay" class="btn btn-primary mt-3 animate-hover">
+            <h3 class="fw-bold text-primary">
+            <span>Total Amount: $@Model.Where(b => b.BookingStatus == "Pending").Sum(b => b.TotalAmount)</span>
+            <a href="/Customer/Payment/PayAllBookings" class="btn btn-primary mt-3 animate-hover">
                 <i class="fas fa-shopping-cart"></i> Proceed to Checkout
             </a>
         </div>
@@ -80,6 +81,33 @@
         </script>
     }
 }
+<script>
+    $(document).ready(function () {
+        $(".pay-now-btn").click(function (e) {
+            e.preventDefault();
+
+            var bookingId = $(this).data("booking-id");
+            var button = $(this);
+
+            $.ajax({
+                url: "/Customer/Payment/PaymentSuccess",
+                type: "POST",
+                data: { bookingId: bookingId },
+                success: function (response) {
+                    if (response.success) {
+                        $("#totalAmount").text("$" + response.updatedTotal.toFixed(2));
+                        button.closest("tr").find(".booking-status").text("Confirmed")
+                            .removeClass("badge-warning").addClass("badge-success");
+                        button.replaceWith('<span class="badge badge-secondary">Payment Locked</span>');
+                    }
+                },
+                error: function () {
+                    alert("Payment failed. Try again.");
+                }
+            });
+        });
+    });
+</script>
 <style>
     .fade-in {
         animation: fadeIn 0.8s ease-in-out;
