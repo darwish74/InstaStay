@@ -2,6 +2,14 @@
 @{
     ViewData["Title"] = "Problem Reports";
 }
+@section Scripts {
+    @if (TempData["success"] != null)
+    {
+        <script>
+            toastr.success('@TempData["success"]');
+        </script>
+    }
+}
 <h1 class="text-center">Problem Reports</h1>
 
 <table class="table table-striped table-bordered text-center align-content-sm-center mx-3">
