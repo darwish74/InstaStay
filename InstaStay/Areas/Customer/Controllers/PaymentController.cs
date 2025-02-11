@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 namespace InstaStay.Areas.Customer.Controllers
 {
     [Area("Customer")]
@@ -23,7 +22,6 @@ namespace InstaStay.Areas.Customer.Controllers
             this.userManager = userManager;
             this.unitOfWork = unitOfWork;
         }
-
         public async Task<IActionResult> Pay(int id)
         {
             var userId = userManager.GetUserId(User);
@@ -46,16 +44,14 @@ namespace InstaStay.Areas.Customer.Controllers
             {
                 bookings = unitOfWork.BookingRepository
                     .Get(b => b.UserId == userId && b.BookingStatus == "Pending")
-                    .Include(b => b.Room) // Ensure Room is loaded
+                    .Include(b => b.Room)
                     .ToList();
             }
-
             if (!bookings.Any())
             {
                 TempData["error"] = "No pending bookings available for payment.";
                 return RedirectToAction("MyBookings", "Booking");
             }
-
             var options = new SessionCreateOptions
             {
                 PaymentMethodTypes = new List<string> { "card" },
@@ -64,10 +60,8 @@ namespace InstaStay.Areas.Customer.Controllers
                 SuccessUrl = Url.Action("PaymentSuccess", "Payment", new { area = "Customer" }, Request.Scheme),
                 CancelUrl = Url.Action("PaymentCancel", "Payment", new { area = "Customer" }, Request.Scheme),
             };
-
             foreach (var item in bookings)
             {
-                // Check if Room or TotalAmount is null
                 if (item.Room == null)
                 {
                     TempData["error"] = $"Booking ID {item.Id} has no associated room.";
@@ -95,7 +89,6 @@ namespace InstaStay.Areas.Customer.Controllers
                     Quantity = 1,
                 });
             }
-
             try
             {
                 var service = new SessionService();
@@ -108,7 +101,6 @@ namespace InstaStay.Areas.Customer.Controllers
                 return RedirectToAction("MyBookings", "Booking");
             }
         }
-
         public IActionResult PaymentSuccess()
         {
             var userId = userManager.GetUserId(User);
@@ -126,7 +118,6 @@ namespace InstaStay.Areas.Customer.Controllers
             TempData["success"] = "Payment successful! Your bookings are confirmed.";
             return RedirectToAction("MyBookings", "Booking");
         }
-
         public IActionResult PaymentCancel()
         {
             TempData["error"] = "Payment was canceled. Please try again.";

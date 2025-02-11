@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Models.Models.Booking>
 @{
     ViewData["Title"] = "My Bookings";
-    double totalAmount = Model.Sum(b => b.TotalAmount);
+    double totalAmount = Model.Sum(b => (double)b.TotalAmount);
 }
 <h1 class="text-center mb-4 mt-3 fw-bold text-primary">🛒 My Bookings</h1>
 

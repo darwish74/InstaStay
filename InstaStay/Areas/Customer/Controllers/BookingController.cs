@@ -22,13 +22,19 @@ namespace InstaStay.Areas.Customer.Controllers
             this.unitOfWork = unitOfWork;
             this.userManager = userManager;
         }
-        public IActionResult Book(int id)
+        public async Task<IActionResult> Book(int id)
         {
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                TempData["success"] = "You Can't Book Room Please First Login or Register";
+                return RedirectToAction("Login", "Account", new { area = "Identity" });
+            }
             var room = unitOfWork.roomRepository.GetOne(e => e.Id == id);
             if (room == null || !room.Availbility)
             {
                 TempData["success"] = "This room is currently unavailable.";
-                return RedirectToAction("Index", "Home"); 
+                return RedirectToAction("Index", "Home");
             }
 
             var model = new BookingVM
@@ -44,6 +50,7 @@ namespace InstaStay.Areas.Customer.Controllers
 
             return View(model);
         }
+
 
         [HttpGet]
         public IActionResult CheckRoomAvailability(int roomId, string checkInDate, string checkOutDate)
@@ -73,67 +80,68 @@ namespace InstaStay.Areas.Customer.Controllers
             }
             return Json(new { valid = false });
         }
-    [HttpPost]
-    public async Task<IActionResult> CreateBooking(BookingVM model)
-    {
-    var user = await userManager.GetUserAsync(User);
-    if (user == null)
-    {
-        return RedirectToAction("Login", "Account", new { area = "Identity" });
-    }
-
-    var room = unitOfWork.roomRepository.GetOne(e => e.Id == model.RoomId);
-    if (room == null || !room.Availbility)
-    {
-        ModelState.AddModelError("", "Sorry, this room is no longer available.");
-        model.IsAvailable = false;
-        return View("Book", model);
-    }
-
-    if (!IsRoomAvailable(model.RoomId, model.CheckINDate, model.CheckOutDate))
-    {
-        ModelState.AddModelError("", "Sorry, this room is already booked for the selected dates.");
-        model.IsAvailable = false;
-        return View("Book", model);
-    }
-
-    decimal totalAmount = (decimal)(room.PricePerNight * (model.CheckOutDate - model.CheckINDate).Days);
-    
-    if (!string.IsNullOrEmpty(model.CouponCode))
-    {
-        var coupon = unitOfWork.CouponRepository.GetOne(c => c.Code == model.CouponCode && c.IsActive);
-        if (coupon != null && DateTime.Now >= coupon.ValidFrom && DateTime.Now <= coupon.ValidTo)
+        [HttpPost]
+        public async Task<IActionResult> CreateBooking(BookingVM model)
         {
-            if (coupon.DiscountType == "Percentage")
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
             {
-                totalAmount -= totalAmount * (coupon.DiscountValue / 100);
+                return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
-            else
-            {
-                totalAmount -= coupon.DiscountValue;
-            }
-        }
-         else
-          {
-            ModelState.AddModelError("", "Invalid or expired coupon.");
-            return View("Book", model);
-          }
-          }
-          var booking = new Booking
-          {
-           UserId = user.Id,
-           HotelId = room.HotelId,
-           RoomId = model.RoomId,
-           CheckINDate = model.CheckINDate,
-           CheckOutDate = model.CheckOutDate,
-           BookingStatus = "Pending",
-           TotalAmount = (int)totalAmount
-         };
 
-          unitOfWork.BookingRepository.Create(booking);
-          unitOfWork.Commit();
-          TempData["success"] = "Room booked successfully";
-          return RedirectToAction("Index", "Home");
+            var room = unitOfWork.roomRepository.GetOne(e => e.Id == model.RoomId);
+            if (room == null || !room.Availbility)
+            {
+                ModelState.AddModelError("", "Sorry, this room is no longer available.");
+                model.IsAvailable = false;
+                return View("Book", model);
+            }
+
+            if (!IsRoomAvailable(model.RoomId, model.CheckINDate, model.CheckOutDate))
+            {
+                ModelState.AddModelError("", "Sorry, this room is already booked for the selected dates.");
+                model.IsAvailable = false;
+                return View("Book", model);
+            }
+
+            decimal totalAmount = (decimal)(room.PricePerNight * (model.CheckOutDate - model.CheckINDate).Days);
+
+            if (!string.IsNullOrEmpty(model.CouponCode))
+            {
+                var coupon = unitOfWork.CouponRepository.GetOne(c => c.Code == model.CouponCode && c.IsActive);
+                if (coupon != null && DateTime.Now >= coupon.ValidFrom && DateTime.Now <= coupon.ValidTo)
+                {
+                    if (coupon.DiscountType == "Percentage")
+                    {
+                        totalAmount -= totalAmount * (coupon.DiscountValue / 100);
+                    }
+                    else
+                    {
+                        totalAmount -= coupon.DiscountValue;
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid or expired coupon.");
+                    return View("Book", model);
+                }
+            }
+
+            var booking = new Booking
+            {
+                UserId = user.Id,
+                HotelId = room.HotelId,
+                RoomId = model.RoomId,
+                CheckINDate = model.CheckINDate,
+                CheckOutDate = model.CheckOutDate,
+                BookingStatus = "Pending",
+                TotalAmount = totalAmount
+            };
+
+            unitOfWork.BookingRepository.Create(booking);
+            unitOfWork.Commit();
+            TempData["success"] = "Room booked successfully";
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
