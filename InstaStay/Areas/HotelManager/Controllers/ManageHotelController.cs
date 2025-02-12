@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models.IRepositories;
 using Models.Models;
+using Models.ViewModels;
 namespace InstaStay.Areas.hotelManager.Controllers
 {
     [Area("hotelManager")]
@@ -24,9 +25,33 @@ namespace InstaStay.Areas.hotelManager.Controllers
             this.roleManager = roleManager;
             this.unitOfWork = unitOfWork;
         }
-        public IActionResult Dashboard()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var userName = User.Identity.Name;
+            var hotels = await unitOfWork.hotelRepository.Get(h => h.HotelManager.Name == userName).ToListAsync();
+            var totalBookings = await unitOfWork.BookingRepository.Get(b => hotels.Select(h => h.Id).Contains(b.HotelId)).CountAsync();
+            var checkedInGuests = await unitOfWork.BookingRepository.Get(b => hotels.Select(h => h.Id).Contains(b.HotelId) && b.BookingStatus == "CheckedIn").CountAsync();
+            var pendingRequests = await unitOfWork.BookingRepository.Get(b => hotels.Select(h => h.Id).Contains(b.HotelId) && b.BookingStatus == "Pending").CountAsync();
+
+            var rooms = await unitOfWork.roomRepository.Get(r => hotels.Select(h => h.Id).Contains(r.HotelId)).Include(r => r.Bookings).ToListAsync();
+
+            var model = new HotelManagerDashboardVM
+            {
+                TotalBookings = totalBookings,
+                CheckedInGuests = checkedInGuests,
+                PendingRequests = pendingRequests,
+                Rooms = rooms.Select(r => new RoomStatusVM
+                {
+                    RoomType = r.RoomType,
+                    Status = r.Availbility != null ? "Occupied" : "Available",
+                    GuestName = r.Bookings
+                        .Where(b => b.BookingStatus == "CheckedIn")
+                        .OrderByDescending(b => b.CheckINDate)
+                        .Select(b => b.User.UserName)
+                        .FirstOrDefault() ?? "-"
+                }).ToList()
+            };
+            return View(model);
         }
         [HttpGet]
         public IActionResult NewHotelRequest()

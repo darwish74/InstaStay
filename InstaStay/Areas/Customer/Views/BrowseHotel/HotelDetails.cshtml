@@ -10,7 +10,8 @@
                 @if (!string.IsNullOrEmpty(Model.CoverImage))
                 {
                     <img src="~/images/HotelImages/@Model.CoverImage" class="img-fluid rounded-start hover-zoom"
-                         alt="@Model.Name" style="height: 100%; width: 100%; object-fit: cover;">
+                         alt="@Model.Name" style="object-fit: cover; max-width: 100%; height: auto;">
+
                 }
                 else
                 {
@@ -67,14 +68,17 @@
                 {
                     var image = hotelImagesList[i];
                     <div class="carousel-item @(i == 0 ? "active" : "")">
-                        <img src="~/images/HIL/@image.ImageURL" class="d-block w-100" alt="Hotel Image @i">
+                    <img src="~/images/HIL/@image.ImageURL" class="d-block w-100" alt="Hotel Image @i"
+                         style="object-fit: cover; height: auto; max-height: 500px;">
+
                     </div>
                 }
             }
             else
             {
                 <div class="carousel-item active">
-                    <img src="~/images/HotelImages/@Model.CoverImage" class="d-block w-100" alt="Default Hotel Image">
+                <img src="~/images/HotelImages/@Model.CoverImage" class="img-fluid rounded-start hover-zoom"
+                     alt="@Model.Name" style="object-fit: cover; max-width: 100%; height: auto;">
                 </div>
             }
         </div>
@@ -312,6 +316,10 @@
         border-radius: 0 8px 8px 0;
     }
 
+    img {
+        max-width: 100%;
+        height: auto;
+    }
 </style>
 @section scripts{
     @if (@TempData["success"] != null)

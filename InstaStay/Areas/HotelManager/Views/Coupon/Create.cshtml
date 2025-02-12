@@ -1,0 +1,101 @@
+﻿@model Models.Models.Coupon
+
+@{
+    ViewData["Title"] = "Create Coupon";
+}
+
+<div class="container mt-4">
+    <div class="card shadow p-4 bg-light">
+        <h2 class="text-center text-primary">
+            <i class="bi bi-ticket-perforated text-danger"></i> Create Coupon
+        </h2>
+        <hr />
+        <form id="couponForm" asp-action="Create" novalidate>
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            <div class="mb-3">
+                <label asp-for="Code" class="form-label text-dark fw-bold">Coupon Code</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-warning text-white"><i class="bi bi-tag"></i></span>
+                    <input asp-for="Code" class="form-control border-info" id="Code" placeholder="Enter coupon code" required />
+                </div>
+                <div class="invalid-feedback text-danger">Coupon code must be alphanumeric (e.g., SAVE10).</div>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DiscountType" class="form-label text-dark fw-bold">Discount Type</label>
+                <select asp-for="DiscountType" class="form-select border-info" id="DiscountType" required>
+                    <option value="Percentage">Percentage (%)</option>
+                    <option value="Fixed">Fixed Amount ($)</option>
+                </select>
+                <div class="invalid-feedback text-danger">Please select a discount type.</div>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DiscountValue" class="form-label text-dark fw-bold">Discount Value</label>
+                <input asp-for="DiscountValue" type="number" class="form-control border-info" id="DiscountValue" placeholder="Enter discount value" required />
+                <div class="invalid-feedback text-danger">Discount must be a positive number.</div>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ValidFrom" class="form-label text-dark fw-bold">Valid From</label>
+                <input asp-for="ValidFrom" type="date" class="form-control border-info" id="ValidFrom" required />
+                <div class="invalid-feedback text-danger">Please select a valid start date.</div>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ValidTo" class="form-label text-dark fw-bold">Valid To</label>
+                <input asp-for="ValidTo" type="date" class="form-control border-info" id="ValidTo" required />
+                <div class="invalid-feedback text-danger">End date must be after the start date.</div>
+            </div>
+            <div class="mb-3 form-check">
+                <input class="form-check-input border-success" asp-for="IsActive" id="IsActive" />
+                <label class="form-check-label text-dark fw-bold"> Active Coupon</label>
+            </div>
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-outline-danger">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-plus-circle"></i> Create Coupon
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            $("#couponForm").on("submit", function (e) {
+                let isValid = true;
+                let code = $("#Code").val().trim();
+                if (!/^[a-zA-Z0-9]+$/.test(code)) {
+                    $("#Code").addClass("is-invalid");
+                    isValid = false;
+                } else {
+                    $("#Code").removeClass("is-invalid").addClass("is-valid");
+                }
+                let discountValue = parseFloat($("#DiscountValue").val());
+                if (isNaN(discountValue) || discountValue <= 0) {
+                    $("#DiscountValue").addClass("is-invalid");
+                    isValid = false;
+                } else {
+                    $("#DiscountValue").removeClass("is-invalid").addClass("is-valid");
+                }
+                let validFrom = new Date($("#ValidFrom").val());
+                let validTo = new Date($("#ValidTo").val());
+                if (validTo <= validFrom) {
+                    $("#ValidTo").addClass("is-invalid");
+                    isValid = false;
+                } else {
+                    $("#ValidTo").removeClass("is-invalid").addClass("is-valid");
+                }
+
+                if (!isValid) {
+                    e.preventDefault();
+                }
+            });
+            $("input, select").on("input change", function () {
+                $(this).removeClass("is-invalid");
+            });
+        });
+    </script>
+}

@@ -10,6 +10,6 @@ namespace Models.IRepositories
 {
     public interface ICouponRepository:IBaseRepositories<Coupon>
     {
-
+        public IEnumerable<Coupon> GetCouponsByManager(string managerId);
     }
 }

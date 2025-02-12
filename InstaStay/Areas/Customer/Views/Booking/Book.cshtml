@@ -17,7 +17,9 @@
                     }
                 </div>
             }
-
+            <a href="javascript:history.back()" class="btn btn-secondary shadow-sm">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
             <form asp-action="CreateBooking" method="post">
                 <input type="hidden" asp-for="RoomId" id="RoomId" />
                 <div class="row">
@@ -40,17 +42,12 @@
                         <input type="date" asp-for="CheckOutDate" class="form-control" id="CheckOutDate" required />
                     </div>
                 </div>
-
-                @if (Model != null && !Model.IsAvailable)
-                {
-                    <div class="alert alert-danger">
-                        <p>Sorry, this room is no longer available.</p>
-                    </div>
-                }
-
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-ticket-alt"></i> Coupon Code (Optional):</label>
+                    <input type="text" asp-for="CouponCode" class="form-control" id="CouponCode" />
+                </div>
                 <div class="text-center">
-                    <button type="submit" class="btn btn-success btn-lg w-100" id="submitBooking"
-                    @(Model != null && !Model.IsAvailable ? "disabled" : "")>
+                    <button type="submit" class="btn btn-success btn-lg w-100" id="submitBooking">
                         <i class="fas fa-book"></i> Book Now
                     </button>
                 </div>
@@ -58,3 +55,16 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("submitBooking").addEventListener("click", function (event) {
+            let checkInDate = new Date(document.getElementById("CheckINDate").value);
+            let checkOutDate = new Date(document.getElementById("CheckOutDate").value);
+
+            if (checkOutDate <= checkInDate) {
+                alert("Check-out date must be after the check-in date.");
+                event.preventDefault();
+            }
+        });
+    });
+</script>
