@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Models.Models.Booking>
+
+@{
+    ViewData["Title"] = "All Booking";
+}
+<div class="m-3 text-center"><h1>All Bookings</h1></div>
+
+
+@if (!Model.Any())
+{
+    <p>No bookings found for this hotel.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Id)</th>
+                <th>@Html.DisplayNameFor(model => model.User.UserName)</th>
+                <th>@Html.DisplayNameFor(model => model.Room)</th>
+                <th>@Html.DisplayNameFor(model => model.CheckINDate)</th>
+                <th>@Html.DisplayNameFor(model => model.CheckOutDate)</th>
+                <th>@Html.DisplayNameFor(model => model.TotalAmount)</th>
+                <th>@Html.DisplayNameFor(model => model.BookingStatus)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                    <td>@Html.DisplayFor(modelItem => item.User.UserName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Room.RoomType)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CheckINDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CheckOutDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TotalAmount)</td>
+                    <td>@Html.DisplayFor(modelItem => item.BookingStatus)</td>
+                    <td>
+                        <a href="#" class="btn btn-dark">Details</a> 
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
