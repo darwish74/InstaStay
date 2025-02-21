@@ -28,6 +28,7 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     transition: background 0.3s ease, color 0.3s ease;
+    overflow-x: hidden;
 }
 
 .theme-icon {
@@ -70,6 +71,8 @@ main {
     color: var(--text-color);
     transition: background-color 0.3s ease, color 0.3s ease;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+    overflow: hidden;
 }
 
     .navbar .nav-link {
@@ -225,4 +228,11 @@ body.light-theme {
 body.dark-theme {
     background-color: #121212;
     color: #ffffff;
+}
+.container {
+    max-width: 100%;
+}
+.theme-icon {
+    max-width: 40px; /* Adjust width */
+    padding: 5px;
 }
