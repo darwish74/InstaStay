@@ -2,7 +2,6 @@ html, body, footer {
     margin: 0;
     padding: 0;
 }
-
 html {
     font-size: 14px;
 }
@@ -12,7 +11,6 @@ html {
         font-size: 16px;
     }
 }
-
 .btn:focus,
 .btn:active:focus,
 .btn-link.nav-link:focus,
@@ -218,4 +216,13 @@ footer {
 
 .transition {
     transition: all 0.3s ease-in-out;
+}
+body.light-theme {
+    background-color: #ffffff;
+    color: #000;
+}
+
+body.dark-theme {
+    background-color: #121212;
+    color: #ffffff;
 }

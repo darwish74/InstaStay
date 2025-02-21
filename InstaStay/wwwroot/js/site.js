@@ -211,3 +211,37 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+te.js file to handle themes correctly:
+
+javascript
+Copy
+Edit
+document.addEventListener("DOMContentLoaded", function () {
+    const themeToggle = document.querySelector(".theme-icon");
+    const lightThemeBtn = document.getElementById("light-theme");
+    const darkThemeBtn = document.getElementById("dark-theme");
+    const body = document.body;
+
+    // Load theme from localStorage
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+        body.classList.remove("light-theme", "dark-theme");
+        body.classList.add(savedTheme);
+    }
+
+    // Apply Light Theme
+    lightThemeBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        body.classList.remove("dark-theme");
+        body.classList.add("light-theme");
+        localStorage.setItem("theme", "light-theme");
+    });
+
+    // Apply Dark Theme
+    darkThemeBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        body.classList.remove("light-theme");
+        body.classList.add("dark-theme");
+        localStorage.setItem("theme", "dark-theme");
+    });
+});

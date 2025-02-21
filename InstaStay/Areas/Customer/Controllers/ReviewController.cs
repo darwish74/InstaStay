@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using DataAccess;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models.IRepositories;
@@ -24,7 +25,6 @@ namespace InstaStay.Areas.Customer.Controllers
             unitOfWork.ActivityLogRepository.Create(activity);
             unitOfWork.Commit();
         }
-
         public ReviewController(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
         {
             this.unitOfWork = unitOfWork;
