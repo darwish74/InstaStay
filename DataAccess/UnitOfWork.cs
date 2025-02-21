@@ -24,6 +24,7 @@ namespace DataAccess
         private IRoomImagesRepository _RoomImagesRepository;
         private ICouponRepository _CouponRepository;
         private IMessageRepository _MessageRepository;  
+        private IActivityLogRepository _ActivityLogRepository;
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -44,6 +45,7 @@ namespace DataAccess
         public IRoomImagesRepository RoomImagesRepository => _RoomImagesRepository ??=new RoomImagesRepository(_context);   
         public ICouponRepository CouponRepository => _CouponRepository ??= new CouponRepository(_context);  
         public IMessageRepository MessageRepository => _MessageRepository ??= new MessageRepository(_context);
+        public IActivityLogRepository ActivityLogRepository => _ActivityLogRepository ??= new ActivityLogRepository(_context);
         public void Commit()
         {
             _context.SaveChanges();

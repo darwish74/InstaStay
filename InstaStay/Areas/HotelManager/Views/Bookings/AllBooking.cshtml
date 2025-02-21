@@ -3,44 +3,55 @@
 @{
     ViewData["Title"] = "All Booking";
 }
-<div class="m-3 text-center"><h1>All Bookings</h1></div>
 
+<div class="container mt-4">
+    <h2 class="text-center mb-4">📅 All Bookings</h2>
 
-@if (!Model.Any())
-{
-    <p>No bookings found for this hotel.</p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>@Html.DisplayNameFor(model => model.Id)</th>
-                <th>@Html.DisplayNameFor(model => model.User.UserName)</th>
-                <th>@Html.DisplayNameFor(model => model.Room)</th>
-                <th>@Html.DisplayNameFor(model => model.CheckINDate)</th>
-                <th>@Html.DisplayNameFor(model => model.CheckOutDate)</th>
-                <th>@Html.DisplayNameFor(model => model.TotalAmount)</th>
-                <th>@Html.DisplayNameFor(model => model.BookingStatus)</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning text-center">No bookings found for this hotel.</div>
+    }
+    else
+    {
+        <table class="table table-hover table-bordered text-center">
+            <thead class="table-dark">
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.Id)</td>
-                    <td>@Html.DisplayFor(modelItem => item.User.UserName)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Room.RoomType)</td>
-                    <td>@Html.DisplayFor(modelItem => item.CheckINDate)</td>
-                    <td>@Html.DisplayFor(modelItem => item.CheckOutDate)</td>
-                    <td>@Html.DisplayFor(modelItem => item.TotalAmount)</td>
-                    <td>@Html.DisplayFor(modelItem => item.BookingStatus)</td>
-                    <td>
-                        <a href="#" class="btn btn-dark">Details</a> 
-                    </td>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Room Type</th>
+                    <th>Check-In Date</th>
+                    <th>Check-Out Date</th>
+                    <th>Total Amount ($)</th>
+                    <th>Status</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.User.UserName</td>
+                        <td>@item.Room.RoomType</td>
+                        <td>@item.CheckINDate.ToString("yyyy-MM-dd")</td>
+                        <td>@item.CheckOutDate.ToString("yyyy-MM-dd")</td>
+                        <td>@item.TotalAmount.ToString("C")</td>
+                        <td>
+                            @if (item.BookingStatus == "Confirmed")
+                            {
+                                <span class="badge bg-success">Confirmed</span>
+                            }
+                            else if (item.BookingStatus == "Pending")
+                            {
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Canceled</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

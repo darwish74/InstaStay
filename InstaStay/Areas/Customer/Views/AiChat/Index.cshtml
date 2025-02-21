@@ -1,0 +1,142 @@
+﻿@{
+    ViewData["Title"] = "AI Chat";
+}
+
+<div class="container d-flex flex-column align-items-center mt-5">
+    <h1 class="text-center fw-bold chat-title">AI Chat</h1>
+
+    <div class="chat-box p-3 border rounded shadow bg-secondary">
+        <div id="chatMessages" class="chat-content"></div>
+    </div>
+
+    <div class="input-group mt-4 bg-secondary">
+        <input type="text" id="userInput" class="form-control chat-input" placeholder="Type your message..." />
+        <button id="sendBtn" class="btn btn-primary">Send</button>
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-text: #222;
+        --secondary-text: #fff;
+        --primary-bg: #f8f9fa;
+        --secondary-bg: #007bff;
+    }
+
+    body.dark-mode {
+        --primary-text: #f1f1f1;
+        --secondary-text: #222;
+        --primary-bg: #1e1e1e;
+        --secondary-bg: #0056b3;
+    }
+
+    .chat-title {
+        font-size: 2rem;
+        color: var(--secondary-bg);
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .chat-box {
+        width: 100%;
+        max-width: 600px;
+        height: 400px;
+        overflow-y: auto;
+        border-radius: 12px;
+        padding: 15px;
+        background: var(--primary-bg);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .message {
+        padding: 12px 18px;
+        margin: 8px;
+        border-radius: 20px;
+        max-width: 75%;
+        word-wrap: break-word;
+        font-size: 16px;
+        line-height: 1.5;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .user-message {
+        align-self: flex-end;
+        background: var(--secondary-bg);
+        color: var(--secondary-text);
+    }
+
+    .ai-message {
+        align-self: flex-start;
+        background: #e9ecef;
+        color: var(--primary-text);
+    }
+
+    .loading {
+        font-style: italic;
+        color: gray;
+    }
+
+    .chat-input {
+        font-size: 1.1rem;
+        border-radius: 8px;
+        padding: 12px;
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<script>
+    document.getElementById("sendBtn").addEventListener("click", sendMessage);
+    document.getElementById("userInput").addEventListener("keypress", function (e) {
+        if (e.key === "Enter") sendMessage();
+    });
+
+    function sendMessage() {
+        let userInput = document.getElementById("userInput").value.trim();
+        if (!userInput) return;
+
+        let chatMessages = document.getElementById("chatMessages");
+
+        let userMessageDiv = document.createElement("div");
+        userMessageDiv.className = "message user-message";
+        userMessageDiv.innerHTML = `<strong>You:</strong> ${userInput}`;
+        chatMessages.appendChild(userMessageDiv);
+
+        let loadingDiv = document.createElement("div");
+        loadingDiv.className = "message ai-message loading";
+        loadingDiv.innerText = "AI is typing...";
+        chatMessages.appendChild(loadingDiv);
+
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        fetch("/Customer/AiChat/GetAIResponse", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `userMessage=${encodeURIComponent(userInput)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            chatMessages.removeChild(loadingDiv);
+            let aiMessageDiv = document.createElement("div");
+            aiMessageDiv.className = "message ai-message";
+            aiMessageDiv.innerHTML = `<strong>AI:</strong> ${data.response}`;
+            chatMessages.appendChild(aiMessageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            chatMessages.removeChild(loadingDiv);
+            chatMessages.innerHTML += `<div class="message ai-message"><strong>Error:</strong> AI service not available.</div>`;
+        });
+
+        document.getElementById("userInput").value = "";
+    }
+</script>

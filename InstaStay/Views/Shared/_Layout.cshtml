@@ -37,11 +37,9 @@
                         <li class="nav-item ">
                             <a class="nav-link active" href="/Customer/Home/Index">About</a>
                         </li>
-                       
 
                         @if (User.Identity.IsAuthenticated && User.IsInRole("Hotel Manager"))
                         {
-
                             <li class="nav-item ">
                                 <a class="nav-link active" href="/hotelManager/ManageHotel/Index">Hotel Management</a>
                             </li>
@@ -57,25 +55,20 @@
                             <li class="nav-item">
                                 <a class="nav-link active" href="/Customer/Contact/create">ContactUs</a>
                             </li>
-
                         }
                         @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link active" href="/Admin/Dashboard/Index">Dashboard</a>
                             </li>
-                            
                         }
                         @if (User.Identity.IsAuthenticated)
                         {
-                            {
-                                <li class="nav-item position-relative">
-                                    <a class="nav-link active" asp-controller="Booking" asp-action="MyBookings" asp-area="Customer">
-                                        <i class="fas fa-calendar-check"></i> Bookings
-                                    </a>
-                                </li>
-                            }
-
+                            <li class="nav-item position-relative">
+                                <a class="nav-link active" asp-controller="Booking" asp-action="MyBookings" asp-area="Customer">
+                                    <i class="fas fa-calendar-check"></i> Bookings
+                                </a>
+                            </li>
                         }
                     </ul>
                     <ul class="navbar-nav align-items-center">
@@ -98,7 +91,12 @@
                                             @ViewBag.UnreadMessages
                                         </span>
                                     }
+                                </a>
+                            </li>
 
+                            <li class="nav-item position-relative">
+                                <a class="nav-link active" asp-controller="AiChat" asp-action="Index" asp-area="Customer">
+                                    <i class="fas fa-robot"></i> Ask AI
                                 </a>
                             </li>
 
@@ -154,34 +152,7 @@
     <script src="~/lib/toastr.Js/toastr.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
-    <script src="~/lib/signalr/signalr.min.js"></script>
-    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
-    <script type="module" src="~/js/site.js"></script> <!-- Marked as Module -->
-    @section Scripts {
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.18/signalr.min.js"></script>
-        <script src="/js/site.js"></script>
-    }
-    <script>
-        const lightTheme = document.getElementById('light-theme');
-        const darkTheme = document.getElementById('dark-theme');
-        const body = document.body;
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            body.className = savedTheme;
-        }
-        lightTheme.addEventListener('click', () => {
-            body.classList.remove('dark-theme');
-            body.classList.add('light-theme');
-            localStorage.setItem('theme', 'light-theme');
-        });
-        darkTheme.addEventListener('click', () => {
-            body.classList.remove('light-theme');
-            body.classList.add('dark-theme');
-            localStorage.setItem('theme', 'dark-theme');
-        });
-    </script>
+    <script type="module" src="~/js/site.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
-    @await RenderSectionAsync("SignalR", required: false)
 </body>
 </html>

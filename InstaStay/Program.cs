@@ -33,6 +33,8 @@ namespace InstaStay
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddHttpClient<GeminiService>();
+            builder.Services.AddScoped<GeminiService>();
             builder.Services.AddSignalR();
             builder.Services.AddAuthentication().AddGoogle(googleOptions =>
             {

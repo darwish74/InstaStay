@@ -1,4 +1,5 @@
 ﻿using DataAccess.Data;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.IRepositories;
 using Models.Models;
@@ -17,6 +18,10 @@ namespace DataAccess.Repositories
         public PaymentRepository(ApplicationDbContext dbContext):base(dbContext)
         {
             this.dbContext = dbContext;
+        }
+        public async Task<int> GetPendingPaymentsCountAsync()
+        {
+            return await dbContext.payments.CountAsync(p => p.PaymentStatus != "Paid");
         }
     }
 }

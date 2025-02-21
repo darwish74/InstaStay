@@ -17,7 +17,6 @@ namespace InstaStay.Areas.Admin.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IUnitOfWork unitOfWork;
-
         public DashBoardController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager,IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
@@ -25,12 +24,36 @@ namespace InstaStay.Areas.Admin.Controllers
             _roleManager = roleManager;
             this.unitOfWork = unitOfWork;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            return View();
+            int pageSize = 3; 
+
+            var totalUsers = await _userManager.Users.CountAsync();
+            var totalBookings = await unitOfWork.BookingRepository.Get().CountAsync();
+            var pendingPayments = await unitOfWork.paymentRepository.GetPendingPaymentsCountAsync();
+
+            var totalActivities = await unitOfWork.ActivityLogRepository.Get().CountAsync(); 
+            var recentActivities = await unitOfWork.ActivityLogRepository
+                .Get()
+                .OrderByDescending(a => a.Date)
+                .Skip((page - 1) * pageSize) 
+                .Take(pageSize) 
+                .ToListAsync();
+
+            var dashboardData = new AdminDashboardVM
+            {
+                TotalUsers = totalUsers,
+                TotalBookings = totalBookings,
+                PendingPayments = pendingPayments,
+                RecentActivities = recentActivities,
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling((double)totalActivities / pageSize) 
+            };
+
+            return View(dashboardData);
         }
+
         [HttpGet] 
-        
         public IActionResult AddAdmin() 
         {
             return View();
@@ -68,8 +91,6 @@ namespace InstaStay.Areas.Admin.Controllers
         {
             var request = unitOfWork.NewHotelRequestsRepository.GetOne(e => e.Id == id);
             var hotelManager = unitOfWork.HotelManagerRepository.GetOne(r => r.Name == request.HotelManager);
-            
-            
             var hotel = new Hotel
             {
                 Name = request.Name,

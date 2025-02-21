@@ -1,49 +1,31 @@
 ﻿@model IEnumerable<Models.Models.Hotel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Hotels";
 }
-<div class="text-center m-3"><h1>Hotel Booking</h1></div>
 
+<div class="container mt-4">
+    <h2 class="text-center mb-4">🏨 Hotel Booking</h2>
 
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                Hotel Name
-            </th>
-
-            <th>
-                Action
-            </th>
-            
-        
-            
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <table class="table table-hover table-bordered text-center">
+        <thead class="table-dark">
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-               
-                
-                <td>
-
-                    <a href="/HotelManager/Bookings/AllBooking?HotelId=@item.Id" class="btn btn-outline-primary"> All Booking </a>
-                    
-                </td>
+                <th>ID</th>
+                <th>Hotel Name</th>
+                <th>Action</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>
+                        <a href="/HotelManager/Bookings/AllBooking?HotelId=@item.Id" class="btn btn-outline-primary btn-sm">All Bookings</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

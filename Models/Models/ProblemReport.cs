@@ -20,7 +20,7 @@ namespace Models.Models
         [Required]
         public string ProblemDescription { get; set; }
         [DataType(DataType.PhoneNumber)]
-        public string? PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; } =null;
         public string? UserImgRequest { get; set; }
         public DateTime CreatedAt { get; set; }
         public string? UserId { get; set; }

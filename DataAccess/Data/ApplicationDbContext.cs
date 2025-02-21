@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Models.Models;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,8 @@ namespace DataAccess.Data
         public DbSet<Amentities> Amentities { get; set; }
         public DbSet<Coupon> Coupons { get; set; }
         public DbSet<Message> Message { get; set; }
+        public DbSet<ActivityLog>ActivityLogs { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

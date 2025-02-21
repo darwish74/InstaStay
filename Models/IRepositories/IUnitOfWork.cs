@@ -25,6 +25,7 @@ namespace Models.IRepositories
         IRoomImagesRepository RoomImagesRepository { get; }   
         ICouponRepository CouponRepository { get; } 
         IMessageRepository MessageRepository { get; }
+        IActivityLogRepository ActivityLogRepository { get; }
         void Commit();
         Task CommitAsync();
     }

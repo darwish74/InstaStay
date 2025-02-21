@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 
 namespace Models.IRepositories
 {
-    public interface IPaymentRepository:IBaseRepositories<Payment>
+    public interface IActivityLogRepository : IBaseRepositories<ActivityLog>
     {
-        Task<int> GetPendingPaymentsCountAsync();
     }
 }
-

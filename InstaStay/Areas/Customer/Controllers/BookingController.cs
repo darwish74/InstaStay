@@ -26,6 +26,19 @@ namespace InstaStay.Areas.Customer.Controllers
             this.userManager = userManager;
             this.emailSender = emailSender;
         }
+        private void LogActivity(string userName, string description)
+        {
+            var activity = new ActivityLog
+            {
+                UserName = userName,
+                Description = description,
+                Date = DateTime.Now
+            };
+
+            unitOfWork.ActivityLogRepository.Create(activity);
+            unitOfWork.Commit();
+        }
+
         public async Task<IActionResult> Book(int id)
         {
             var user = await userManager.GetUserAsync(User);
@@ -61,6 +74,7 @@ namespace InstaStay.Areas.Customer.Controllers
                 bool isAvailable = IsRoomAvailable(roomId, inDate, outDate);
                 return Json(new { available = isAvailable });
             }
+            LogActivity("System", $"Checked availability for room {roomId} from {checkInDate} to {checkOutDate}.");
             return Json(new { available = false, error = "Invalid date format" });
         }
         private bool IsRoomAvailable(int roomId, DateTime checkInDate, DateTime checkOutDate)
@@ -140,7 +154,7 @@ namespace InstaStay.Areas.Customer.Controllers
             };
             unitOfWork.BookingRepository.Create(booking);
             unitOfWork.Commit();
-
+            LogActivity(user.UserName, $"Booked room {room.Id} in hotel {room.HotelId} from {model.CheckINDate} to {model.CheckOutDate}.");
             TempData["success"] = "Room booked successfully";
             return RedirectToAction("Index", "Home");
         }
@@ -173,6 +187,7 @@ namespace InstaStay.Areas.Customer.Controllers
             }
             unitOfWork.BookingRepository.Delete(booking);
             unitOfWork.Commit();
+            LogActivity(user.UserName, $"Cancelled booking ID {booking.Id} for room {booking.RoomId}.");
             TempData["success"] = "Book Deleted Successfully";
             return RedirectToAction("MyBookings");
         }

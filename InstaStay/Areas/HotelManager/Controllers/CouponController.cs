@@ -17,11 +17,25 @@ namespace InstaStay.Areas.Manager.Controllers
         private readonly IUnitOfWork unitOfWork;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public CouponController(IUnitOfWork unitOfWork ,UserManager<ApplicationUser> userManager)
+        public CouponController(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
         {
             this.unitOfWork = unitOfWork;
             this.userManager = userManager;
         }
+
+        private void LogActivity(string description)
+        {
+            var userName = User.Identity?.Name ?? "Unknown";
+            var log = new ActivityLog
+            {
+                UserName = userName,
+                Description = description,
+                Date = DateTime.UtcNow
+            };
+            unitOfWork.ActivityLogRepository.Create(log);
+            unitOfWork.Commit();
+        }
+
         public async Task<IActionResult> Index()
         {
             var user = await userManager.GetUserAsync(User);
@@ -34,6 +48,7 @@ namespace InstaStay.Areas.Manager.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Create(Coupon coupon)
         {
@@ -41,14 +56,18 @@ namespace InstaStay.Areas.Manager.Controllers
             if (ModelState.IsValid)
             {
                 coupon.IsActive = true;
-                coupon.HotelManagerId = user.Id; 
+                coupon.HotelManagerId = user.Id;
                 unitOfWork.CouponRepository.Create(coupon);
                 unitOfWork.Commit();
+
+                LogActivity($"Created a new coupon '{coupon.Code}' with Discount {coupon.DiscountValue}%");
+
                 TempData["success"] = "Coupon Created Successfully";
                 return RedirectToAction(nameof(Index));
             }
             return View(coupon);
         }
+
         public async Task<IActionResult> Edit(int id)
         {
             var user = await userManager.GetUserAsync(User);
@@ -57,6 +76,7 @@ namespace InstaStay.Areas.Manager.Controllers
 
             return View(coupon);
         }
+
         [HttpPost]
         public async Task<IActionResult> Edit(Coupon coupon)
         {
@@ -66,11 +86,15 @@ namespace InstaStay.Areas.Manager.Controllers
                 coupon.HotelManagerId = user.Id;
                 unitOfWork.CouponRepository.Alter(coupon);
                 unitOfWork.Commit();
+
+                LogActivity($"Edited coupon '{coupon.Code}' (ID {coupon.CouponId}) with new Discount {coupon.DiscountValue}%");
+
                 TempData["success"] = "Coupon Edited Successfully";
                 return RedirectToAction(nameof(Index));
             }
             return View(coupon);
         }
+
         public async Task<IActionResult> Delete(int id)
         {
             var user = await userManager.GetUserAsync(User);
@@ -90,11 +114,14 @@ namespace InstaStay.Areas.Manager.Controllers
             {
                 unitOfWork.CouponRepository.Delete(coupon);
                 unitOfWork.Commit();
-                TempData["success"] = "Coupon Deleted successfully";
+
+                LogActivity($"Deleted coupon '{coupon.Code}' (ID {coupon.CouponId})");
+
+                TempData["success"] = "Coupon Deleted Successfully";
             }
-            TempData["success"] = "Coupon Deleted successfully";
             return RedirectToAction(nameof(Index));
         }
+
         public IActionResult ToggleStatus(int id)
         {
             var coupon = unitOfWork.CouponRepository.GetOne(c => c.CouponId == id);
@@ -103,6 +130,9 @@ namespace InstaStay.Areas.Manager.Controllers
             coupon.IsActive = !coupon.IsActive;
             unitOfWork.CouponRepository.Alter(coupon);
             unitOfWork.Commit();
+
+            string status = coupon.IsActive ? "Activated" : "Deactivated";
+            LogActivity($"{status} coupon '{coupon.Code}' (ID {coupon.CouponId})");
 
             return RedirectToAction(nameof(Index));
         }

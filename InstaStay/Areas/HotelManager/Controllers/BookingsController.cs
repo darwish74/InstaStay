@@ -31,7 +31,7 @@ namespace InstaStay.Areas.HotelManager.Controllers
             var Booking=unitOfWork.BookingRepository.Get(filter:e=>e.Hotel.Id==HotelId, includeprops: e=>e.Include(e=>e.User).Include(e=>e.Room)).ToList();
             if (Booking == null || !Booking.Any())
             {
-                return View(new List<Models.Models.Booking>()); // Return empty list instead of null
+                return View(new List<Models.Models.Booking>()); 
             }
 
             return View(Booking);

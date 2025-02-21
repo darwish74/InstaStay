@@ -82,7 +82,7 @@ namespace InstaStay.Areas.hotelManager.Controllers
                 unitOfWork.NewHotelRequestsRepository.Create(request);
                 unitOfWork.Commit();
                 TempData["success"] = "Request Created Successfully";
-                return RedirectToAction("Dashboard");
+                return RedirectToAction("Index");
             }
           return View(request);
         }

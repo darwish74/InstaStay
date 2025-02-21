@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models.IRepositories;
 using Models.Models;
+using System.Security.Claims;
+
 namespace InstaStay.Areas.HotelManager.Controllers
 {
     [Area("hotelManager")]
@@ -10,11 +12,26 @@ namespace InstaStay.Areas.HotelManager.Controllers
     public class AmentitiesController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
+
         public AmentitiesController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
-        public IActionResult AddAmentity(int id, IFormFile AmenityImage,string AmenityName)
+
+        private void LogActivity(string description)
+        {
+            var userName = User.Identity?.Name ?? "Unknown";
+            var log = new ActivityLog
+            {
+                UserName = userName,
+                Description = description,
+                Date = DateTime.UtcNow
+            };
+            unitOfWork.ActivityLogRepository.Create(log);
+            unitOfWork.Commit();
+        }
+
+        public IActionResult AddAmentity(int id, IFormFile AmenityImage, string AmenityName)
         {
             var hotel = unitOfWork.hotelRepository.GetOne(filter: e => e.Id == id, includeprops: e => e.Include(e => e.HotelManager));
             if (hotel != null)
@@ -30,21 +47,19 @@ namespace InstaStay.Areas.HotelManager.Controllers
                     }
                     NewAmentity.Image = fileName;
                     NewAmentity.HotelId = id;
-                    NewAmentity.Name = AmenityName; 
+                    NewAmentity.Name = AmenityName;
                     unitOfWork.AmentitiesRepository.Create(NewAmentity);
                     unitOfWork.Commit();
-                    TempData["success"] = "Amentity added for hotel successfully";
-                    return RedirectToAction("ShowAllHotels","ManageHotel",new { UserName = hotel.HotelManager.Name });
+                    LogActivity($"Added amenity '{AmenityName}' to Hotel ID {id}");
+
+                    TempData["success"] = "Amenity added successfully";
+                    return RedirectToAction("ShowAllHotels", "ManageHotel", new { UserName = hotel.HotelManager.Name });
                 }
             }
             TempData["success"] = "No Images added";
             return RedirectToAction("ShowAllHotels", "ManageHotel", new { UserName = hotel.HotelManager.Name });
         }
-        public IActionResult Index(int id)
-        {
-            var hotel = unitOfWork.hotelRepository.GetOne(e=>e.Id==id,includeprops:e=>e.Include(e=>e.Amentities));
-            return View(hotel);  
-        }
+
         public IActionResult Delete(int id)
         {
             var hotelAmenity = unitOfWork.AmentitiesRepository.GetOne(e => e.Id == id);
@@ -60,15 +75,12 @@ namespace InstaStay.Areas.HotelManager.Controllers
             }
             unitOfWork.AmentitiesRepository.Delete(hotelAmenity);
             unitOfWork.Commit();
+            LogActivity($"Deleted amenity '{hotelAmenity.Name}' from Hotel ID {hotelAmenity.HotelId}");
+
             TempData["success"] = "Hotel Image Deleted Successfully";
             return RedirectToAction("Index", new { id = hotelAmenity.HotelId });
         }
-        [HttpGet]
-        public IActionResult Edit(int id) 
-        {
-          var Amenity = unitOfWork.AmentitiesRepository.GetOne(e => e.Id == id);
-          return View(Amenity);
-        }
+
         [HttpPost]
         public IActionResult Edit(Amentities amenity, IFormFile ImageFile)
         {
@@ -103,10 +115,12 @@ namespace InstaStay.Areas.HotelManager.Controllers
                 existingAmentity.Description = amenity.Description;
                 unitOfWork.AmentitiesRepository.Alter(existingAmentity);
                 unitOfWork.Commit();
+                LogActivity($"Edited amenity '{existingAmentity.Name}' (ID {existingAmentity.Id})");
+
                 TempData["success"] = "Amenity Edited Successfully";
                 return RedirectToAction("index", new { id = existingAmentity.HotelId });
             }
-            TempData["success"] = "No Amenity updates Added Successfully";
+            TempData["success"] = "No Amenity updates added successfully";
             return RedirectToAction("index", new { id = existingAmentity.HotelId });
         }
     }

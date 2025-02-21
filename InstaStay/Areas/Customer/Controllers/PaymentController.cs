@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 namespace InstaStay.Areas.Customer.Controllers
 {
     [Area("Customer")]
@@ -19,29 +20,38 @@ namespace InstaStay.Areas.Customer.Controllers
         private readonly IUnitOfWork unitOfWork;
         private readonly IEmailSender emailSender;
 
-        public PaymentController(UserManager<ApplicationUser> userManager, IUnitOfWork unitOfWork,IEmailSender emailSender)
+        public PaymentController(UserManager<ApplicationUser> userManager, IUnitOfWork unitOfWork, IEmailSender emailSender)
         {
             this.userManager = userManager;
             this.unitOfWork = unitOfWork;
             this.emailSender = emailSender;
         }
+
         public async Task<IActionResult> PaySingleBooking(int id)
         {
             var userId = userManager.GetUserId(User);
+            var user = await userManager.FindByIdAsync(userId);
+
             var booking = unitOfWork.BookingRepository
                 .GetOne(b => b.Id == id && b.UserId == userId && b.BookingStatus == "Pending",
                         includeprops: q => q.Include(b => b.Room));
 
             if (booking == null)
             {
+                LogActivity(user.UserName, $"Failed payment attempt for booking {id}: Invalid selection.");
                 TempData["error"] = "Invalid booking selection.";
                 return RedirectToAction("MyBookings", "Booking");
             }
-            return await ProcessPayment(new List<Booking> { booking });
+
+            LogActivity(user.UserName, $"Initiated payment for booking {id}.");
+            return await ProcessPayment(new List<Booking> { booking }, user.UserName);
         }
+
         public async Task<IActionResult> PayAllBookings()
         {
             var userId = userManager.GetUserId(User);
+            var user = await userManager.FindByIdAsync(userId);
+
             var bookings = unitOfWork.BookingRepository
                 .Get(b => b.UserId == userId && b.BookingStatus == "Pending")
                 .Include(b => b.Room)
@@ -49,12 +59,16 @@ namespace InstaStay.Areas.Customer.Controllers
 
             if (!bookings.Any())
             {
+                LogActivity(user.UserName, "Attempted to pay all bookings but found no pending ones.");
                 TempData["error"] = "No pending bookings available for payment.";
                 return RedirectToAction("MyBookings", "Booking");
             }
-            return await ProcessPayment(bookings); 
+
+            LogActivity(user.UserName, $"Initiated payment for {bookings.Count} bookings.");
+            return await ProcessPayment(bookings, user.UserName);
         }
-        private async Task<IActionResult> ProcessPayment(List<Booking> bookings)
+
+        private async Task<IActionResult> ProcessPayment(List<Booking> bookings, string userName)
         {
             var options = new SessionCreateOptions
             {
@@ -89,14 +103,18 @@ namespace InstaStay.Areas.Customer.Controllers
             {
                 var service = new SessionService();
                 var session = await service.CreateAsync(options);
+
+                LogActivity(userName, "Payment session successfully created.");
                 return Redirect(session.Url);
             }
             catch (Exception ex)
             {
+                LogActivity(userName, $"Payment processing error: {ex.Message}");
                 TempData["error"] = "Payment processing error: " + ex.Message;
                 return RedirectToAction("MyBookings", "Booking");
             }
         }
+
         public async Task<IActionResult> PaymentSuccess(int bookingId)
         {
             var userId = userManager.GetUserId(User);
@@ -108,11 +126,16 @@ namespace InstaStay.Areas.Customer.Controllers
 
             if (booking == null)
             {
+                LogActivity(user.UserName, $"Payment confirmation failed for booking {bookingId}: Invalid selection.");
                 TempData["error"] = "Invalid booking selection.";
                 return RedirectToAction("MyBookings", "Booking");
             }
+
             booking.BookingStatus = "Confirmed";
             unitOfWork.Commit();
+
+            LogActivity(user.UserName, $"Payment successful. Booking {bookingId} confirmed.");
+
             string subject = "Booking Confirmation - InstaStay";
             string message = $@"
             <h2>Booking Confirmation</h2>
@@ -120,25 +143,43 @@ namespace InstaStay.Areas.Customer.Controllers
             <p>Thank you for your payment. Your booking has been confirmed.</p>
             <h3>Booking Details:</h3>
             <ul>
-            <li><strong>Hotel:</strong> {booking.Room.Hotel?.Name ?? "Hotel"}</li>
-            <li><strong>Room:</strong> {booking.Room.RoomType}</li>
-            <li><strong>Check-in:</strong> {booking.CheckINDate:dd MMM yyyy}</li>
-            <li><strong>Check-out:</strong> {booking.CheckOutDate:dd MMM yyyy}</li>
-            <li><strong>Total Amount:</strong> ${booking.TotalAmount:F2}</li>
-        </ul>
-        <p>We look forward to welcoming you!</p>
-        <p><strong>InstaStay Team</strong></p>";
+                <li><strong>Hotel:</strong> {booking.Room.Hotel?.Name ?? "Hotel"}</li>
+                <li><strong>Room:</strong> {booking.Room.RoomType}</li>
+                <li><strong>Check-in:</strong> {booking.CheckINDate:dd MMM yyyy}</li>
+                <li><strong>Check-out:</strong> {booking.CheckOutDate:dd MMM yyyy}</li>
+                <li><strong>Total Amount:</strong> ${booking.TotalAmount:F2}</li>
+            </ul>
+            <p>We look forward to welcoming you!</p>
+            <p><strong>InstaStay Team</strong></p>";
 
             await emailSender.SendEmailAsync(user.Email, subject, message);
 
             TempData["success"] = "Payment successful! Your booking is now confirmed.";
-
             return RedirectToAction("MyBookings", "Booking");
         }
+
         public IActionResult PaymentCancel()
         {
+            var userId = userManager.GetUserId(User);
+            var user = userManager.FindByIdAsync(userId).Result;
+
+            LogActivity(user.UserName, "User canceled the payment process.");
+
             TempData["error"] = "Payment was canceled. Please try again.";
             return RedirectToAction("MyBookings", "Booking");
+        }
+
+        private void LogActivity(string userName, string description)
+        {
+            var log = new ActivityLog
+            {
+                UserName = userName,
+                Description = description,
+                Date = DateTime.UtcNow
+            };
+
+            unitOfWork.ActivityLogRepository.Create(log);
+            unitOfWork.Commit();
         }
     }
 }
