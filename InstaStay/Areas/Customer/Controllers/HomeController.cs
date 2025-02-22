@@ -23,9 +23,7 @@ namespace InstaStay.Areas.Customer.Controllers
                .Select(h => new SelectListItem { Value = h.Address, Text = h.Address })
                .Distinct()
                .ToList();
-            ViewBag.Amenities = unitOfWork.AmentitiesRepository.Get()
-                .Select(a => new SelectListItem { Value = a.Id.ToString(), Text = a.Name })
-                .ToList();
+            ViewBag.Amenities = unitOfWork.AmentitiesRepository.Get().ToList();
             return View(hotels);
         }
         [HttpGet]

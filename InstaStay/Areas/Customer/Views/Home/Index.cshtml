@@ -57,19 +57,6 @@
                 <input type="number" class="form-control" id="MaxPrice" name="MaxPrice" placeholder="Enter maximum price">
             </div>
         </div>
-        <div class="row g-4 mt-3">
-            <label class="form-label fw-bold text-secondary">Amenities</label>
-            <div class="d-flex flex-wrap">
-                @foreach (var amenity in @ViewBag.Amenities)
-                {
-                    <div class="form-check me-3">
-                        <input class="form-check-input" type="checkbox" id="amenity_@amenity.Value" name="Amenities" value="@amenity.Value">
-                        <label class="form-check-label text-dark" for="amenity_@amenity.Value">@amenity.Text</label>
-                    </div>
-                }
-            </div>
-        </div>
-
         <div class="text-center mt-4">
             <button type="submit" class="btn btn-outline-success btn-lg px-5">
                 <i class="fas fa-search-location me-2"></i>Search

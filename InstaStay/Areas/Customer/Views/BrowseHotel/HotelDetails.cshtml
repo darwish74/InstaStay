@@ -3,7 +3,7 @@
     ViewData["Title"] = Model.Name;
     var hotelImagesList = Model.HotelImages?.ToList() ?? new List<HotelImages>();
 }
-<div class="container my-5 mx-4">
+<div class="container my-5">
     <div class="card shadow-lg fade-in custom-card rounded-4 border-0 overflow-hidden bg-gradient bg-opacity-25">
         <div class="row g-0">
             <div class="col-md-5 position-relative">
@@ -60,7 +60,7 @@
     </div>
 </div>
 
-    <div id="hotelImageCarousel" class="carousel slide mt-4 ms-5 rounded-2" data-bs-ride="carousel">
+    <div id="hotelImageCarousel" class="carousel slide mt-4 rounded-2" data-bs-ride="carousel">
         <div class="carousel-inner rounded-3">
             @if (hotelImagesList.Any())
             {
