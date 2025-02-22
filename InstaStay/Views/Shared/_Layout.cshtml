@@ -3,12 +3,12 @@
 @inject UserManager<ApplicationUser> _userManager
 @inject ApplicationDbContext Context
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"] - InstaStay</title>
-   @*  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> *@
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -16,7 +16,7 @@
     <link rel="icon" type="image/x-icon" href="~/images/download.jpeg" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 </head>
-<body class="light-theme">
+<body class ="dark-theme">
     <header>
         <nav class="navbar navbar-expand-lg navbar-collapse navbar-text-light bg-gradient bg-primary shadow-sm position-relative">
             <div class="container-fluid fs-6">
@@ -120,15 +120,6 @@
                             </li>
                         }
                     </ul>
-                    <div class="dropdown">
-                        <button class="btn btn-outline-info bg-gradient theme-icon ms-1" type="button" id="themeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-lightbulb"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="themeDropdown">
-                            <li><a class="dropdown-item" href="#" id="light-theme">Light Theme</a></li>
-                            <li><a class="dropdown-item" href="#" id="dark-theme">Dark Theme</a></li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </nav>
@@ -138,7 +129,6 @@
             @RenderBody()
         </div>
     </main>
-
     <footer class="mb-0 bg-light bg-opacity-50">
         <div class="container">
             &copy; 2025 - InstaStay
@@ -157,32 +147,6 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const themeButton = document.getElementById("themeDropdown");
-        const lightThemeBtn = document.getElementById("light-theme");
-        const darkThemeBtn = document.getElementById("dark-theme");
-        const body = document.body;
-        const savedTheme = localStorage.getItem("theme") || "light";
-        applyTheme(savedTheme);
-        lightThemeBtn.addEventListener("click", function () {
-            applyTheme("light");
-        });
 
-        darkThemeBtn.addEventListener("click", function () {
-            applyTheme("dark");
-        });
 
-        function applyTheme(theme) {
-            if (theme === "dark") {
-                body.classList.add("dark-theme");
-                body.classList.remove("light-theme");
-            } else {
-                body.classList.add("light-theme");
-                body.classList.remove("dark-theme");
-            }
-            localStorage.setItem("theme", theme);
-        }
-    });
-</script>
 

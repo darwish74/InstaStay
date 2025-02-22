@@ -233,6 +233,23 @@ body.dark-theme {
     max-width: 100%;
 }
 .theme-icon {
-    max-width: 40px; /* Adjust width */
+    max-width: 40px; 
     padding: 5px;
 }
+.dark-theme {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+.navbar, footer {
+    background-color: #1e1e1e !important;
+    color: #ffffff !important;
+}
+
+a {
+    color: #bb86fc;
+}
+
+    a:hover {
+        color: #3700b3;
+    }
